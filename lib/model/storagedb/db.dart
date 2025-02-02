@@ -17,7 +17,7 @@ class DatabaseHelper {
   // Fetch initial data once
   Future<void> _fetchInitialData() async {
     try {
-      final result = await pb.collection('database').getList();
+      final result = await pb.collection('database').getList(page: 1,perPage: 99999999);
       _currentPlates =
           result.items.map((item) => plateModel.fromJson(item.toJson())).toList();
       _entryStreamController.add(_currentPlates);

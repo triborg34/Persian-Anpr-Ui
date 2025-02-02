@@ -140,16 +140,15 @@ class ReportController extends GetxController {
   getData() async {
     pModel.clear();
     int page = 1;
-    const int perPage = 100; // Fetch 100 records per request
+     int perPage = 99999999; // Fetch 100 records per request
     // ignore: unused_local_variable
-    while (true){
+
     final resultList = await pb.collection('database').getList(page: page,perPage: perPage);
-    if (resultList.items.isEmpty) break;
+
     pModel = resultList.items
         .map((item) => plateModel.fromJson(item.toJson()))
         .toList();
-        page++;
-    }
+
     // await databaseHelper.getEntriesAsList().then((value) {
     //   for (var json in value) {
     //     pModel.add(plateModel(
