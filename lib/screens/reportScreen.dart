@@ -145,9 +145,9 @@ class ReportScreen extends StatelessWidget {
                                                   )]
                                               .carName!,
                                       "Image Path":
-                                          "${imagesPath}${rcontroller.selectedModel[index].imgpath}",
+                                          "${imagesPath}${rcontroller.selectedModel[index].id}/${rcontroller.selectedModel[index].imgpath}",
                                       "ScreenShot Path":
-                                          "${imagesPath}${rcontroller.selectedModel[index].scrnPath}",
+                                          "${imagesPath}${rcontroller.selectedModel[index].id}/${rcontroller.selectedModel[index].scrnPath}",
                                       "Plate Percsent": rcontroller
                                           .selectedModel[index].platePercent,
                                       "Char Percent": rcontroller
@@ -848,9 +848,9 @@ class ReportScreen extends StatelessWidget {
                                               },
                                               child: Hero(
                                                   tag: "heroTag${index}",
-                                                  child: Image.file(
-                                                    File(
-                                                        "${imagesPath}${rcontroller.selectedModel[index].imgpath}"),
+                                                  child: Image.network(
+                                                    
+                                                        "${imagesPath}${rcontroller.selectedModel[index].id}/${rcontroller.selectedModel[index].imgpath}",
                                                     fit: BoxFit.fill,
                                                     width: 221,
                                                     height: 48,

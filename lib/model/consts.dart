@@ -1,4 +1,4 @@
-import 'dart:convert';
+
 import 'dart:io';
 import 'dart:math';
 
@@ -292,7 +292,7 @@ try{
 
 
 
-late String path ;
+
 late String imagesPath;
 
 Color purpule = Color.fromARGB(255, 56, 2, 109);
@@ -310,15 +310,7 @@ String generateRandomString(int len) {
 
 
 
-Future<Map<String, String>> loadConfig() async {
-  // For asset-based file
-  final configString = await File('assets/config.json');
-  //  await rootBundle.loadString('assets/config.json');
-  final Map<String, dynamic> config = jsonDecode(configString.readAsStringSync());
-  
-  // Convert dynamic values to strings
-  return config.map((key, value) => MapEntry(key, value.toString()));
-}
+
 
 
 

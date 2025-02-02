@@ -27,7 +27,7 @@ class LicanceNumber extends StatelessWidget {
           Container(
             height: 40,
             child: Center(
-              child: Image.asset(
+              child: Image.network(
                   'assets/images/iranFlag.png'),
             ),
             width: 30,

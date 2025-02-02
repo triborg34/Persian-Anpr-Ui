@@ -1,4 +1,4 @@
-import 'package:dio/dio.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -10,9 +10,6 @@ import 'package:unapwebv/model/storagedb/users.dart';
 import 'package:unapwebv/widgets/videogetter.dart';
 
 import '../model/consts.dart';
-
-
-
 
 class videoController extends GetxController {
   late final WebSocket soccket;
@@ -78,36 +75,33 @@ class Boxes extends GetxController {
   }
 
   void getSetting() async {
-
     final resultList = await pb.collection('setting').getList();
     settingbox = resultList.items
         .map((item) => Setting.fromJson(item.toJson()))
         .toList();
 
-          if (settingbox.isEmpty){
+    if (settingbox.isEmpty) {
+      var body = {
+        "charConf": 0.75,
+        "clockType": '24',
+        "plateConf": 0.8,
+        "hardWare": 'cuda',
+        "timeZone": 'Asia/Tehran',
+        "connect": '8000',
+        "isRfid": false,
+        "port": '5000',
+        "rl1": false,
+        "rl2": false,
+        "rfidip": '192.168.1.91',
+        "rfidport": '2000',
+        "alarm": false
+      };
 
-            var body={
-                  "charConf": 0.75,
-          "clockType": '24',
-          "plateConf": 0.8,
-          "hardWare": 'cuda',
-          "timeZone": 'Asia/Tehran',
-          "connect": '8000',
-          "isRfid": false,
-          "port": '5000',
-          "rl1": false,
-          "rl2": false,
-          "rfidip": '192.168.1.91',
-          "rfidport": '2000',
-          "alarm": false
-            };
-
-await pb.collection('setting').create(body: body);
-                final resultList = await pb.collection('setting').getList();
-    settingbox = resultList.items
-        .map((item) => Setting.fromJson(item.toJson()))
-        .toList();
-
+      await pb.collection('setting').create(body: body);
+      final resultList = await pb.collection('setting').getList();
+      settingbox = resultList.items
+          .map((item) => Setting.fromJson(item.toJson()))
+          .toList();
     }
   }
 
@@ -145,26 +139,17 @@ class ReportController extends GetxController {
 
   getData() async {
     pModel.clear();
-    String url = 'http://127.0.0.1:8090/api/collections/database/records';
+    int page = 1;
+    const int perPage = 100; // Fetch 100 records per request
     // ignore: unused_local_variable
-    var res = Dio().get(url).then(
-      (value) {
-        for (var json in value.data['items']) {
-          pModel.add(plateModel(
-              imgpath: json['imgpath'],
-              plateNum: json['plateNum'],
-              charPercent: json['charPercent'],
-              eDate: json['eDate'],
-              eTime: json['eTime'],
-              isarvand: json['isarvand'],
-              rtpath: json['rtpath'],
-              scrnPath: json['scrnPath'],
-              platePercent: json['platePercent'],
-              status: json['status']));
-        }
-        print(pModel);
-      },
-    );
+    while (true){
+    final resultList = await pb.collection('database').getList(page: page,perPage: perPage);
+    if (resultList.items.isEmpty) break;
+    pModel = resultList.items
+        .map((item) => plateModel.fromJson(item.toJson()))
+        .toList();
+        page++;
+    }
     // await databaseHelper.getEntriesAsList().then((value) {
     //   for (var json in value) {
     //     pModel.add(plateModel(
@@ -212,7 +197,6 @@ class settingController extends GetxController {
           charConf: csliderValue.value,
           clockType: clockType,
           plateConf: psliderValue.value,
-
           hardWare: hardWareValue,
           timeZone: timezoneseleted,
           connect: connect,
@@ -224,28 +208,26 @@ class settingController extends GetxController {
           rfidport: rfidport,
           alarm: alarm.value));
 
-        // var body={
-        //     "charConf": csliderValue.value,
-        //   "clockType": clockType,
-        //   "plateConf": psliderValue.value,
-        //   "dbPath": pathOfdb.value,
-        //   "outPutPath": pathOfOutput.value,
-        //   "hardWare": hardWareValue,
-        //   "timeZone": timezoneseleted,
-        //   "connect": connect,
-        //   "isRfid": isRfid.value,
-        //   "port": port,
-        //   "rl1": rl1.value,
-        //   "rl2": rl2.value,
-        //   "rfidip": rfidip,
-        //   "rfidport": rfidport,
-        //   "alarm": alarm.value
+      // var body={
+      //     "charConf": csliderValue.value,
+      //   "clockType": clockType,
+      //   "plateConf": psliderValue.value,
+      //   "dbPath": pathOfdb.value,
+      //   "outPutPath": pathOfOutput.value,
+      //   "hardWare": hardWareValue,
+      //   "timeZone": timezoneseleted,
+      //   "connect": connect,
+      //   "isRfid": isRfid.value,
+      //   "port": port,
+      //   "rl1": rl1.value,
+      //   "rl2": rl2.value,
+      //   "rfidip": rfidip,
+      //   "rfidport": rfidport,
+      //   "alarm": alarm.value
 
-        // };
-        //   await pb.collection('setting').create(body: body);
-    } else {
-
-    }
+      // };
+      //   await pb.collection('setting').create(body: body);
+    } else {}
     super.onReady();
   }
 }

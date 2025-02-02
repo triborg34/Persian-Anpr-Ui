@@ -486,6 +486,28 @@ class _CameraSettingState extends State<CameraSetting> {
                                                   .licance);
                                     }
                                     Get.find<Boxes>().update([5]);
+                                    var body={
+                                           "rtpath": controller
+                                                  .camerabox[index].rtpath,
+                                              "id": controller.camerabox
+                                                  .toList()[index]
+                                                  .id,
+                                              "gate": value['type'],
+                                              "ip": value['ip'],
+                                              "nameCamera": value['name'],
+                                              "rtspname": value['rtspname'],
+                                              "status": true,
+                                              "username": value['username'],
+                                              "password": value['username'],
+                                              "isNotrtsp": value['isnotrtsp'],
+                                              "licance": controller.camerabox
+                                                  .toList()[index]
+                                                  .licance
+
+                                    };
+                                    await pb.collection('cameras').update(controller.camerabox
+                                                  .toList()[index]
+                                                  .id!, body: body);
                                   });
                                 },
                                 icon: Icon(

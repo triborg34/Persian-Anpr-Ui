@@ -1,4 +1,4 @@
-import 'dart:io';
+
 
 import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
@@ -43,9 +43,9 @@ class Detailedscreen extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(15),
                   child: EasyImageView(
-                    imageProvider: FileImage( File(
-                          "${imagesPath}${selectedModel.scrnPath}",
-                        )),),
+                    imageProvider: NetworkImage(
+                          "${imagesPath}${selectedModel.id}/${selectedModel.scrnPath}",
+                        ),),
     
                 ),
               ),
@@ -87,9 +87,9 @@ class Detailedscreen extends StatelessWidget {
                       child: Center(
                         child: Hero(
                           tag: "heroTag${index}",
-                          child: Image.file(
-                            File(
-                                "${imagesPath}${selectedModel.imgpath}"),
+                          child: Image.network(
+                           
+                                "${imagesPath}${selectedModel.id}/${selectedModel.imgpath}",
                             fit: BoxFit.fill,
                             width: 210,
                             height: 48,

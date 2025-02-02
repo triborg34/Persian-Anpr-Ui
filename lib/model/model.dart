@@ -1,4 +1,5 @@
 class plateModel {
+  String? id;
   double? charPercent;
   String? eDate;
   String? eTime;
@@ -11,7 +12,7 @@ class plateModel {
   String? rtpath;
 
   plateModel(
-      {this.charPercent,
+      {this.id,this.charPercent,
       this.eDate,
       this.eTime,
       this.plateNum,
@@ -19,6 +20,7 @@ class plateModel {
       this.status,this.imgpath,this.scrnPath,this.isarvand,this.rtpath});
 
   plateModel.fromJson(Map<String, dynamic> json) {
+    id=json['id'];
     charPercent = json['charPercent'];
     eDate = json['eDate'];
     eTime = json['eTime'];
@@ -33,6 +35,7 @@ class plateModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id']=this.id;
     data['charPercent'] = this.charPercent;
     data['eDate'] = this.eDate;
     data['eTime'] = this.eTime;

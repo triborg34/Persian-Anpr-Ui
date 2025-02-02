@@ -1,4 +1,4 @@
-import 'dart:io';
+
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -48,7 +48,7 @@ Container contant() {
                       padding: EdgeInsets.symmetric(horizontal: 0),
                       width: 223,
                       child: Center(
-                        child: Hero(tag: 'heroTag${tcontroller.selectedIndex}',child: Image.file(File("${imagesPath}${tcontroller.selectedmodel.imgpath}"),fit: BoxFit.fill,width: 205,),),
+                        child: Hero(tag: 'heroTag${tcontroller.selectedIndex}',child: Image.network("${imagesPath}${tcontroller.selectedmodel.id}/${tcontroller.selectedmodel.imgpath}",fit: BoxFit.fill,width: 205,),),
                       ),
                     ),
                 ),

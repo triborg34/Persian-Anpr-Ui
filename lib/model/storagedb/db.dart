@@ -5,6 +5,7 @@ import 'package:unapwebv/model/model.dart';
 class DatabaseHelper {
   final PocketBase pb = PocketBase('http://localhost:8090');
   final _entryStreamController = StreamController<List<plateModel>>.broadcast();
+  List<plateModel> _currentPlates = []; // Store current records
 
   Stream<List<plateModel>> get entryStream => _entryStreamController.stream;
 
@@ -13,26 +14,41 @@ class DatabaseHelper {
     _subscribeToRealtime();
   }
 
-  // Fetch initial data
+  // Fetch initial data once
   Future<void> _fetchInitialData() async {
     try {
       final result = await pb.collection('database').getList();
-      final List<plateModel> plates =
+      _currentPlates =
           result.items.map((item) => plateModel.fromJson(item.toJson())).toList();
-
-      _entryStreamController.add(plates);
+      _entryStreamController.add(_currentPlates);
     } catch (e) {
       print('Error fetching initial data: $e');
     }
   }
 
-  // Subscribe to real-time updates
+  // Subscribe to real-time updates without re-fetching everything
   void _subscribeToRealtime() {
     pb.collection('database').subscribe('*', (e) {
       print('Realtime Event: ${e.action}');
       print('Updated Record: ${e.record}');
 
-      _fetchInitialData(); // Re-fetch data when a record is created/updated/deleted
+      if (e.action == "create") {
+        // Add new record
+        _currentPlates.add(plateModel.fromJson(e.record!.toJson()));
+      } else if (e.action == "update") {
+        // Find and update the existing record
+        int index =
+            _currentPlates.indexWhere((plate) => plate.id == e.record!.id);
+        if (index != -1) {
+          _currentPlates[index] = plateModel.fromJson(e.record!.toJson());
+        }
+      } else if (e.action == "delete") {
+        // Remove the deleted record
+        _currentPlates.removeWhere((plate) => plate.id == e.record!.id);
+      }
+
+      // Update the stream with new data
+      _entryStreamController.add(List.from(_currentPlates));
     });
   }
 
