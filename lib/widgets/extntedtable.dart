@@ -77,7 +77,7 @@ Container contant() {
                     : tcontroller.selectedmodel.plateNum!.contains("x")
                         ? 'تاکسی'
                         : tcontroller.selectedmodel.plateNum!.contains('A')
-                            ? "دولتی"
+                            ? "دولتی" :  tcontroller.selectedmodel.plateNum!.contains('PuV') ?   'کامیون' 
                             : "شخصی"
             // Get.find<Boxes>()
             //         .regBox
