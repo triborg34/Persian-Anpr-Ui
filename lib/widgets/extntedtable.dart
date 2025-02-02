@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:unapwebv/controller/mianController.dart';
 import 'package:unapwebv/model/consts.dart';
 import 'package:unapwebv/screens/detailedScreen.dart';
+import 'package:unapwebv/widgets/arvand_pelak.dart';
 import 'package:unapwebv/widgets/licancenumber.dart';
 import  'package:persian_number_utility/persian_number_utility.dart';
 
@@ -31,7 +32,10 @@ Container contant() {
                     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     width: Get.width/9.03,
                     height: 48,
-                    child:  LicanceNumber(entry: tcontroller.selectedmodel)),
+                    child: tcontroller.selectedmodel.isarvand == 'arvand'
+                        ? ArvandPelak(entry:tcontroller.selectedmodel)
+                        :
+                     LicanceNumber(entry: tcontroller.selectedmodel)),
             tcontroller.selectedIndex == -1
                 ? headerOftable('-')
                 : InkWell(
@@ -68,8 +72,13 @@ Container contant() {
                               tcontroller.selectedmodel.plateNum,
                         )]
                     .name!),
-            contactOfTable(tcontroller.selectedIndex==-1 ? '-':
-            tcontroller.selectedmodel.plateNum!.contains("x") ? 'تاکسی' : tcontroller.selectedmodel.plateNum!.contains('A') ? "دولتی" : "شخصی" 
+                       contactOfTable(tcontroller.selectedIndex == -1
+                    ? '-'
+                    : tcontroller.selectedmodel.plateNum!.contains("x")
+                        ? 'تاکسی'
+                        : tcontroller.selectedmodel.plateNum!.contains('A')
+                            ? "دولتی"
+                            : "شخصی"
             // Get.find<Boxes>()
             //         .regBox
             //         .where(

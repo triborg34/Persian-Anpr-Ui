@@ -14,6 +14,7 @@ import 'package:unapwebv/model/consts.dart';
 import 'package:unapwebv/model/model.dart';
 import 'package:unapwebv/screens/detailedScreen.dart';
 import 'package:unapwebv/widgets/alphabetselector.dart';
+import 'package:unapwebv/widgets/arvand_pelak.dart';
 import 'package:unapwebv/widgets/licancenumber.dart';
 
 class ReportScreen extends StatelessWidget {
@@ -179,19 +180,16 @@ class ReportScreen extends StatelessWidget {
                                                             .plateNum,
                                                   )]
                                               .role!,
-                                              "Camera Name"
-                                              :    Get.find<Boxes>()
-                                                        .camerabox
-                                                        
-                                                        .firstWhere(
-                                                          (element) =>
-                                                              element.rtpath ==
-                                                              rcontroller
-                                                                  .selectedModel[
-                                                                      index]
-                                                                  .rtpath,
-                                                        )
-                                                        .nameCamera
+                                               "Camera Name": Get.find<Boxes>()
+                                          .camerabox
+                                          
+                                          .firstWhere(
+                                            (element) =>
+                                                element.rtpath ==
+                                                rcontroller.selectedModel[index]
+                                                    .rtpath,
+                                          )
+                                          .nameCamera
                                     };
                                   },
                                 );
@@ -647,14 +645,27 @@ class ReportScreen extends StatelessWidget {
                           itemBuilder: (context, index) {
                             return Visibility(
                               visible:
-                                  rcontroller.selectedModel[index].isarvand ==
-                                          'arvand'
-                                      ? true
-                                      : convertToPersian(
-                                              rcontroller.selectedModel[index]
-                                                  .plateNum!,
-                                              alphabetP2)[0] !=
-                                          '-',
+                                   rcontroller
+                                          .selectedModel[index].isarvand ==
+                                      'arvand'
+                                  ? rcontroller.selectedModel[index].plateNum!
+                                          .contains(RegExp('[a-zA-Z]'))
+                                      ? false
+                                      : true
+                                  : convertToPersian(
+                                          rcontroller
+                                              .selectedModel[index].plateNum!,
+                                          alphabetP2)[0] !=
+                                      '-',
+
+                              // rcontroller.selectedModel[index].isarvand ==
+                              //         'arvand'
+                              //     ? true
+                              //     : convertToPersian(
+                              //             rcontroller.selectedModel[index]
+                              //                 .plateNum!,
+                              //             alphabetP2)[0] !=
+                              //         '-',
                               child: Container(
                                 width: Get.width,
                                 height: 50,
@@ -874,18 +885,12 @@ class ReportScreen extends StatelessWidget {
                                               ? SizedBox(
                                                   width: Get.width / 9.03,
                                                   height: 50,
-                                                  child: Center(
-                                                    child: Text(
-                                                      rcontroller
-                                                          .selectedModel[index]
-                                                          .plateNum!
-                                                          .toPersianDigit(),
-                                                      style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: 18),
-                                                    ),
-                                                  ),
-                                                )
+                                                  child:
+                                                   ArvandPelak(
+                                                      entry: rcontroller
+                                                              .selectedModel[
+                                                          index]))
+
                                               : LicanceNumber(
                                                   entry: rcontroller
                                                       .selectedModel[index]),
