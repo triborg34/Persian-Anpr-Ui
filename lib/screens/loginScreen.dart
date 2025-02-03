@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:unapwebv/controller/mianController.dart';
-import 'package:unapwebv/screens/subscreens/licancecheker.dart';
 
+import 'package:unapwebv/controller/mianController.dart';
+import 'package:unapwebv/model/consts.dart';
+import 'package:unapwebv/screens/subscreens/licancecheker.dart';
 
 class ModernLoginPage extends StatefulWidget {
   const ModernLoginPage({super.key});
@@ -16,18 +16,22 @@ class ModernLoginPage extends StatefulWidget {
 class _ModernLoginPageState extends State<ModernLoginPage> {
   final _formKey = GlobalKey<FormState>();
   bool _rememberMe = false;
+
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   Future<void> _checkLoginStatus() async {
-    final prefs = await SharedPreferences.getInstance();
-    bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+final records = await pb.collection('sharedPerfence').getFullList(
 
-    if (isLoggedIn) {
-          Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (_) =>  Licancecheker()),
-    );
-      
+);
+if(records.isNotEmpty){
+      if (records[0].data['login']) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => Licancecheker()),
+      );
+}
+
+
     }
   }
 
@@ -44,9 +48,10 @@ class _ModernLoginPageState extends State<ModernLoginPage> {
         focusNode: FocusNode(),
         autofocus: true,
         onKeyEvent: (event) {
-                   if (event is KeyDownEvent && event.logicalKey == LogicalKeyboardKey.enter) {
-             _login();
-            }
+          if (event is KeyDownEvent &&
+              event.logicalKey == LogicalKeyboardKey.enter) {
+            _login();
+          }
         },
         child: Container(
           width: double.infinity,
@@ -86,12 +91,13 @@ class _ModernLoginPageState extends State<ModernLoginPage> {
                           ),
                         ),
                         const SizedBox(height: 40),
-        
+
                         // Username TextField
                         TextFormField(
                           controller: _usernameController,
                           decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.person, color: Colors.purple),
+                            prefixIcon:
+                                Icon(Icons.person, color: Colors.purple),
                             hintText: 'نام کاربری',
                             filled: true,
                             fillColor: Colors.white.withOpacity(0.1),
@@ -119,7 +125,7 @@ class _ModernLoginPageState extends State<ModernLoginPage> {
                           },
                         ),
                         const SizedBox(height: 20),
-        
+
                         // Password TextField
                         TextFormField(
                           controller: _passwordController,
@@ -153,9 +159,7 @@ class _ModernLoginPageState extends State<ModernLoginPage> {
                           },
                         ),
                         const SizedBox(height: 10),
-                        
-                        
-        
+
                         // Remember Me Checkbox
                         Row(
                           textDirection: TextDirection.rtl,
@@ -188,15 +192,14 @@ class _ModernLoginPageState extends State<ModernLoginPage> {
                           ],
                         ),
                         const SizedBox(height: 30),
-        
+
                         // Login Button
                         ElevatedButton(
                           autofocus: false,
                           onPressed: () async {
-                          await _login();
+                            await _login();
                           },
                           style: ElevatedButton.styleFrom(
-                          
                             backgroundColor: Colors.purple,
                             padding: EdgeInsets.symmetric(vertical: 15),
                             shape: RoundedRectangleBorder(
@@ -222,47 +225,41 @@ class _ModernLoginPageState extends State<ModernLoginPage> {
         ),
       ),
     );
-    
   }
-  _login()async {
-      final prefs = await SharedPreferences.getInstance();
-                          if (_formKey.currentState!.validate()) {
-                            // Login logic here
 
-                            try {
-                              if (Get.find<Boxes>()
-                                      .userbox
-                                      
-                                      .firstWhere(
-                                        (element) =>
-                                            element.username ==
-                                            _usernameController.text,
-                                      )
-                                      .password ==
-                                  _passwordController.text) {
-                                if (_rememberMe) {
-                                  await prefs.setBool('isLoggedIn', true);
-                                  await prefs.setString(
-                                      'username', _usernameController.text);
-                                }
+  _login() async {
+    if (_formKey.currentState!.validate()) {
+      // Login logic here
 
-                                Get.to(() => Licancecheker());
-                              } else {}
-                            } catch (e) {
-                              if(_usernameController.text=="root"&&_passwordController.text=="root"){
-                                 Get.to(() => Licancecheker());
-                              }
-                              else{
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                    content:
-                                        Text('رمز عبور یا نام کاربری اشتباه')),
-                              );
-                              }
-                      
-                            }
-                          }
+      try {
+        if (Get.find<Boxes>()
+                .userbox
+                .firstWhere(
+                  (element) => element.username == _usernameController.text,
+                )
+                .password ==
+            _passwordController.text) {
+          if (_rememberMe) {
+            final records = await pb.collection('sharedPerfence').getFullList(
+     
+                );
+                await pb.collection('sharedPerfence').update(records[0].id, body: {
+                  'login':_rememberMe
+                });
+          }
 
+          Get.to(() => Licancecheker());
+        } else {}
+      } catch (e) {
+        if (_usernameController.text == "root" &&
+            _passwordController.text == "root") {
+          Get.to(() => Licancecheker());
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('رمز عبور یا نام کاربری اشتباه')),
+          );
+        }
+      }
+    }
   }
 }
-

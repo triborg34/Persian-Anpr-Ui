@@ -17,20 +17,19 @@ class DatabaseHelper {
   // Fetch initial data once
   Future<void> _fetchInitialData() async {
     try {
-      final result = await pb.collection('database').getList(page: 1,perPage: 99999999);
+      final result = await pb.collection('database').getFullList(batch: 100);
       _currentPlates =
-          result.items.map((item) => plateModel.fromJson(item.toJson())).toList();
+          result.map((item) => plateModel.fromJson(item.toJson())).toList();
       _entryStreamController.add(_currentPlates);
     } catch (e) {
-      print('Error fetching initial data: $e');
+
     }
   }
 
   // Subscribe to real-time updates without re-fetching everything
   void _subscribeToRealtime() {
     pb.collection('database').subscribe('*', (e) {
-      print('Realtime Event: ${e.action}');
-      print('Updated Record: ${e.record}');
+
 
       if (e.action == "create") {
         // Add new record

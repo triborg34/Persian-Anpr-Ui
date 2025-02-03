@@ -359,8 +359,21 @@ Future<void> deleteAllRecords(String collectionName) async {
 
   for (var record in records) {
     await pb.collection(collectionName).delete(record.id);
-    print('✅ Deleted record: ${record.id}');
+
   }
 
-  print('🎉 All records deleted successfully.');
+}
+
+
+firstLogin()async{
+  final records = await pb.collection('sharedPerfence').getFullList(
+
+);
+if(records.isEmpty){
+await pb.collection('sharedPerfence').create(body: {
+  'nol':0,
+  'login':false,
+  'licance':false
+});
+}
 }

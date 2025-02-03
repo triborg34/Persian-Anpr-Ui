@@ -286,7 +286,7 @@ class Generalsetting extends StatelessWidget {
                               .value
                               .toStringAsFixed(2)
                         });
-                        print(res.statusCode);
+                 
                     if (res.statusCode == 200) {
                       await dio.post(
                           "http://127.0.0.1:${Get.find<Boxes>().settingbox.last.connect}/config",

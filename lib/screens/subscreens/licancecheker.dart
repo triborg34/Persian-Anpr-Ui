@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:unapwebv/controller/mianController.dart';
 import 'package:unapwebv/model/consts.dart';
 import 'package:unapwebv/screens/mainPage.dart';
@@ -14,10 +14,9 @@ class Licancecheker extends StatefulWidget {
 
 class _LicancechekerState extends State<Licancecheker> {
   TextEditingController controller = TextEditingController();
-  late final nol;
-
-  int _intValue = 0;
-  bool _boolValue = false;
+  late int nol;
+  bool isLicanced = false;
+   String? id;
 
   @override
   void initState() {
@@ -27,15 +26,12 @@ class _LicancechekerState extends State<Licancecheker> {
 
   // Load saved values
   _loadSavedValues() async {
-    final prefs = await SharedPreferences.getInstance();
-    _intValue = prefs.getInt('myIntValue') ?? 0;
-    _boolValue = prefs.getBool('myBoolValue') ?? false;
+    final resuilt=await pb.collection('sharedPerfence').getFullList();
 
-    if (_boolValue) {
+    isLicanced=resuilt[0].data['licance'];
+    Get.find<Boxes>().nol.value=resuilt[0].data['nol'];
 
-      Get.find<Boxes>().nol.value=_intValue;
-
-     
+    if (isLicanced) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (_) => SplashScreen()),
       );
@@ -43,11 +39,10 @@ class _LicancechekerState extends State<Licancecheker> {
   }
 
   // Save values
-  _saveValues() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt('myIntValue', _intValue);
-    await prefs.setBool('myBoolValue', _boolValue);
-
+  _saveValues(bool isLicanced, String id, int nol) async {
+    await pb
+        .collection('sharedPerfence')
+        .update(id, body: {"nol": nol, "licance": isLicanced});
   }
 
   @override
@@ -95,28 +90,26 @@ class _LicancechekerState extends State<Licancecheker> {
             ),
             ElevatedButton(
                 onPressed: () async {
-             
                   Dio dio = Dio();
                   String url = 'https://sheetdb.io/api/v1/znsflyn60etgx';
+                  final resultList =
+                    await  pb.collection('sharedPerfence').getFullList();
+
                   var response = await dio.get(url,
                       options: Options(
                           headers: {"Authorization": "Bearer ${auth}"}));
                   if (response.statusCode == 200) {
                     for (var json in response.data) {
                       if (json['sn'] == controller.text) {
-                        
-                        nol = json['nol'];
-                        _intValue = int.parse(nol);
-                        _boolValue = true;
-                     
-                    
-                        await _saveValues();
+                        nol = int.parse(json['nol']);
+                        isLicanced = true;
+                        id=resultList[0].id;
+            
+
+                        await _saveValues(isLicanced, id!, nol);
                         Get.to(() => MainView());
                         break;
-                        
-                      }
-                       else {
-                        
+                      } else {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text(
                           "شناسه سریال اشتباه است",

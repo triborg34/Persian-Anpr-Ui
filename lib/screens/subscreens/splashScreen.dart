@@ -9,6 +9,7 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     return SplashView(
         backgroundColor: Colors.black,
         logo: Image.network('assets/images/logo.jpg'),

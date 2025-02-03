@@ -47,7 +47,7 @@ class _EnhancedCarRegistrationDialogState
       _selectedRole = Get.find<Boxes>().regBox[widget.index].role;
 
       //
-      print(Get.find<Boxes>().regBox.last.plateNumber);
+
       var d = Get.find<Boxes>()
           .regBox[widget.index]
           .plateNumber!

@@ -5,8 +5,12 @@ import 'package:responsive_framework/responsive_framework.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:unapwebv/controller/bindings.dart';
 import 'package:unapwebv/model/consts.dart';
+import 'package:unapwebv/screens/loginScreen.dart';
 
-import 'package:unapwebv/screens/subscreens/splashScreen.dart';
+
+
+
+
 
 void main() async {
   //TODO:Add Pdf
@@ -38,9 +42,13 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(fontFamily: 'byekan', useMaterial3: true),
         debugShowCheckedModeBanner: false,
         title: 'AmnAfarin',
+        onInit: () async{
+           await firstLogin();
+        },
         onReady: () async {
           printIps();
+         
         },
-        home: SplashScreen());
+        home: ModernLoginPage());
   }
 }

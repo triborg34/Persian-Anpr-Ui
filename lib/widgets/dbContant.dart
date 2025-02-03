@@ -36,7 +36,7 @@ class _DbContantState extends State<DbContant> {
   }
   @override
   Widget build(BuildContext context) {
-    print(_databaseHelper.entryStream.isBlank);
+
     return Container(
       height: 290,
       color: Colors.transparent,

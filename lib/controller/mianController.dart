@@ -55,28 +55,28 @@ class Boxes extends GetxController {
   List<Setting> settingbox = <Setting>[];
 
   void getUsers() async {
-    final resultList = await pb.collection('users').getList();
+    final resultList = await pb.collection('users').getFullList();
     userbox =
-        resultList.items.map((item) => Users.fromJson(item.toJson())).toList();
+        resultList.map((item) => Users.fromJson(item.toJson())).toList();
   }
 
   void getregData() async {
-    final resultList = await pb.collection('registredDb').getList();
-    regBox = resultList.items
+    final resultList = await pb.collection('registredDb').getFullList();
+    regBox = resultList
         .map((item) => RegistredDb.fromJson(item.toJson()))
         .toList();
   }
 
   void getCamera() async {
-    final resultList = await pb.collection('cameras').getList();
-    camerabox = resultList.items
+    final resultList = await pb.collection('cameras').getFullList();
+    camerabox = resultList
         .map((item) => Cameras.fromJson(item.toJson()))
         .toList();
   }
 
   void getSetting() async {
-    final resultList = await pb.collection('setting').getList();
-    settingbox = resultList.items
+    final resultList = await pb.collection('setting').getFullList();
+    settingbox = resultList
         .map((item) => Setting.fromJson(item.toJson()))
         .toList();
 
@@ -98,8 +98,8 @@ class Boxes extends GetxController {
       };
 
       await pb.collection('setting').create(body: body);
-      final resultList = await pb.collection('setting').getList();
-      settingbox = resultList.items
+      final resultList = await pb.collection('setting').getFullList();
+      settingbox = resultList
           .map((item) => Setting.fromJson(item.toJson()))
           .toList();
     }
@@ -139,13 +139,12 @@ class ReportController extends GetxController {
 
   getData() async {
     pModel.clear();
-    int page = 1;
-     int perPage = 99999999; // Fetch 100 records per request
+    // Fetch 100 records per request
     // ignore: unused_local_variable
 
-    final resultList = await pb.collection('database').getList(page: page,perPage: perPage);
+    final resultList = await pb.collection('database').getFullList(batch: 100);
 
-    pModel = resultList.items
+    pModel = resultList
         .map((item) => plateModel.fromJson(item.toJson()))
         .toList();
 
