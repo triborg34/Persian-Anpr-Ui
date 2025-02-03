@@ -24,7 +24,7 @@ class ArvandPelak extends StatelessWidget {
                 width: 30,
                 color: const Color.fromARGB(255, 64, 107, 180),
                 child: Center(
-                  child: Image.asset('assets/images/arvand.png'),
+                  child: Image.network('assets/images/arvand.png'),
                 ),
               ),
               Container(
@@ -63,7 +63,7 @@ class ArvandPelak2 extends StatelessWidget {
                 width: 30,
                 color: const Color.fromARGB(255, 64, 107, 180),
                 child: Center(
-                  child: Image.asset('assets/images/arvand.png'),
+                  child: Image.network('assets/images/arvand.png'),
                 ),
               ),
               Column(
