@@ -19,9 +19,12 @@ void main() async {
   //TODO:Licance Demo🤓
 
   WidgetsFlutterBinding.ensureInitialized();
-
+  await getIps().then((value) {
+    url=value;
+  },);
   tz.initializeTimeZones();
-  imagesPath='http://127.0.0.1:8090/api/files/database/';
+
+  
 
   //Clean Up Code Refactor all codes and remove duplicate code
 
@@ -43,7 +46,9 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'AmnAfarin',
         onInit: () async{
+          await getIps();
            await firstLogin();
+
         },
         onReady: () async {
           printIps();

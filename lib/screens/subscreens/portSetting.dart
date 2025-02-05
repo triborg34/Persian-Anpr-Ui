@@ -11,7 +11,8 @@ class PortSettings extends StatelessWidget {
       TextEditingController(text: Get.find<settingController>().port);
   TextEditingController connectConttroler =
       TextEditingController(text: Get.find<settingController>().connect);
-
+      
+TextEditingController defipcontroller=TextEditingController(text: pathurl);
   TextEditingController rfidip =
       TextEditingController(text: Get.find<settingController>().rfidip);
   TextEditingController rfidport = TextEditingController(
@@ -133,26 +134,76 @@ class PortSettings extends StatelessWidget {
                         width: 100,
                         height: 50,
                         child: TextFormField(
-                          controller: TextEditingController(text: '127.0.0.1'),
-                          readOnly: true,
+                          controller: defipcontroller,
+                          readOnly: false,
+                        
                           textDirection: TextDirection.ltr,
                           style: TextStyle(
                               color: Colors.white70, fontFamily: 'arial'),
                           decoration: InputDecoration(
                               border: OutlineInputBorder(),
-                              hintText: 'eg:8080',
+                              hintText: 'eg:192.168.1...',
                               hintTextDirection: TextDirection.ltr),
                         ),
                       )
                     ],
                   ),
-                ))
+                )),
+                             Expanded(
+                    child: Container(
+                  height: 65,
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 100,
+                        child: Text(
+                          'پورت دیتابیس:',
+                          style: TextStyle(color: Colors.white, fontSize: 16),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 100,
+                        height: 50,
+                        child: TextFormField(
+                          controller: TextEditingController(text: '8090'),
+                          readOnly: false,
+                          onEditingComplete: () {
+                            // Get.find<settingController>().connect =
+                            //     connectConttroler.text;
+                          },
+                          textDirection: TextDirection.ltr,
+                          style: TextStyle(
+                              color: Colors.white, fontFamily: 'arial'),
+                          decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              hintText: 'eg:8090',
+                              hintTextDirection: TextDirection.ltr),
+                        ),
+                      )
+                    ],
+                  ),
+                )),
+                IconButton(onPressed: ()async{
+
+                                Dio dio = Dio();
+
+                        await dio.post("http://${pathurl}:${Get.find<Boxes>().settingbox.last.connect}/defip?defip=${defipcontroller.text}&defport=8090");
+                        await dio.post('http://127.0.0.1:${Get.find<Boxes>().settingbox.last.connect}/config', data: {
+                          "section": "DEFAULT",
+                          "key": "socketport",
+                          "value": portController.text
+                        });
+                        await dio.post('http://127.0.0.1:${Get.find<Boxes>().settingbox.last.connect}/config', data: {
+                          "section": "DEFAULT",
+                          "key": "serverport",
+                          "value": connectConttroler.text
+                        });
+                  
+                }, icon: Icon(Icons.save))
               ],
             ),
           ),
-          SizedBox(
-            height: 15,
-          ),
+        
           SizedBox(
             height: 15,
           ),
@@ -170,15 +221,15 @@ class PortSettings extends StatelessWidget {
           SizedBox(
             height: 15,
           ),
-          ipFunction("نام شبکه", ethname),
+          ipFunction("نام شبکه", "Lan"),
           SizedBox(
             height: 10,
           ),
-          ipFunction("آدرس شبکه", ipadress),
+          ipFunction("آدرس شبکه", pathurl),
           SizedBox(
             height: 10,
           ),
-          ipFunction("نوع آدرس", ipname),
+          ipFunction("نوع آدرس", 'IPV4'),
           SizedBox(
             height: 10,
           ),
@@ -393,17 +444,7 @@ class PortSettings extends StatelessWidget {
                             Get.snackbar("", "تغییرات ذخیره شد",
                                 colorText: Colors.white);
                    
-                        Dio dio = Dio();
-                        await dio.post('http://127.0.0.1:${Get.find<Boxes>().settingbox.last.connect}/config', data: {
-                          "section": "DEFAULT",
-                          "key": "socketport",
-                          "value": portController.text
-                        });
-                        await dio.post('http://127.0.0.1:${Get.find<Boxes>().settingbox.last.connect}/config', data: {
-                          "section": "DEFAULT",
-                          "key": "serverport",
-                          "value": connectConttroler.text
-                        });
+         
                       },
                       child: Text("ذخیره")))),
         ],

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:math';
 
 
+import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 import 'package:pocketbase/pocketbase.dart';
 
@@ -293,7 +294,7 @@ try{
 
 
 
-late String imagesPath;
+
 
 Color purpule = Color.fromARGB(255, 56, 2, 109);
 Color selecetpurpule=const Color.fromARGB(255, 109, 20, 125);
@@ -350,8 +351,10 @@ rawAddress="تعریف نشده";
 
 
 String auth='6ov7yca3kg6wvzpxzoqpb3g1enav32v98a9zeicl';
-String url='http://localhost:8090';
-final pb = PocketBase(url);
+
+
+
+
 
 
 Future<void> deleteAllRecords(String collectionName) async {
@@ -363,6 +366,27 @@ Future<void> deleteAllRecords(String collectionName) async {
   }
 
 }
+
+
+
+
+ Future<String> getIps()async {
+  
+ Dio dio=Dio();
+ var response=await dio.get('../anprv8/engine/ip.json');
+
+ try{
+return response.data['defip'];
+ }
+ catch(e){
+ return 'http://127.0.0.1:8090';
+ }
+
+}
+late String url;
+late String imagesPath='${url}/api/files/database/';
+late String pathurl=url.split('//')[1].split(':')[0];
+final pb = PocketBase(url);
 
 
 firstLogin()async{

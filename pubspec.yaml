@@ -60,6 +60,7 @@ dependencies:
   web_socket_channel: ^3.0.2
   pocketbase: ^0.21.0
 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

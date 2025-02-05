@@ -1,9 +1,10 @@
 import 'dart:async';
-import 'package:pocketbase/pocketbase.dart';
+
+import 'package:unapwebv/model/consts.dart';
 import 'package:unapwebv/model/model.dart';
 
 class DatabaseHelper {
-  final PocketBase pb = PocketBase('http://localhost:8090');
+  // final PocketBase pb = PocketBase('http://localhost:8090');
   final _entryStreamController = StreamController<List<plateModel>>.broadcast();
   List<plateModel> _currentPlates = []; // Store current records
 
@@ -17,7 +18,7 @@ class DatabaseHelper {
   // Fetch initial data once
   Future<void> _fetchInitialData() async {
     try {
-      final result = await pb.collection('database').getFullList(batch: 100);
+      final result = await pb.collection('database').getFullList(batch: 100,);
       _currentPlates =
           result.map((item) => plateModel.fromJson(item.toJson())).toList();
       _entryStreamController.add(_currentPlates);
