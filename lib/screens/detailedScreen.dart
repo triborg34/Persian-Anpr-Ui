@@ -69,16 +69,21 @@ class Detailedscreen extends StatelessWidget {
                     //         alphabetP2)),
                     index == -1
                         ? headerOftable3('-')
-                        : Container(
-                          
-                            decoration: BoxDecoration(
-                                border:
-                                    Border(right: BorderSide(color: purpule),left: BorderSide(color: purpule))),
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 0, vertical: 5),
-                            width: 200,
-                            height: 48,
-                            child:selectedModel.isarvand=='arvand' ?ArvandPelak(entry: selectedModel): LicanceNumber(entry: selectedModel)),
+                        : InkWell(
+                          onTap: () {
+                            
+                          },
+                          child: Container(
+                            
+                              decoration: BoxDecoration(
+                                  border:
+                                      Border(right: BorderSide(color: purpule),left: BorderSide(color: purpule))),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 0, vertical: 5),
+                              width: 200,
+                              height: 48,
+                              child:selectedModel.isarvand=='arvand' ?ArvandPelak(entry: selectedModel): LicanceNumber(entry: selectedModel)),
+                        ),
 
                     Container(
                       decoration: BoxDecoration(

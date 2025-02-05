@@ -38,6 +38,7 @@ if(records.isNotEmpty){
   @override
   void initState() {
     _checkLoginStatus();
+
     super.initState();
   }
 

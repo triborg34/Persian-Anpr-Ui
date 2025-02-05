@@ -1,7 +1,8 @@
 import 'dart:async';
 
 
-import 'package:dio/dio.dart';
+
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -59,12 +60,9 @@ class _MainViewState extends State<MainView> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
-      floatingActionButton: FloatingActionButton(onPressed: (){
-        Dio dio=Dio();
-        var res=dio.get('assets/config.json');
-        res.then((value) => print(value.data['defip']),);
-      }),
+
       bottomNavigationBar: ResponsiveNavigationBar(
 
         inactiveIconColor: Colors.white38,

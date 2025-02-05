@@ -1,9 +1,6 @@
 
 import 'dart:io';
 import 'dart:math';
-
-
-import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 import 'package:pocketbase/pocketbase.dart';
 
@@ -370,25 +367,31 @@ Future<void> deleteAllRecords(String collectionName) async {
 
 
 
- Future<String> getIps()async {
+//  Future<String> getIps()async {
   
- Dio dio=Dio();
- var response=await dio.get('../anprv8/engine/ip.json');
+//  Dio dio=Dio();
+//  var response=await dio.get('assets/config.json');
 
- try{
-return response.data['defip'];
- }
- catch(e){
- return 'http://127.0.0.1:8090';
- }
+//  try{
+// return response.data['defip'];
+//  }
+//  catch(e){
+//  return 'http://192.168.1.114:8090';
+//  }
 
+// }
+late String url='http://192.168.1.114:8090';
+late String imagesPath;
+late String pathurl;
+late String pathport;
+late PocketBase pb=PocketBase(url);
+
+void updatePaths() {
+  imagesPath = '${url}/api/files/database/';
+  pathurl = url.split('//')[1].split(':')[0];
+  pathport=url.split('//')[1].split(':')[1];
+           pb = PocketBase(url); 
 }
-late String url;
-late String imagesPath='${url}/api/files/database/';
-late String pathurl=url.split('//')[1].split(':')[0];
-final pb = PocketBase(url);
-
-
 firstLogin()async{
   final records = await pb.collection('sharedPerfence').getFullList(
 

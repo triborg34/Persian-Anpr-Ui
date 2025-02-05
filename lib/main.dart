@@ -1,14 +1,13 @@
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import 'package:responsive_framework/responsive_framework.dart';
 
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:unapwebv/controller/bindings.dart';
 import 'package:unapwebv/model/consts.dart';
-import 'package:unapwebv/screens/loginScreen.dart';
-
-
-
+import 'package:unapwebv/screens/firstsplashscreen.dart';
 
 
 
@@ -19,17 +18,17 @@ void main() async {
   //TODO:Licance Demo🤓
 
   WidgetsFlutterBinding.ensureInitialized();
-  await getIps().then((value) {
-    url=value;
-  },);
+
   tz.initializeTimeZones();
 
-  
+
 
   //Clean Up Code Refactor all codes and remove duplicate code
 
   runApp(MyApp());
 }
+
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -45,15 +44,12 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(fontFamily: 'byekan', useMaterial3: true),
         debugShowCheckedModeBanner: false,
         title: 'AmnAfarin',
-        onInit: () async{
-          await getIps();
-           await firstLogin();
+        onInit: () async {
 
         },
         onReady: () async {
           printIps();
-         
         },
-        home: ModernLoginPage());
+        home: FirstLoginScreen());
   }
 }

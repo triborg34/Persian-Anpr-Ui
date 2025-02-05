@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:unapwebv/controller/mianController.dart';
+import 'package:unapwebv/model/consts.dart';
 
 
 import 'package:unapwebv/widgets/dbContant.dart';
@@ -96,7 +97,7 @@ class HomeScreen extends StatelessWidget {
   Widget VidGridBuild(int index, context) {
     if (index == 0) {
       return VideoStream(
-        url: "ws://127.0.0.1:${port}/rt${selectedVideo}",
+        url: "ws://${pathurl}:${port}/rt${selectedVideo}",
       );
     } else if (index == 1) {
       return Container(
@@ -115,7 +116,7 @@ class HomeScreen extends StatelessWidget {
                     selectedVideo=i;
                   },
                     child: VideoStream(
-                  url: "ws://127.0.0.1:${port}/rt${i}",
+                  url: "ws://${pathurl}:${port}/rt${i}",
                 )),
               )
           ],
@@ -134,7 +135,7 @@ class HomeScreen extends StatelessWidget {
                 margin: EdgeInsets.symmetric(horizontal: 5, vertical: 0),
                 color: Colors.transparent,
                 child: VideoStream(
-                  url: "ws://127.0.0.1:${port}/rt${i}",
+                  url: "ws://${pathurl}:${port}/rt${i}",
                 ),
               )
           ],

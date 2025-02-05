@@ -108,10 +108,10 @@ class Boxes extends GetxController {
   @override
   void onReady() {
     // getregData();
-    getUsers();
-    getSetting();
-    getregData();
-    getCamera();
+  getUsers();
+ getSetting();
+getregData();
+  getCamera();
     super.onReady();
   }
 }
@@ -132,10 +132,14 @@ class ReportController extends GetxController {
   String? platePicker;
   String? savePath;
   @override
-  void onInit() async {
+
+  
+  @override
+  void onReady() async {
     await getData();
-    super.onInit();
+    super.onReady();
   }
+  
 
   getData() async {
     pModel.clear();

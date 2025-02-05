@@ -11,8 +11,9 @@ class PortSettings extends StatelessWidget {
       TextEditingController(text: Get.find<settingController>().port);
   TextEditingController connectConttroler =
       TextEditingController(text: Get.find<settingController>().connect);
-      
-TextEditingController defipcontroller=TextEditingController(text: pathurl);
+
+  TextEditingController defipcontroller = TextEditingController(text: pathurl);
+  TextEditingController defportcontroller = TextEditingController(text: pathport);
   TextEditingController rfidip =
       TextEditingController(text: Get.find<settingController>().rfidip);
   TextEditingController rfidport = TextEditingController(
@@ -136,10 +137,9 @@ TextEditingController defipcontroller=TextEditingController(text: pathurl);
                         child: TextFormField(
                           controller: defipcontroller,
                           readOnly: false,
-                        
                           textDirection: TextDirection.ltr,
                           style: TextStyle(
-                              color: Colors.white70, fontFamily: 'arial'),
+                              color: Colors.white, fontFamily: 'arial'),
                           decoration: InputDecoration(
                               border: OutlineInputBorder(),
                               hintText: 'eg:192.168.1...',
@@ -149,7 +149,7 @@ TextEditingController defipcontroller=TextEditingController(text: pathurl);
                     ],
                   ),
                 )),
-                             Expanded(
+                Expanded(
                     child: Container(
                   height: 65,
                   child: Row(
@@ -165,7 +165,7 @@ TextEditingController defipcontroller=TextEditingController(text: pathurl);
                         width: 100,
                         height: 50,
                         child: TextFormField(
-                          controller: TextEditingController(text: '8090'),
+                          controller: defportcontroller,
                           readOnly: false,
                           onEditingComplete: () {
                             // Get.find<settingController>().connect =
@@ -183,27 +183,40 @@ TextEditingController defipcontroller=TextEditingController(text: pathurl);
                     ],
                   ),
                 )),
-                IconButton(onPressed: ()async{
+                IconButton(
+                    onPressed: () async {
+                      final records =
+                          await pb.collection('ipconfig').getFullList(
+                      
+                              );
+                    await pb.collection('ipconfig').update(records.last.id, body: {
+                      "defip":"http://${defipcontroller.text}:${defportcontroller.text}"
+                    });
 
-                                Dio dio = Dio();
+                      Dio dio = Dio();
 
-                        await dio.post("http://${pathurl}:${Get.find<Boxes>().settingbox.last.connect}/defip?defip=${defipcontroller.text}&defport=8090");
-                        await dio.post('http://127.0.0.1:${Get.find<Boxes>().settingbox.last.connect}/config', data: {
-                          "section": "DEFAULT",
-                          "key": "socketport",
-                          "value": portController.text
-                        });
-                        await dio.post('http://127.0.0.1:${Get.find<Boxes>().settingbox.last.connect}/config', data: {
-                          "section": "DEFAULT",
-                          "key": "serverport",
-                          "value": connectConttroler.text
-                        });
-                  
-                }, icon: Icon(Icons.save))
+                      await dio.post(
+                          "http://${pathurl}:${Get.find<Boxes>().settingbox.last.connect}/defip?defip=${defipcontroller.text}&defport=${defportcontroller.text}");
+      
+                      await dio.post(
+                          'http://127.0.0.1:${Get.find<Boxes>().settingbox.last.connect}/config',
+                          data: {
+                            "section": "DEFAULT",
+                            "key": "socketport",
+                            "value": portController.text
+                          });
+                      await dio.post(
+                          'http://127.0.0.1:${Get.find<Boxes>().settingbox.last.connect}/config',
+                          data: {
+                            "section": "DEFAULT",
+                            "key": "serverport",
+                            "value": connectConttroler.text
+                          });
+                    },
+                    icon: Icon(Icons.save))
               ],
             ),
           ),
-        
           SizedBox(
             height: 15,
           ),
@@ -390,7 +403,7 @@ TextEditingController defipcontroller=TextEditingController(text: pathurl);
                       value: Get.find<settingController>().alarm.value,
                       onChanged: (value) {
                         Get.find<settingController>().alarm.value = value;
-                        Get.snackbar("", "فعال شد",colorText: Colors.white);
+                        Get.snackbar("", "فعال شد", colorText: Colors.white);
                       },
                     )),
               ],
@@ -405,46 +418,34 @@ TextEditingController defipcontroller=TextEditingController(text: pathurl);
               child: Center(
                   child: ElevatedButton(
                       onPressed: () async {
-                         Get.find<Boxes>()
-                            .settingbox[ Get.find<Boxes>().settingbox.length - 1]=
-                           
-                                Setting(
-                                    alarm: Get.find<settingController>()
-                                        .alarm
-                                        .value,
-                                    port: portController.text,
-                                    connect: connectConttroler.text,
-                                    isRfid: Get.find<settingController>()
-                                        .isRfid
-                                        .value,
-                                    rl1:
-                                        Get.find<settingController>().rl1.value,
-                                    rl2:
-                                        Get.find<settingController>().rl2.value,
-                                    rfidip: rfidip.text,
-                                    rfidport: int.parse(rfidport.text));
-                                    final resultList = await pb.collection('setting').getList();
-                                    var body={
-                                           "alarm": Get.find<settingController>()
-                                        .alarm
-                                        .value,
-                                    "port": portController.text,
-                                    "connect": connectConttroler.text,
-                                    "isRfid": Get.find<settingController>()
-                                        .isRfid
-                                        .value,
-                                    "rl1":
-                                        Get.find<settingController>().rl1.value,
-                                    "rl2":
-                                        Get.find<settingController>().rl2.value,
-                                    "rfidip": rfidip.text,
-                                    "rfidport": int.parse(rfidport.text)
-                                    };
-                        await pb.collection('setting').update(resultList.items.last.id, body: body);
-                            Get.snackbar("", "تغییرات ذخیره شد",
-                                colorText: Colors.white);
-                   
-         
+                        Get.find<Boxes>().settingbox[
+                            Get.find<Boxes>().settingbox.length -
+                                1] = Setting(
+                            alarm: Get.find<settingController>().alarm.value,
+                            port: portController.text,
+                            connect: connectConttroler.text,
+                            isRfid: Get.find<settingController>().isRfid.value,
+                            rl1: Get.find<settingController>().rl1.value,
+                            rl2: Get.find<settingController>().rl2.value,
+                            rfidip: rfidip.text,
+                            rfidport: int.parse(rfidport.text));
+                        final resultList =
+                            await pb.collection('setting').getList();
+                        var body = {
+                          "alarm": Get.find<settingController>().alarm.value,
+                          "port": portController.text,
+                          "connect": connectConttroler.text,
+                          "isRfid": Get.find<settingController>().isRfid.value,
+                          "rl1": Get.find<settingController>().rl1.value,
+                          "rl2": Get.find<settingController>().rl2.value,
+                          "rfidip": rfidip.text,
+                          "rfidport": int.parse(rfidport.text)
+                        };
+                        await pb
+                            .collection('setting')
+                            .update(resultList.items.last.id, body: body);
+                        Get.snackbar("", "تغییرات ذخیره شد",
+                            colorText: Colors.white);
                       },
                       child: Text("ذخیره")))),
         ],
