@@ -19,8 +19,11 @@ void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
 
-  tz.initializeTimeZones();
-
+// try{
+//   tz.initializeTimeZones();
+// }catch(e){
+//   print(e);
+// }
 
 
   //Clean Up Code Refactor all codes and remove duplicate code
@@ -49,6 +52,11 @@ class MyApp extends StatelessWidget {
         },
         onReady: () async {
           printIps();
+          try{
+          tz.initializeTimeZones();
+          }catch(e){
+          
+          }
         },
         home: FirstLoginScreen());
   }

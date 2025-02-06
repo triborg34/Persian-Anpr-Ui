@@ -34,9 +34,13 @@ class _FirstLoginScreenState extends State<FirstLoginScreen> {
       // Navigate to login screen after initialization
       Get.to(() => ModernLoginPage());
     } catch (e) {
+   
+      await pb.collection('ipconfig').create(body: {
+        "defip":"http://127.0.0.1:8090"
+      }).then((value) => initializeApp());
       print("Error initializing app: $e");
       // Show an error message if something goes wrong
-      showErrorMessage();
+      // showErrorMessage();
     }
   }
 

@@ -599,7 +599,7 @@ class _licanceFieldState extends State<licanceField> {
               ),
               Text(
                 "/",
-                style: TextStyle(color: Colors.white, fontSize: 30),
+                style: TextStyle(color: Colors.white, fontSize: 30,decoration: TextDecoration.none),
               ),
               SizedBox(
                 width: 15,
