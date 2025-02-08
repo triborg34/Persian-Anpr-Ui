@@ -380,7 +380,7 @@ Future<void> deleteAllRecords(String collectionName) async {
 //  }
 
 // }
-late String url='http://192.168.1.114:8090';
+late String url='http://127.0.0.1:8090';
 late String imagesPath;
 late String pathurl;
 late String pathport;
