@@ -87,9 +87,9 @@ class Boxes extends GetxController {
         "plateConf": 0.8,
         "hardWare": 'cuda',
         "timeZone": 'Asia/Tehran',
-        "connect": '8000',
+        "connect": '9993',
         "isRfid": false,
-        "port": '5000',
+        "port": '9992',
         "rl1": false,
         "rl2": false,
         "rfidip": '192.168.1.91',
@@ -183,8 +183,8 @@ class settingController extends GetxController {
   var pathOfOutput = '../engine/'.obs;
   var clockType = '24';
   String timezoneseleted = "Asia/Tehran";
-  String port = 5000.toString();
-  String connect = 8000.toString();
+  String port = 9992.toString();
+  String connect = 9993.toString();
   var isRfid = false.obs;
   var rl1 = false.obs;
   var rl2 = false.obs;
