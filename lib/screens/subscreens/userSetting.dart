@@ -186,6 +186,7 @@ GetBuilder<Boxes>(id: 9,builder: (controller) {
               height: 150,
               child: ListView.separated(
                   itemBuilder: (context, index) {
+                    print(Get.find<Boxes>().regBox[index].isarvand);
                     return Container(
                       height: 50,
                       width: MediaQuery.of(context).size.width,
@@ -195,7 +196,7 @@ GetBuilder<Boxes>(id: 9,builder: (controller) {
                       child: Row(
                         textDirection: TextDirection.rtl,
                         children: [
-                          UserRows(
+                        Get.find<Boxes>().regBox[index].isarvand=='arvnad' ? UserRows(title:  Get.find<Boxes>().regBox[index].plateNumber) :   UserRows(
                               title: convertToPersianString(
                                   Get.find<Boxes>().regBox[index].plateNumber!,
                                   alphabetP2)),
@@ -261,19 +262,18 @@ GetBuilder<Boxes>(id: 9,builder: (controller) {
                             width: 5,
                           ),
                           IconButton(
-                              onPressed: () {},
-                              icon: IconButton(
-                                  onPressed: () async{
-                                    await pb.collection('registredDb').delete(Get.find<Boxes>().regBox[index].id!);
+                              onPressed: () async{
+                                      await pb.collection('registredDb').delete(Get.find<Boxes>().regBox[index].id!);
                                     await Get.find<Boxes>().regBox.removeAt(index); //TODO:
                                      Get.find<Boxes>().getregData();
                                     Get.find<Boxes>().update([9]);
-                                    
-                                  },
-                                  icon: Icon(
+                              },
+                              icon: Icon(
+                               
+                                   
                                     Icons.delete,
                                     color: Colors.red,
-                                  )))
+                                  ))
                         ],
                       ),
                     );
@@ -383,9 +383,11 @@ class _UserRegistrationDialogState extends State<UserRegistrationDialog> {
         'password': _passwordController.text,
         'role': _selectedRole,
       };
+      String tempemail=Get.find<Boxes>().userbox[widget.index!].email!;
+ String id=Random().nextInt(9999).toString();
 
-
-      String id=Random().nextInt(9999).toString();
+  if(widget.isEditing=='false'){
+     
        Get.find<Boxes>().userbox.add(Users(
           id: id,
           username: registrationData['username'],
@@ -403,6 +405,28 @@ class _UserRegistrationDialogState extends State<UserRegistrationDialog> {
 
           };
       await pb.collection('users').create(body: body);
+  }else{
+    Get.find<Boxes>().userbox[widget.index!]=(Users(
+          id: id,
+          username: registrationData['username'],
+          password: registrationData['password'],
+          accsesslvl: registrationData['role'],
+          email: registrationData['email'],
+          nickname: registrationData['nickname']));
+  }
+   var body={
+            
+          "username": registrationData['username'],
+          "password": registrationData['password'],
+          "accsesslvl": registrationData['role'],
+          "email": registrationData['email'],
+          "nickname": registrationData['nickname']
+
+          };
+          final record = await pb.collection('users').getFirstListItem(
+  'email="${tempemail}"',
+);
+await pb.collection('users').update(record.id, body: body);
       // Close the dialog
       Navigator.of(context).pop();
     }

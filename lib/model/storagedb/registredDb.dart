@@ -48,8 +48,10 @@ class RegistredDb {
     status = json['status'];
     screenImg = json['screenImg'];
     role = json['role'];
+    isarvand=json['isarvand'];
     socialNumber = json['socialNumber'];
     id=json['id'];
+    rtpath=json['rtpath'];
   }
 
   Map<String, dynamic> toJson() {
@@ -65,6 +67,8 @@ class RegistredDb {
     data['role'] = this.role;
     data['socialNumber'] = this.socialNumber;
     data['id']=this.id;
+    data['isarvand']=this.isarvand;
+    data['rtpath']=this.rtpath;
     return data;
   }
 }

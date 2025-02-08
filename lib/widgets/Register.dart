@@ -7,10 +7,10 @@ import 'package:unapwebv/model/consts.dart';
 import 'package:unapwebv/model/storagedb/registredDb.dart';
 import 'package:unapwebv/screens/reportScreen.dart';
 import 'package:unapwebv/widgets/alphabetselector.dart';
+import 'package:unapwebv/widgets/arvand_pelak.dart';
 import 'package:unapwebv/widgets/licancenumber.dart';
 
 class EnhancedCarRegistrationDialog extends StatefulWidget {
-
   //TODO:arvand register
   final dynamic
       entry; // Assuming this is the entry object from your original code
@@ -35,62 +35,70 @@ class _EnhancedCarRegistrationDialogState
     extends State<EnhancedCarRegistrationDialog> {
   String? _selectedRole;
   final List<String> _roles = ['مجاز', 'غیر مجاز'];
+  bool arvandSwith = true;
+  TextEditingController arvandController = TextEditingController();
   @override
   void initState() {
     if (widget.isEditing) {
-      Get.find<feildController>().Fname.text =
-          Get.find<Boxes>().regBox[widget.index].name!.split(' ').toList()[1];
-      Get.find<feildController>().carName.text =
-          Get.find<Boxes>().regBox[widget.index].carName!;
-      Get.find<feildController>().socialNumber.text =
-          Get.find<Boxes>().regBox[widget.index].socialNumber!;
-      Get.find<feildController>().name.text =
-          Get.find<Boxes>().regBox[widget.index].name!.split(' ').toList()[0];
-      _selectedRole = Get.find<Boxes>().regBox[widget.index].role;
+      if (Get.find<Boxes>().regBox[widget.index].isarvand != 'arvnad') {
+        Get.find<feildController>().Fname.text =
+            Get.find<Boxes>().regBox[widget.index].name!.split(' ').toList()[1];
+        Get.find<feildController>().carName.text =
+            Get.find<Boxes>().regBox[widget.index].carName!;
+        Get.find<feildController>().socialNumber.text =
+            Get.find<Boxes>().regBox[widget.index].socialNumber!;
+        Get.find<feildController>().name.text =
+            Get.find<Boxes>().regBox[widget.index].name!.split(' ').toList()[0];
+        _selectedRole = Get.find<Boxes>().regBox[widget.index].role;
 
-      //
+        //
 
-      var d = Get.find<Boxes>()
-          .regBox[widget.index]
-          .plateNumber!
-          .split(RegExp(r'[0-9]'))
-          .toList()[2]
-          .toString();
-      var ind = plateAlphabet.keys.toList().indexOf(d);
-      var f = plateAlphabet.values.elementAt(ind);
+        var d = Get.find<Boxes>()
+            .regBox[widget.index]
+            .plateNumber!
+            .split(RegExp(r'[0-9]'))
+            .toList()[2]
+            .toString();
+        var ind = plateAlphabet.keys.toList().indexOf(d);
+        var f = plateAlphabet.values.elementAt(ind);
 
-      Get.find<ReportController>().persianalhpabet.value = f;
-      Get.find<ReportController>().engishalphabet = d;
-      Get.find<ReportController>().firtTwodigits.text = Get.find<Boxes>()
-          .regBox[widget.index]
-          .plateNumber!
-          .split(RegExp(r'[a-z,A-Z]'))
-          .toList()[0];
+        Get.find<ReportController>().persianalhpabet.value = f;
+        Get.find<ReportController>().engishalphabet = d;
+        Get.find<ReportController>().firtTwodigits.text = Get.find<Boxes>()
+            .regBox[widget.index]
+            .plateNumber!
+            .split(RegExp(r'[a-z,A-Z]'))
+            .toList()[0];
 
-         
-   try{
-       Get.find<ReportController>().threedigits.text = Get.find<Boxes>()
-          .regBox[widget.index]
-          .plateNumber!
-          .split(RegExp(r'[a-z,A-Z]'))
-          .toList()[1]
-          .substring(0, 3);
+        try {
+          Get.find<ReportController>().threedigits.text = Get.find<Boxes>()
+              .regBox[widget.index]
+              .plateNumber!
+              .split(RegExp(r'[a-z,A-Z]'))
+              .toList()[1]
+              .substring(0, 3);
 
-      Get.find<ReportController>().lastTwoDigits.text = Get.find<Boxes>()
-          .regBox[widget.index]
-          .plateNumber!
-          .split(RegExp(r'[a-z,A-Z]'))
-          .toList()[1]
-          .substring(3, 5);
-   }catch(e){
-        Get.find<ReportController>().threedigits.text='-';
-          Get.find<ReportController>().lastTwoDigits.text='-';
-   }
+          Get.find<ReportController>().lastTwoDigits.text = Get.find<Boxes>()
+              .regBox[widget.index]
+              .plateNumber!
+              .split(RegExp(r'[a-z,A-Z]'))
+              .toList()[1]
+              .substring(3, 5);
+        } catch (e) {
+          Get.find<ReportController>().threedigits.text = '-';
+          Get.find<ReportController>().lastTwoDigits.text = '-';
+        }
+      } else {
+        arvandController.text =
+            Get.find<Boxes>().regBox[widget.index].plateNumber!;
+        print(Get.find<Boxes>().regBox[widget.index].plateNumber!);
+      }
     } else {
       Get.find<feildController>().Fname.clear();
       Get.find<feildController>().carName.clear();
       Get.find<feildController>().socialNumber.clear();
       Get.find<feildController>().name.clear();
+      arvandController.clear();
     }
     super.initState();
   }
@@ -128,7 +136,15 @@ class _EnhancedCarRegistrationDialogState
                 ),
               ),
               const SizedBox(height: 20),
-
+              TextButton(
+                  onPressed: () {
+                    arvandSwith = !arvandSwith;
+                    setState(() {});
+                  },
+                  child: Text(
+                    " نوع پلاک",
+                    style: TextStyle(color: Colors.white),
+                  )),
               // Car Name and License Number Row
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -136,14 +152,23 @@ class _EnhancedCarRegistrationDialogState
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     widget.isEditing
-                        ? EditPlateNum(widget: widget)
+                        ? Get.find<Boxes>().regBox[widget.index].isarvand ==
+                                'arvnad'
+                            ? arvandEditor(arvandController: arvandController)
+                            : EditPlateNum(widget: widget)
                         : widget.isRegister
-                            ? licanceField()
+                            ? Visibility(
+                                visible: arvandSwith,
+                                replacement: arvandEditor(
+                                    arvandController: arvandController),
+                                child: licanceField())
                             : Expanded(
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 100),
-                                  child: LicanceNumber(entry: widget.entry),
+                                  child: widget.entry.isarvand == 'arvand'
+                                      ? ArvandPelak(entry: widget.entry)
+                                      : LicanceNumber(entry: widget.entry),
                                 ),
                               ),
                   ],
@@ -272,12 +297,16 @@ class _EnhancedCarRegistrationDialogState
               // Register Button
               ElevatedButton(
                 onPressed: () async {
-                  Get.find<ReportController>().platePicker =
-                      "${Get.find<ReportController>().firtTwodigits.text}${Get.find<ReportController>().engishalphabet == null ? '' : Get.find<ReportController>().engishalphabet}${Get.find<ReportController>().threedigits.text}${Get.find<ReportController>().lastTwoDigits.text}";
-
+                  if (arvandSwith) {
+                    Get.find<ReportController>().platePicker =
+                        "${Get.find<ReportController>().firtTwodigits.text}${Get.find<ReportController>().engishalphabet == null ? '' : Get.find<ReportController>().engishalphabet}${Get.find<ReportController>().threedigits.text}${Get.find<ReportController>().lastTwoDigits.text}";
+                  } else {
+                    Get.find<ReportController>().platePicker =
+                        arvandController.text;
+                  }
                   // Create RegistredDb object with the new fields
                   RegistredDb? registredDb;
-                  
+
                   String id = Random().nextInt(9999).toString();
                   try {
                     registredDb = RegistredDb(
@@ -296,11 +325,11 @@ class _EnhancedCarRegistrationDialogState
                         eDate: widget.entry.eDate,
                         eTime: widget.entry.eTime,
                         screenImg: widget.entry.scrnPath,
-                        isarvand: "widget.entry.isarvand");
+                        isarvand: arvandSwith ? "notarvand" : 'arvnad');
                   } catch (e) {
                     registredDb = RegistredDb(
                         id: id,
-                        isarvand: " widget.entry.isarvand",
+                        isarvand: arvandSwith ? "notarvand" : 'arvnad',
                         rtpath: '/rt1',
                         role: _selectedRole ?? '',
                         socialNumber: Get.find<feildController>()
@@ -320,27 +349,41 @@ class _EnhancedCarRegistrationDialogState
                   ;
                   // Add to Hive and refresh
                   if (widget.isEditing) {
+                    String tempplate=Get.find<Boxes>().regBox[widget.index].plateNumber!;
                     Get.find<Boxes>().regBox[widget.index] = registredDb;
                     try {
                       final body = <String, dynamic>{
-                        "id": widget.entry.id,
-                        "plateImagePath": widget.entry.imgpath,
-                        "plateNumber":widget.entry.plateNum,
+                    
+                        "plateImagePath": Get.find<Boxes>()
+                            .regBox[widget.index]
+                            .plateImagePath,
+                        "plateNumber":
+                             Get.find<ReportController>().platePicker,
                         "name":
                             "${Get.find<feildController>().Fname.text} ${Get.find<feildController>().name.text}",
                         "carName": Get.find<feildController>().carName.text,
-                        "eDate":widget.entry.eDate,
-                        "eTime":
-                           widget.entry.eTime,
+                        "eDate": Get.find<Boxes>().regBox[widget.index].eDate,
+                        "eTime": Get.find<Boxes>().regBox[widget.index].eTime,
                         "status": true,
-                        "screenImg":widget.entry.scrnPath,
+                        "screenImg":
+                            Get.find<Boxes>().regBox[widget.index].screenImg,
                         "role": _selectedRole,
                         "socialNumber":
                             Get.find<feildController>().socialNumber.text,
-                        "isarvand": "test",
-                        "rtpath":  widget.entry.rtpath
+                        "isarvand":
+                            Get.find<Boxes>().regBox[widget.index].isarvand,
+                        "rtpath": Get.find<Boxes>().regBox[widget.index].rtpath
                       };
-                      await await pb.collection('registredDb').update(widget.entry[widget.index].id, body: body);
+
+                      final record =
+                          await pb.collection('registredDb').getFirstListItem(
+                                'plateNumber ="${tempplate}"',
+                               
+                              );
+                      print(record.id);
+                      await await pb
+                          .collection('registredDb')
+                          .update(record.id, body: body);
                     } catch (e) {
                       print(e);
                     }
@@ -362,7 +405,7 @@ class _EnhancedCarRegistrationDialogState
                         "role": _selectedRole,
                         "socialNumber":
                             Get.find<feildController>().socialNumber.text,
-                        "isarvand": "test",
+                        "isarvand": arvandSwith ? "notarvand" : 'arvnad',
                         "rtpath": "/rt1"
                       };
                       await pb.collection('registredDb').create(body: body);
@@ -404,6 +447,44 @@ class _EnhancedCarRegistrationDialogState
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class arvandEditor extends StatelessWidget {
+  const arvandEditor({
+    super.key,
+    required this.arvandController,
+  });
+
+  final TextEditingController arvandController;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: SizedBox(
+        width: 350,
+        child: TextField(
+          style: TextStyle(color: Colors.white, fontSize: 16),
+          controller: arvandController,
+          decoration: InputDecoration(
+              enabled: true,
+              border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white),
+                  borderRadius: BorderRadius.circular(15)),
+              enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white),
+                  borderRadius: BorderRadius.circular(15)),
+              focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white),
+                  borderRadius: BorderRadius.circular(15)),
+              focusColor: purpule,
+              hoverColor: purpule,
+              filled: true,
+              fillColor: purpule),
         ),
       ),
     );
@@ -599,7 +680,10 @@ class _licanceFieldState extends State<licanceField> {
               ),
               Text(
                 "/",
-                style: TextStyle(color: Colors.white, fontSize: 30,decoration: TextDecoration.none),
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 30,
+                    decoration: TextDecoration.none),
               ),
               SizedBox(
                 width: 15,

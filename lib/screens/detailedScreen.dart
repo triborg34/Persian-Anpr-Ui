@@ -5,7 +5,7 @@ import 'package:persian_number_utility/persian_number_utility.dart';
 import 'package:unapwebv/controller/mianController.dart';
 import 'package:unapwebv/model/consts.dart';
 import 'package:unapwebv/model/model.dart';
-import 'package:unapwebv/widgets/Register.dart';
+
 import 'package:unapwebv/widgets/alphabetselector.dart';
 import 'package:unapwebv/widgets/appbar.dart';
 import 'package:unapwebv/widgets/arvand_pelak.dart';
@@ -15,6 +15,8 @@ class Detailedscreen extends StatelessWidget {
   plateModel selectedModel = plateModel();
   int index;
   Detailedscreen({required this.selectedModel, required this.index});
+
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -69,6 +71,7 @@ class Detailedscreen extends StatelessWidget {
                         : InkWell(
                             onTap: () {
                               if (selectedModel.isarvand == 'arvand') {
+                                 TextEditingController arvandController=TextEditingController(text: selectedModel.plateNum);
                                 showDialog(
                                   context: context,
                                   builder: (context) {
@@ -90,13 +93,72 @@ class Detailedscreen extends StatelessWidget {
                                                       TextDecoration.none,
                                                   fontFamily: 'byekan'),
                                             ),
+                                            SizedBox(
+                                              height: 15,
+                                            ),
                                             Material(
-                                              child: TextField(
-                                                decoration: InputDecoration(
-                                                  filled: true,
-                                                    fillColor: purpule),
+                                              color: purpule,
+                                              child: SizedBox(
+                                                width: 350,
+                                                child: TextField(
+                                                  style: TextStyle(color: Colors.white,fontSize: 16),
+                                                  controller:arvandController ,
+                                                  decoration: InputDecoration(
+                                                  
+                                                      enabled: true,
+                                                      border: OutlineInputBorder(
+                                                          borderSide: BorderSide(
+                                                              color:
+                                                                  Colors.white),
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  15)),
+                                                      enabledBorder: OutlineInputBorder(
+                                                          borderSide: BorderSide(
+                                                              color:
+                                                                  Colors.white),
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  15)),
+                                                      focusedBorder: OutlineInputBorder(
+                                                          borderSide:
+                                                              BorderSide(
+                                                                  color: Colors
+                                                                      .white),
+                                                          borderRadius:
+                                                              BorderRadius.circular(15)),
+                                                      focusColor: purpule,
+                                                      hoverColor: purpule,
+                                                      filled: true,
+                                                      fillColor: purpule),
+                                                ),
                                               ),
-                                            )
+                                            ),
+                                            SizedBox(height: 15,),
+                                            ElevatedButton(onPressed: ()async{
+                                              String platePicker=arvandController.text;
+                                                    await pb
+                                                        .collection('database')
+                                                        .update(
+                                                            selectedModel.id!,
+                                                            body: {
+                                                          "plateNum":
+                                                              platePicker
+                                                        }).then(
+                                                      (value) {
+                                                        ScaffoldMessenger.of(
+                                                                context)
+                                                            .showSnackBar(SnackBar(
+                                                                content: Text(
+                                                                    "تغییر یافت")));
+                                                        Get.find<
+                                                                ReportController>()
+                                                            .update([10]);
+                                                        Navigator.pop(context);
+                                                        Get.back();
+                                                      },
+                                                    );
+                                            }, child: Text("ثبت"))
                                           ],
                                         ),
                                       ),
