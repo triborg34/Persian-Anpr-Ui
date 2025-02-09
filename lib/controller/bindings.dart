@@ -8,7 +8,7 @@ class MyBinding extends Bindings{
     Get.put(tableController());
     Get.lazyPut(()=>feildController());
     Get.lazyPut(()=>Boxes());
-    Get.lazyPut(()=>ReportController());
+    Get.put(ReportController());
     Get.lazyPut(()=>navController());
     Get.lazyPut(()=>settingController(),);
     Get.lazyPut(()=>ViedoSocket());

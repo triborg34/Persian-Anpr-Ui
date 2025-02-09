@@ -20,6 +20,7 @@ class Detailedscreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: MyAppBar(),
@@ -70,6 +71,12 @@ class Detailedscreen extends StatelessWidget {
                         ? headerOftable3('-')
                         : InkWell(
                             onTap: () {
+                              Get.find<ReportController>().platePicker=null;
+                              Get.find<ReportController>().engishalphabet=null;
+                              Get.find<ReportController>().lastTwoDigits.text='';
+                              Get.find<ReportController>().threedigits.text='';
+                              Get.find<ReportController>().persianalhpabet.value='';
+                              
                               if (selectedModel.isarvand == 'arvand') {
                                  TextEditingController arvandController=TextEditingController(text: selectedModel.plateNum);
                                 showDialog(

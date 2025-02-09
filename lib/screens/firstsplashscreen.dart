@@ -12,59 +12,82 @@ class FirstLoginScreen extends StatefulWidget {
 }
 
 class _FirstLoginScreenState extends State<FirstLoginScreen> {
- @override
+  TextEditingController urlController = TextEditingController();
+  bool showUrlInput = false;
+
+  @override
   void initState() {
-
     super.initState();
-
     initializeApp();
   }
 
-  Future<void> initializeApp() async {
-    var resultList = await pb.collection('ipconfig').getFullList();
+  Future<void> initializeApp({String? customUrl}) async {
+    setState(() {
+      showUrlInput = false;
+    });
 
     try {
+      var resultList = await pb.collection('ipconfig').getFullList();
       url = resultList.last.data['defip'];
-      pb = PocketBase(url); 
-      print(url);
+      pb = PocketBase(url);
+      print("Initialized with URL: $url");
 
-      // Update dependent variables
       updatePaths();
       await firstLogin();
-      // Navigate to login screen after initialization
       Get.to(() => ModernLoginPage());
     } catch (e) {
-   
-      await pb.collection('ipconfig').create(body: {
-        "defip":"http://127.0.0.1:8090"
-      }).then((value) => initializeApp());
       print("Error initializing app: $e");
-      // Show an error message if something goes wrong
-      // showErrorMessage();
+      setState(() {
+        showUrlInput = true;
+      });
     }
   }
-
-  void showErrorMessage() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("Failed to load app configuration!")),
-    );
-  }
-
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CircularProgressIndicator(), // Loading indicator
-            SizedBox(height: 20),
-            Text("Initializing...", style: TextStyle(fontSize: 16))
-          ],
-        ),
+        child: showUrlInput
+            ? Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("Enter Server URL:", style: TextStyle(fontSize: 16)),
+                    SizedBox(height: 10),
+                    TextField(
+                      controller: urlController,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: "http://127.0.0.1:8090",
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: () async{
+                        if (urlController.text.isNotEmpty) {
+                          url = urlController.text;
+                          pb = PocketBase(url);
+                          await pb.collection('ipconfig').create(body: {
+                            "defip":url
+                          });
+                          initializeApp();
+                        }
+                      },
+                      child: Text("Retry Initialization"),
+                    )
+                  ],
+                ),
+              )
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(),
+                  SizedBox(height: 20),
+                  Text("Initializing...", style: TextStyle(fontSize: 16))
+                ],
+              ),
       ),
     );
   }
