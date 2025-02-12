@@ -89,27 +89,36 @@ class _FirstLoginScreenState extends State<FirstLoginScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Enter Server URL:", style: TextStyle(fontSize: 16)),
+                    Text("آدرس سرور را وارد کنید", style: TextStyle(fontSize: 16)),
                     SizedBox(height: 10),
-                    TextField(
-                      controller: urlController,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: "127.0.0.1:8090",
+                    SizedBox(
+                      height: 50,
+                      width: 200,
+                      child: TextField(
+                        controller: urlController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText: "127.0.0.1:8090",
+                        ),
                       ),
                     ),
                     SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: () async {
-                        if (urlController.text.isNotEmpty) {
-                          url = "http://${urlController.text}";
-                          pb = PocketBase(url);
-                          await pb.collection('ipconfig').create(body: {"defip": url});
-                          await _saveUrl(url);
-                          initializeApp();
-                        }
-                      },
-                      child: Text("Retry Initialization"),
+                    SizedBox(
+                      height: 50,
+                      width: 200,
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          if (urlController.text.isNotEmpty) {
+                            url = "http://${urlController.text}";
+                            print(url);
+                            pb = PocketBase(url);
+                            await pb.collection('ipconfig').create(body: {"defip": url});
+                            await _saveUrl(url);
+                            initializeApp();
+                          }
+                        },
+                        child: Text("ثبت"),
+                      ),
                     )
                   ],
                 ),
@@ -119,7 +128,7 @@ class _FirstLoginScreenState extends State<FirstLoginScreen> {
                 children: [
                   CircularProgressIndicator(),
                   SizedBox(height: 20),
-                  Text("Initializing...", style: TextStyle(fontSize: 16))
+                  Text("در حال بارگزاری", style: TextStyle(fontSize: 16))
                 ],
               ),
       ),
