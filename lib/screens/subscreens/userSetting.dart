@@ -383,10 +383,10 @@ class _UserRegistrationDialogState extends State<UserRegistrationDialog> {
         'password': _passwordController.text,
         'role': _selectedRole,
       };
-      String tempemail=Get.find<Boxes>().userbox[widget.index!].email!;
+ 
  String id=Random().nextInt(9999).toString();
 
-  if(widget.isEditing=='false'){
+  if(widget.isEditing==false){
      
        Get.find<Boxes>().userbox.add(Users(
           id: id,
@@ -406,6 +406,7 @@ class _UserRegistrationDialogState extends State<UserRegistrationDialog> {
           };
       await pb.collection('users').create(body: body);
   }else{
+         String tempemail=Get.find<Boxes>().userbox[widget.index!].email!;
     Get.find<Boxes>().userbox[widget.index!]=(Users(
           id: id,
           username: registrationData['username'],
@@ -413,8 +414,8 @@ class _UserRegistrationDialogState extends State<UserRegistrationDialog> {
           accsesslvl: registrationData['role'],
           email: registrationData['email'],
           nickname: registrationData['nickname']));
-  }
-   var body={
+
+            var body={
             
           "username": registrationData['username'],
           "password": registrationData['password'],
@@ -427,6 +428,9 @@ class _UserRegistrationDialogState extends State<UserRegistrationDialog> {
   'email="${tempemail}"',
 );
 await pb.collection('users').update(record.id, body: body);
+
+  }
+ 
       // Close the dialog
       Navigator.of(context).pop();
     }

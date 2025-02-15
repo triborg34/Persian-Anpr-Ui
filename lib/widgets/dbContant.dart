@@ -62,7 +62,7 @@ class _DbContantState extends State<DbContant> {
                     (element) => element.plateNumber != entries.last.plateNum,
                   )
                   .isNotEmpty) {
-                audioPlayer.play(AssetSource('assets/alarm.mp3'));
+                audioPlayer.play(UrlSource('assets/alarm.mp3'));
               }
               Dio dio = Dio();
               dio.post(

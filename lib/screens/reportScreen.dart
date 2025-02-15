@@ -23,7 +23,8 @@ class ReportScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.find<ReportController>().selectedItem = null;
+  try{
+      Get.find<ReportController>().selectedItem = null;
     Get.find<ReportController>().firstime = null;
     Get.find<ReportController>().lastTime = null;
     Get.find<ReportController>().firstdate = null;
@@ -31,6 +32,15 @@ class ReportScreen extends StatelessWidget {
     Get.find<ReportController>().persianalhpabet.value = '';
     Get.find<ReportController>().platePicker = null;
     Get.find<ReportController>().selectedModel.clear();
+                       
+                              Get.find<ReportController>().engishalphabet=null;
+                              Get.find<ReportController>().lastTwoDigits.text='';
+                              Get.find<ReportController>().threedigits.text='';
+                             
+  }
+  catch(e){
+    print(e);
+  }
 
     return Container(
         height: MediaQuery.of(context).size.height,
