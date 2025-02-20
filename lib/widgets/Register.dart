@@ -40,7 +40,8 @@ class _EnhancedCarRegistrationDialogState
   @override
   void initState() {
     if (widget.isEditing) {
-      if (Get.find<Boxes>().regBox[widget.index].isarvand != 'arvnad') {
+      print(Get.find<Boxes>().regBox[widget.index].isarvand );
+      if (Get.find<Boxes>().regBox[widget.index].isarvand != 'arvand') {
         Get.find<feildController>().Fname.text =
             Get.find<Boxes>().regBox[widget.index].name!.split(' ').toList()[1];
         Get.find<feildController>().carName.text =
@@ -153,7 +154,7 @@ class _EnhancedCarRegistrationDialogState
                   children: [
                     widget.isEditing
                         ? Get.find<Boxes>().regBox[widget.index].isarvand ==
-                                'arvnad'
+                                'arvand'
                             ? arvandEditor(arvandController: arvandController)
                             : EditPlateNum(widget: widget)
                         : widget.isRegister
@@ -309,8 +310,9 @@ class _EnhancedCarRegistrationDialogState
 
                   String id = Random().nextInt(9999).toString();
                   try {
+                    print(widget.entry.plateNum);
                     registredDb = RegistredDb(
-                        id: widget.entry.id,
+                        id: id,
                         role: _selectedRole ?? '',
                         socialNumber: Get.find<feildController>()
                             .socialNumber
@@ -325,8 +327,33 @@ class _EnhancedCarRegistrationDialogState
                         eDate: widget.entry.eDate,
                         eTime: widget.entry.eTime,
                         screenImg: widget.entry.scrnPath,
-                        isarvand: arvandSwith ? "notarvand" : 'arvnad');
+                        isarvand: widget.entry.isarvand);
+                    try {
+                      final body = <String, dynamic>{
+                     
+                        "plateImagePath": "",
+                        "plateNumber": widget.entry.plateNum,
+                        "name":
+                            "${Get.find<feildController>().Fname.text} ${Get.find<feildController>().name.text}",
+                        "carName": Get.find<feildController>().carName.text,
+                        "eDate": widget.entry.eDate,
+                        "eTime": widget.entry.eTime,
+                        "status": true,
+                        "screenImg": "",
+                        "role": _selectedRole ?? '',
+                        "socialNumber":
+                            Get.find<feildController>().socialNumber.text,
+                        "isarvand": widget.entry.isarvand,
+                        "rtpath": widget.entry.rtpath,
+                      };
+                      await pb.collection('registredDb').create(body: body);
+                      Get.find<Boxes>().regBox.add(registredDb);
+                      Get.find<Boxes>().getregData();
+                    } catch (e) {
+                      print(e);
+                    }
                   } catch (e) {
+                    print(e);
                     registredDb = RegistredDb(
                         id: id,
                         isarvand: arvandSwith ? "notarvand" : 'arvnad',
@@ -345,20 +372,21 @@ class _EnhancedCarRegistrationDialogState
                         eTime:
                             "${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}",
                         screenImg: '');
+                    Get.find<Boxes>().regBox.add(registredDb);
+                    Get.find<Boxes>().getregData();
                   }
                   ;
                   // Add to Hive and refresh
                   if (widget.isEditing) {
-                    String tempplate=Get.find<Boxes>().regBox[widget.index].plateNumber!;
+                    String tempplate =
+                        Get.find<Boxes>().regBox[widget.index].plateNumber!;
                     Get.find<Boxes>().regBox[widget.index] = registredDb;
                     try {
                       final body = <String, dynamic>{
-                    
                         "plateImagePath": Get.find<Boxes>()
                             .regBox[widget.index]
                             .plateImagePath,
-                        "plateNumber":
-                             Get.find<ReportController>().platePicker,
+                        "plateNumber": Get.find<ReportController>().platePicker,
                         "name":
                             "${Get.find<feildController>().Fname.text} ${Get.find<feildController>().name.text}",
                         "carName": Get.find<feildController>().carName.text,
@@ -378,7 +406,6 @@ class _EnhancedCarRegistrationDialogState
                       final record =
                           await pb.collection('registredDb').getFirstListItem(
                                 'plateNumber ="${tempplate}"',
-                               
                               );
                       print(record.id);
                       await await pb

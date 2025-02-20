@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,17 +12,17 @@ import 'package:unapwebv/widgets/alphabetselector.dart';
 import 'package:unapwebv/widgets/appbar.dart';
 import 'package:unapwebv/widgets/arvand_pelak.dart';
 import 'package:unapwebv/widgets/licancenumber.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
 
 class Detailedscreen extends StatelessWidget {
   plateModel selectedModel = plateModel();
   int index;
   Detailedscreen({required this.selectedModel, required this.index});
 
- 
-
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: MyAppBar(),
@@ -71,14 +73,21 @@ class Detailedscreen extends StatelessWidget {
                         ? headerOftable3('-')
                         : InkWell(
                             onTap: () {
-                              Get.find<ReportController>().platePicker=null;
-                              Get.find<ReportController>().engishalphabet=null;
-                              Get.find<ReportController>().lastTwoDigits.text='';
-                              Get.find<ReportController>().threedigits.text='';
-                              Get.find<ReportController>().persianalhpabet.value='';
-                              
+                              Get.find<ReportController>().platePicker = null;
+                              Get.find<ReportController>().engishalphabet =
+                                  null;
+                              Get.find<ReportController>().lastTwoDigits.text =
+                                  '';
+                              Get.find<ReportController>().threedigits.text =
+                                  '';
+                              Get.find<ReportController>()
+                                  .persianalhpabet
+                                  .value = '';
+
                               if (selectedModel.isarvand == 'arvand') {
-                                 TextEditingController arvandController=TextEditingController(text: selectedModel.plateNum);
+                                TextEditingController arvandController =
+                                    TextEditingController(
+                                        text: selectedModel.plateNum);
                                 showDialog(
                                   context: context,
                                   builder: (context) {
@@ -108,10 +117,11 @@ class Detailedscreen extends StatelessWidget {
                                               child: SizedBox(
                                                 width: 350,
                                                 child: TextField(
-                                                  style: TextStyle(color: Colors.white,fontSize: 16),
-                                                  controller:arvandController ,
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 16),
+                                                  controller: arvandController,
                                                   decoration: InputDecoration(
-                                                  
                                                       enabled: true,
                                                       border: OutlineInputBorder(
                                                           borderSide: BorderSide(
@@ -141,31 +151,34 @@ class Detailedscreen extends StatelessWidget {
                                                 ),
                                               ),
                                             ),
-                                            SizedBox(height: 15,),
-                                            ElevatedButton(onPressed: ()async{
-                                              String platePicker=arvandController.text;
-                                                    await pb
-                                                        .collection('database')
-                                                        .update(
-                                                            selectedModel.id!,
-                                                            body: {
-                                                          "plateNum":
-                                                              platePicker
-                                                        }).then(
-                                                      (value) {
-                                                        ScaffoldMessenger.of(
-                                                                context)
-                                                            .showSnackBar(SnackBar(
-                                                                content: Text(
-                                                                    "تغییر یافت")));
-                                                        Get.find<
-                                                                ReportController>()
-                                                            .update([10]);
-                                                        Navigator.pop(context);
-                                                        Get.back();
-                                                      },
-                                                    );
-                                            }, child: Text("ثبت"))
+                                            SizedBox(
+                                              height: 15,
+                                            ),
+                                            ElevatedButton(
+                                                onPressed: () async {
+                                                  String platePicker =
+                                                      arvandController.text;
+                                                  await pb
+                                                      .collection('database')
+                                                      .update(selectedModel.id!,
+                                                          body: {
+                                                        "plateNum": platePicker
+                                                      }).then(
+                                                    (value) {
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(SnackBar(
+                                                              content: Text(
+                                                                  "تغییر یافت")));
+                                                      Get.find<
+                                                              ReportController>()
+                                                          .update([10]);
+                                                      Navigator.pop(context);
+                                                      Get.back();
+                                                    },
+                                                  );
+                                                },
+                                                child: Text("ثبت"))
                                           ],
                                         ),
                                       ),
@@ -362,6 +375,90 @@ class Detailedscreen extends StatelessWidget {
                     contactOfTable3(selectedModel.eTime!)
                   ],
                 ),
+              ),
+              IconButton(
+                icon: Icon(Icons.print),
+                onPressed: () async {
+                  final doc = pw.Document();
+                  final ttf =
+                      await fontFromAssetBundle('assets/fonts/arial.ttf');
+                  final image = await networkImage(
+                      "${imagesPath}${selectedModel.id}/${selectedModel.imgpath}");
+                  doc.addPage(pw.Page(
+                  
+                    orientation: pw.PageOrientation.landscape,
+                      pageFormat: PdfPageFormat.a5,
+                      build: (pw.Context context) {
+                        return pw.Container(
+                            height: double.infinity,
+                            width: double.infinity,
+                            decoration:
+                                pw.BoxDecoration(border: pw.Border.all()),
+                            child: pw.Column(
+                                mainAxisAlignment: pw.MainAxisAlignment.start,
+                                crossAxisAlignment: pw.CrossAxisAlignment.start,
+                                children: [
+                                  pw.Container(
+                                      alignment: pw.Alignment.topCenter,
+                                      width: double.maxFinite,
+                                      height: 20,
+                                      child: pw.Text('بسمه تعالی',
+                                          style: pw.TextStyle(font: ttf),
+                                          textDirection: pw.TextDirection.rtl)),
+                                           pw.Container(
+                                      alignment: pw.Alignment.topRight,
+                                      width: double.maxFinite,
+                                      height: 100,
+                                      child: pw.Text('شماره قبض : ${Random().nextInt(200)}',
+                                          style: pw.TextStyle(font: ttf),
+                                          textDirection: pw.TextDirection.rtl)),
+                                  pw.Row(
+                                      mainAxisAlignment:
+                                          pw.MainAxisAlignment.end,
+                                      crossAxisAlignment:
+                                          pw.CrossAxisAlignment.end,
+                                      children: [
+                                        pw.Container(
+                                          height: 70,
+                                          child: pw.Text(
+                                              convertToPersianString(
+                                                  selectedModel.plateNum!,
+                                                  alphabetP2),
+                                              style: pw.TextStyle(
+                                                font: ttf,
+                                              ),
+                                              textDirection:
+                                                  pw.TextDirection.rtl),
+                                        )
+                                      ])
+                                ]));
+                      })); // Page
+                  await Printing.layoutPdf(
+                    format: PdfPageFormat.a5,
+                    dynamicLayout: true,
+                    usePrinterSettings: true,
+                    
+                      onLayout: (PdfPageFormat format) async => doc.save());
+
+//                 await Printing.layoutPdf(onLayout: (PdfPageFormat format,) async {
+//   const body = '''
+//     <h1>Heading Example</h1>
+//     <p>This is a paragraph.</p>
+//     <img src="image.jpg" alt="Example Image" />
+//     <blockquote>This is a quote.</blockquote>
+//     <ul>
+//       <li>سلام item</li>
+//       <li>Second item</li>
+//       <li>Third item</li>
+//     </ul>
+//     ''';
+
+//   final pdf = pw.Document();
+//   final widgets = await htmltopdf.HTMLToPdf().convert(body);
+//   pdf.addPage(pw.MultiPage(build: (context) => widgets));
+//   return await pdf.save();
+// });
+                },
               )
             ],
           ),

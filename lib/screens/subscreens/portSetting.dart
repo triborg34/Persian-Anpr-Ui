@@ -134,12 +134,13 @@ class PortSettings extends StatelessWidget {
                       SizedBox(
                         width: 100,
                         height: 50,
+                        
                         child: TextFormField(
                           controller: defipcontroller,
-                          readOnly: false,
+                          readOnly: true,
                           textDirection: TextDirection.ltr,
                           style: TextStyle(
-                              color: Colors.white, fontFamily: 'arial'),
+                              color: Colors.white24, fontFamily: 'arial',overflow: TextOverflow.clip),
                           decoration: InputDecoration(
                               border: OutlineInputBorder(),
                               hintText: 'eg:192.168.1...',

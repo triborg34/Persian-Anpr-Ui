@@ -186,7 +186,7 @@ GetBuilder<Boxes>(id: 9,builder: (controller) {
               height: 150,
               child: ListView.separated(
                   itemBuilder: (context, index) {
-                    print(Get.find<Boxes>().regBox[index].isarvand);
+  
                     return Container(
                       height: 50,
                       width: MediaQuery.of(context).size.width,
@@ -196,7 +196,7 @@ GetBuilder<Boxes>(id: 9,builder: (controller) {
                       child: Row(
                         textDirection: TextDirection.rtl,
                         children: [
-                        Get.find<Boxes>().regBox[index].isarvand=='arvnad' ? UserRows(title:  Get.find<Boxes>().regBox[index].plateNumber) :   UserRows(
+                        Get.find<Boxes>().regBox[index].isarvand=='arvand' ? UserRows(title:  Get.find<Boxes>().regBox[index].plateNumber) :   UserRows(
                               title: convertToPersianString(
                                   Get.find<Boxes>().regBox[index].plateNumber!,
                                   alphabetP2)),
