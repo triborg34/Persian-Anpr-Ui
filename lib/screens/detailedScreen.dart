@@ -382,14 +382,14 @@ class Detailedscreen extends StatelessWidget {
                   final doc = pw.Document();
                   final ttf =
                       await fontFromAssetBundle('assets/fonts/arial.ttf');
-                  final image = await networkImage(
-                      "${imagesPath}${selectedModel.id}/${selectedModel.imgpath}");
+                  // final image = await networkImage(
+                  //     "${imagesPath}${selectedModel.id}/${selectedModel.imgpath}");
                   doc.addPage(pw.Page(
-                  
-                    orientation: pw.PageOrientation.landscape,
+                      orientation: pw.PageOrientation.landscape,
                       pageFormat: PdfPageFormat.a5,
                       build: (pw.Context context) {
                         return pw.Container(
+                            padding: pw.EdgeInsets.all(10),
                             height: double.infinity,
                             width: double.infinity,
                             decoration:
@@ -398,20 +398,24 @@ class Detailedscreen extends StatelessWidget {
                                 mainAxisAlignment: pw.MainAxisAlignment.start,
                                 crossAxisAlignment: pw.CrossAxisAlignment.start,
                                 children: [
-                                  pw.Container(
-                                      alignment: pw.Alignment.topCenter,
-                                      width: double.maxFinite,
-                                      height: 20,
-                                      child: pw.Text('بسمه تعالی',
-                                          style: pw.TextStyle(font: ttf),
-                                          textDirection: pw.TextDirection.rtl)),
-                                           pw.Container(
-                                      alignment: pw.Alignment.topRight,
-                                      width: double.maxFinite,
-                                      height: 100,
-                                      child: pw.Text('شماره قبض : ${Random().nextInt(200)}',
-                                          style: pw.TextStyle(font: ttf),
-                                          textDirection: pw.TextDirection.rtl)),
+                                  pw.Row(
+                                      mainAxisAlignment:
+                                          pw.MainAxisAlignment.end,
+                                      crossAxisAlignment:
+                                          pw.CrossAxisAlignment.end,
+                                      children: [
+                                        pw.Text(
+                                            "تاریخ : ${DateTime.now().toPersianDate()}",
+                                            textDirection: pw.TextDirection.rtl,
+                                            style: pw.TextStyle(font: ttf)),
+                                        pw.Spacer(),
+                                        pw.Text(
+                                            'شماره قبض : ${Random().nextInt(200)}',
+                                            style: pw.TextStyle(font: ttf),
+                                            textDirection:
+                                                pw.TextDirection.rtl),
+                                      ]),
+                                  pw.SizedBox(height: 15),
                                   pw.Row(
                                       mainAxisAlignment:
                                           pw.MainAxisAlignment.end,
@@ -419,7 +423,240 @@ class Detailedscreen extends StatelessWidget {
                                           pw.CrossAxisAlignment.end,
                                       children: [
                                         pw.Container(
-                                          height: 70,
+                                          height: 30,
+                                          width: 70,
+                                          alignment: pw.Alignment.center,
+                                          decoration: pw.BoxDecoration(
+                                              border: pw.Border.all()),
+                                          child: pw.Text("دسترسی",
+                                              style: pw.TextStyle(
+                                                font: ttf,
+                                              ),
+                                              textDirection:
+                                                  pw.TextDirection.rtl),
+                                        ),
+                                        pw.SizedBox(width: 0),
+                                        pw.Container(
+                                          height: 30,
+                                          width: 70,
+                                          alignment: pw.Alignment.center,
+                                          decoration: pw.BoxDecoration(
+                                              border: pw.Border.all()),
+                                          child: pw.Text("نام ماشین",
+                                              style: pw.TextStyle(
+                                                font: ttf,
+                                              ),
+                                              textDirection:
+                                                  pw.TextDirection.rtl),
+                                        ),
+                                        pw.SizedBox(width: 0),
+                                        pw.Container(
+                                          height: 30,
+                                          width: 70,
+                                          alignment: pw.Alignment.center,
+                                          decoration: pw.BoxDecoration(
+                                              border: pw.Border.all()),
+                                          child: pw.Text("نام و نام خانوادگی",
+                                              style: pw.TextStyle(
+                                                  font: ttf, fontSize: 8.0),
+                                              textDirection:
+                                                  pw.TextDirection.rtl),
+                                        ),
+                                        pw.SizedBox(width: 0),
+                                        pw.Container(
+                                          height: 30,
+                                          width: 70,
+                                          alignment: pw.Alignment.center,
+                                          decoration: pw.BoxDecoration(
+                                              border: pw.Border.all()),
+                                          child: pw.Text("ساعت ورود",
+                                              style: pw.TextStyle(
+                                                font: ttf,
+                                              ),
+                                              textDirection:
+                                                  pw.TextDirection.rtl),
+                                        ),
+                                        pw.SizedBox(width: 0),
+                                        pw.Container(
+                                          height: 30,
+                                          width: 70,
+                                          alignment: pw.Alignment.center,
+                                          decoration: pw.BoxDecoration(
+                                              border: pw.Border.all()),
+                                          child: pw.Text("تاریخ ورود",
+                                              style: pw.TextStyle(
+                                                font: ttf,
+                                              ),
+                                              textDirection:
+                                                  pw.TextDirection.rtl),
+                                        ),
+                                        pw.SizedBox(width: 0),
+                                        pw.Container(
+                                          height: 30,
+                                          width: 70,
+                                          alignment: pw.Alignment.center,
+                                          decoration: pw.BoxDecoration(
+                                              border: pw.Border.all()),
+                                          child: pw.Text("شماره پلاک",
+                                              style: pw.TextStyle(
+                                                font: ttf,
+                                              ),
+                                              textDirection:
+                                                  pw.TextDirection.rtl),
+                                        ),
+                                      ]),
+                                  pw.Row(
+                                      mainAxisAlignment:
+                                          pw.MainAxisAlignment.end,
+                                      crossAxisAlignment:
+                                          pw.CrossAxisAlignment.end,
+                                      children: [
+                                        pw.Container(
+                                          height: 30,
+                                          width: 70,
+                                          alignment: pw.Alignment.center,
+                                          decoration: pw.BoxDecoration(
+                                              border: pw.Border.all()),
+                                          child: pw.Text(
+                                              Get.find<Boxes>()
+                                                      .regBox
+                                                      .where(
+                                                        (element) =>
+                                                            element
+                                                                .plateNumber ==
+                                                            selectedModel
+                                                                .plateNum,
+                                                      )
+                                                      .isEmpty
+                                                  ? "-"
+                                                  : Get.find<Boxes>()
+                                                      .regBox[Get.find<Boxes>()
+                                                          .regBox
+                                                          .indexWhere(
+                                                            (element) =>
+                                                                element
+                                                                    .plateNumber ==
+                                                                selectedModel
+                                                                    .plateNum,
+                                                          )]
+                                                      .role!,
+                                              style: pw.TextStyle(
+                                                font: ttf,
+                                              ),
+                                              textDirection:
+                                                  pw.TextDirection.rtl),
+                                        ),
+                                        pw.SizedBox(width: 0),
+                                        pw.Container(
+                                          height: 30,
+                                          width: 70,
+                                          alignment: pw.Alignment.center,
+                                          decoration: pw.BoxDecoration(
+                                              border: pw.Border.all()),
+                                          child: pw.Text(
+                                              Get.find<Boxes>()
+                                                      .regBox
+                                                      .where(
+                                                        (element) =>
+                                                            element
+                                                                .plateNumber ==
+                                                            selectedModel
+                                                                .plateNum,
+                                                      )
+                                                      .isEmpty
+                                                  ? "-"
+                                                  : Get.find<Boxes>()
+                                                      .regBox[Get.find<Boxes>()
+                                                          .regBox
+                                                          .indexWhere(
+                                                            (element) =>
+                                                                element
+                                                                    .plateNumber ==
+                                                                selectedModel
+                                                                    .plateNum,
+                                                          )]
+                                                      .carName!,
+                                              style: pw.TextStyle(
+                                                font: ttf,
+                                              ),
+                                              textDirection:
+                                                  pw.TextDirection.rtl),
+                                        ),
+                                        pw.SizedBox(width: 0),
+                                        pw.Container(
+                                          height: 30,
+                                          width: 70,
+                                          alignment: pw.Alignment.center,
+                                          decoration: pw.BoxDecoration(
+                                              border: pw.Border.all()),
+                                          child: pw.Text(
+                                              Get.find<Boxes>()
+                                                      .regBox
+                                                      .where(
+                                                        (element) =>
+                                                            element
+                                                                .plateNumber ==
+                                                            selectedModel
+                                                                .plateNum,
+                                                      )
+                                                      .isEmpty
+                                                  ? "-"
+                                                  : Get.find<Boxes>()
+                                                      .regBox[Get.find<Boxes>()
+                                                          .regBox
+                                                          .indexWhere(
+                                                            (element) =>
+                                                                element
+                                                                    .plateNumber ==
+                                                                selectedModel
+                                                                    .plateNum,
+                                                          )]
+                                                      .name!,
+                                              style: pw.TextStyle(
+                                                font: ttf,
+                                              ),
+                                              textDirection:
+                                                  pw.TextDirection.rtl),
+                                        ),
+                                        pw.SizedBox(width: 0),
+                                        pw.Container(
+                                          height: 30,
+                                          width: 70,
+                                          alignment: pw.Alignment.center,
+                                          decoration: pw.BoxDecoration(
+                                              border: pw.Border.all()),
+                                          child: pw.Text(
+                                              selectedModel.eTime!
+                                                  .toPersianDigit(),
+                                              style: pw.TextStyle(
+                                                font: ttf,
+                                              ),
+                                              textDirection:
+                                                  pw.TextDirection.rtl),
+                                        ),
+                                        pw.SizedBox(width: 0),
+                                        pw.Container(
+                                          height: 30,
+                                          width: 70,
+                                          alignment: pw.Alignment.center,
+                                          decoration: pw.BoxDecoration(
+                                              border: pw.Border.all()),
+                                          child: pw.Text(
+                                              selectedModel.eDate!
+                                                  .toPersianDate(),
+                                              style: pw.TextStyle(
+                                                font: ttf,
+                                              ),
+                                              textDirection:
+                                                  pw.TextDirection.rtl),
+                                        ),
+                                        pw.SizedBox(width: 0),
+                                        pw.Container(
+                                          height: 30,
+                                          width: 70,
+                                          alignment: pw.Alignment.center,
+                                          decoration: pw.BoxDecoration(
+                                              border: pw.Border.all()),
                                           child: pw.Text(
                                               convertToPersianString(
                                                   selectedModel.plateNum!,
@@ -429,15 +666,23 @@ class Detailedscreen extends StatelessWidget {
                                               ),
                                               textDirection:
                                                   pw.TextDirection.rtl),
-                                        )
-                                      ])
+                                        ),
+                                      ]),
+                                  pw.SizedBox(height: 25),
+                                  pw.SizedBox(
+                                      height: 15,
+                                      child: pw.Align(
+                                          alignment: pw.Alignment.topRight,
+                                          child: pw.Text('توضیحات',
+                                              textDirection:
+                                                  pw.TextDirection.rtl,
+                                              style: pw.TextStyle(font: ttf))))
                                 ]));
                       })); // Page
                   await Printing.layoutPdf(
-                    format: PdfPageFormat.a5,
-                    dynamicLayout: true,
-                    usePrinterSettings: true,
-                    
+                      format: PdfPageFormat.a5,
+                      dynamicLayout: true,
+                      usePrinterSettings: true,
                       onLayout: (PdfPageFormat format) async => doc.save());
 
 //                 await Printing.layoutPdf(onLayout: (PdfPageFormat format,) async {

@@ -1,4 +1,6 @@
-import 'dart:io';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
 
@@ -23,24 +25,22 @@ class ReportScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  try{
+    try {
       Get.find<ReportController>().selectedItem = null;
-    Get.find<ReportController>().firstime = null;
-    Get.find<ReportController>().lastTime = null;
-    Get.find<ReportController>().firstdate = null;
-    Get.find<ReportController>().lastdate = null;
-    Get.find<ReportController>().persianalhpabet.value = '';
-    Get.find<ReportController>().platePicker = null;
-    Get.find<ReportController>().selectedModel.clear();
-                       
-                              Get.find<ReportController>().engishalphabet=null;
-                              Get.find<ReportController>().lastTwoDigits.text='';
-                              Get.find<ReportController>().threedigits.text='';
-                             
-  }
-  catch(e){
-    print(e);
-  }
+      Get.find<ReportController>().firstime = null;
+      Get.find<ReportController>().lastTime = null;
+      Get.find<ReportController>().firstdate = null;
+      Get.find<ReportController>().lastdate = null;
+      Get.find<ReportController>().persianalhpabet.value = '';
+      Get.find<ReportController>().platePicker = null;
+      Get.find<ReportController>().selectedModel.clear();
+
+      Get.find<ReportController>().engishalphabet = null;
+      Get.find<ReportController>().lastTwoDigits.text = '';
+      Get.find<ReportController>().threedigits.text = '';
+    } catch (e) {
+      print(e);
+    }
 
     return Container(
         height: MediaQuery.of(context).size.height,
@@ -102,6 +102,8 @@ class ReportScreen extends StatelessWidget {
                                   rcontroller.selectedModel.length,
                                   (index) {
                                     return {
+                                      "arvand": rcontroller
+                                          .selectedModel[index].isarvand,
                                       "Plate Number": rcontroller
                                           .selectedModel[index].plateNum!
                                       //  convertToPersianString(
@@ -190,9 +192,8 @@ class ReportScreen extends StatelessWidget {
                                                             .plateNum,
                                                   )]
                                               .role!,
-                                               "Camera Name": Get.find<Boxes>()
+                                      "Camera Name": Get.find<Boxes>()
                                           .camerabox
-                                          
                                           .firstWhere(
                                             (element) =>
                                                 element.rtpath ==
@@ -258,7 +259,6 @@ class ReportScreen extends StatelessWidget {
                                   builder: (context, child) {
                                     return MediaQuery(
                                         data: MediaQuery.of(context).copyWith(
-                                          
                                             alwaysUse24HourFormat: true),
                                         child: child!);
                                   },
@@ -654,8 +654,7 @@ class ReportScreen extends StatelessWidget {
                           itemCount: rcontroller.selectedModel.length, //todo
                           itemBuilder: (context, index) {
                             return Visibility(
-                              visible:
-                                   rcontroller
+                              visible: rcontroller
                                           .selectedModel[index].isarvand ==
                                       'arvand'
                                   ? rcontroller.selectedModel[index].plateNum!
@@ -732,7 +731,6 @@ class ReportScreen extends StatelessWidget {
                                           child: Text(
                                             Get.find<Boxes>()
                                                         .camerabox
-                                                        
                                                         .firstWhere(
                                                           (element) =>
                                                               element.rtpath ==
@@ -870,8 +868,7 @@ class ReportScreen extends StatelessWidget {
                                               child: Hero(
                                                   tag: "heroTag${index}",
                                                   child: Image.network(
-                                                    
-                                                        "${imagesPath}${rcontroller.selectedModel[index].id}/${rcontroller.selectedModel[index].imgpath}",
+                                                    "${imagesPath}${rcontroller.selectedModel[index].id}/${rcontroller.selectedModel[index].imgpath}",
                                                     fit: BoxFit.fill,
                                                     width: 221,
                                                     height: 48,
@@ -895,12 +892,10 @@ class ReportScreen extends StatelessWidget {
                                               ? SizedBox(
                                                   width: Get.width / 9.03,
                                                   height: 50,
-                                                  child:
-                                                   ArvandPelak(
+                                                  child: ArvandPelak(
                                                       entry: rcontroller
                                                               .selectedModel[
                                                           index]))
-
                                               : LicanceNumber(
                                                   entry: rcontroller
                                                       .selectedModel[index]),
@@ -1319,34 +1314,188 @@ class ReportTextField extends StatelessWidget {
 // }
 
 Future<void> saveToCsv(List<Map<String, dynamic>> data) async {
-  if (data.isEmpty) return;
+  
+  final doc = pw.Document();
+  final ttf = await fontFromAssetBundle('assets/fonts/arial.ttf');
+  doc.addPage(
+    pw.MultiPage(
+      textDirection: pw.TextDirection.rtl,
+      mainAxisAlignment: pw.MainAxisAlignment.start,
+      crossAxisAlignment: pw.CrossAxisAlignment.end,
+      build: (pw.Context context) {
+        return [
+          // Replace the Column with a list of widgets
+          pw.Row(children: [
+ pw.Container(
+                height: 30,
+                width: 75,
+                alignment: pw.Alignment.center,
+                decoration: pw.BoxDecoration(border: pw.Border.all()),
+                child: pw.Text(
+                   'پلاک',
+                    style: pw.TextStyle(font: ttf) // Apply the font
+                    ),
+              ),
+               pw.Container(
+                height: 30,
+                width: 75,
+                alignment: pw.Alignment.center,
+                decoration: pw.BoxDecoration(border: pw.Border.all()),
+                child: pw.Text(
+                   'تاریخ',
+                    style: pw.TextStyle(font: ttf) // Apply the font
+                    ),
+              ),
+               pw.Container(
+                height: 30,
+                width: 75,
+                alignment: pw.Alignment.center,
+                decoration: pw.BoxDecoration(border: pw.Border.all()),
+                child: pw.Text(
+                   'ساعت',
+                    style: pw.TextStyle(font: ttf) // Apply the font
+                    ),
+              ),
+               pw.Container(
+                height: 30,
+                width: 75,
+                alignment: pw.Alignment.center,
+                decoration: pw.BoxDecoration(border: pw.Border.all()),
+                child: pw.Text(
+                   'نام و نام خانوادگی',
+                    style: pw.TextStyle(font: ttf,fontSize: 8) // Apply the font
+                    ),
+              ),
+               pw.Container(
+                height: 30,
+                width: 75,
+                alignment: pw.Alignment.center,
+                decoration: pw.BoxDecoration(border: pw.Border.all()),
+                child: pw.Text(
+                   'ماشین',
+                    style: pw.TextStyle(font: ttf) // Apply the font
+                    ),
+              ),
+               pw.Container(
+                height: 30,
+                width: 75,
+                alignment: pw.Alignment.center,
+                decoration: pw.BoxDecoration(border: pw.Border.all()),
+                child: pw.Text(
+                   'نام دوربین',
+                    style: pw.TextStyle(font: ttf) // Apply the font
+                    ),
+              ),
+          ]),
+          for (var i in data)
+   i['arvand'] == 'arvand'   || convertToPersianString(i['Plate Number'], alphabetP2) !='-'  ?      pw.Container(
+              child: pw.Row(children: [
+                  pw.Container(
+                height: 30,
+                width: 75,
+                alignment: pw.Alignment.center,
+                decoration: pw.BoxDecoration(border: pw.Border.all()),
+                child: pw.Text(
+                    i['arvand'] == 'arvand'
+                        ? i['Plate Number'].contains(RegExp('[a-zA-Z]'))
+                            ? "-"
+                            : i['Plate Number'].toString().toPersianDigit()
+                        : convertToPersianString(i['Plate Number'], alphabetP2),
+                    style: pw.TextStyle(font: ttf) // Apply the font
+                    ),
+              ),
+              pw.Container(
+                height: 30,
+                width: 75,
+                alignment: pw.Alignment.center,
+                decoration: pw.BoxDecoration(border: pw.Border.all()),
+                child: pw.Text(
+                    i['Date'].toString().toPersianDate(),
+                    style: pw.TextStyle(font: ttf) // Apply the font
+                    ),
+              ),
+                         pw.Container(
+                height: 30,
+                width: 75,
+                alignment: pw.Alignment.center,
+                decoration: pw.BoxDecoration(border: pw.Border.all()),
+                child: pw.Text(
+                    i['Time'].toString().toPersianDigit(),
+                    style: pw.TextStyle(font: ttf) // Apply the font
+                    ),
+              ),
+                                 pw.Container(
+                height: 30,
+                width: 75,
+                alignment: pw.Alignment.center,
+                decoration: pw.BoxDecoration(border: pw.Border.all()),
+                child: pw.Text(
+                    i['Name'].toString(),
+                    style: pw.TextStyle(font: ttf) // Apply the font
+                    ),
+                    
+              ),
+                                 pw.Container(
+                height: 30,
+                width: 75,
+                alignment: pw.Alignment.center,
+                decoration: pw.BoxDecoration(border: pw.Border.all()),
+                child: pw.Text(
+                    i['Car name'].toString(),
+                    style: pw.TextStyle(font: ttf) // Apply the font
+                    ),
+              ),
+                                        pw.Container(
+                height: 30,
+                width: 75,
+                alignment: pw.Alignment.center,
+                decoration: pw.BoxDecoration(border: pw.Border.all()),
+                child: pw.Text(
+                    i['Camera Name'].toString(),
+                    style: pw.TextStyle(font: ttf) // Apply the font
+                    ),
+              ),
+            ])
+            ) : pw.SizedBox()
+        ];
+      },
+      // Optional: Add header/footer to all pages
+      footer: (pw.Context context) => pw.Text(' صفحه  ${context.pageNumber}',style: pw.TextStyle(font: ttf),textDirection: pw.TextDirection.rtl),
+    ),
+  );
+  await Printing.layoutPdf(
+      format: PdfPageFormat.a4,
+      dynamicLayout: true,
+      usePrinterSettings: true,
+      onLayout: (PdfPageFormat format) async => doc.save());
 
   // Define the custom directory path
-  final directory = Directory('../output/');
-  if (!await directory.exists()) {
-    await directory.create(recursive: true);
-  }
+  // final directory = Directory('../output/');
+  // if (!await directory.exists()) {
+  //   await directory.create(recursive: true);
 
-  Get.find<ReportController>().savePath =
-      '${directory.path}/Report ${DateTime.now().month}-${DateTime.now().day} ${DateTime.now().hour}-${DateTime.now().minute}.csv';
+  // }
 
-  // Create a CSV file
-  final File file = File(Get.find<ReportController>().savePath!);
-  final sink = file.openWrite();
+  // Get.find<ReportController>().savePath =
+  //     '${directory.path}/Report ${DateTime.now().month}-${DateTime.now().day} ${DateTime.now().hour}-${DateTime.now().minute}.csv';
 
-  // Write headers
-  final headers = data.first.keys.toList();
-  sink.writeln(headers.join(','));
+  // // Create a CSV file
+  // final File file = File(Get.find<ReportController>().savePath!);
+  // final sink = file.openWrite();
 
-  // Write data
-  for (final row in data) {
-    final values =
-        headers.map((header) => row[header]?.toString() ?? '').toList();
-    sink.writeln(values.join(','));
-  }
+  // // Write headers
+  // final headers = data.first.keys.toList();
+  // sink.writeln(headers.join(','));
 
-  await sink.flush();
-  await sink.close();
+  // // Write data
+  // for (final row in data) {
+  //   final values =
+  //       headers.map((header) => row[header]?.toString() ?? '').toList();
+  //   sink.writeln(values.join(','));
+  // }
+
+  // await sink.flush();
+  // await sink.close();
 }
 
 // Future<void> saveToExel(List<Map<String, dynamic>> data) async {
