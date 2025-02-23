@@ -1,8 +1,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
-import 'package:responsive_framework/responsive_framework.dart';
+
 
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:unapwebv/controller/bindings.dart';
@@ -39,32 +40,25 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-        builder: (context, child) {
-
-          return ResponsiveBreakpoints.builder(child: child!, breakpoints: [
-                      const Breakpoint(start: 0, end: 450, name: MOBILE),
-          const Breakpoint(start: 451, end: 800, name: TABLET),
-          const Breakpoint(start: 801, end: 1920, name: DESKTOP),
-          const Breakpoint(start: 1921, end: double.infinity, name: '4K'),
-          ]);
-
-        },
-        initialBinding: MyBinding(),
-        theme: ThemeData(fontFamily: 'byekan', useMaterial3: true),
-        debugShowCheckedModeBanner: false,
-        title: 'AmnAfarin',
-        onInit: () async {
-
-        },
-        onReady: () async {
-          printIps();
-          try{
-          tz.initializeTimeZones();
-          }catch(e){
-          
-          }
-        },
-        home: FirstLoginScreen());
+    return ResponsiveSizer(
+      builder:(context, orientation, screenType) =>  GetMaterialApp(
+       
+          initialBinding: MyBinding(),
+          theme: ThemeData(fontFamily: 'byekan', useMaterial3: true),
+          debugShowCheckedModeBanner: false,
+          title: 'AmnAfarin',
+          onInit: () async {
+      
+          },
+          onReady: () async {
+            printIps();
+            try{
+            tz.initializeTimeZones();
+            }catch(e){
+            
+            }
+          },
+          home: FirstLoginScreen()),
+    );
   }
 }

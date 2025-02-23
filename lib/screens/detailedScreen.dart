@@ -4,6 +4,7 @@ import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:persian_number_utility/persian_number_utility.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:unapwebv/controller/mianController.dart';
 import 'package:unapwebv/model/consts.dart';
 import 'package:unapwebv/model/model.dart';
@@ -312,7 +313,7 @@ class Detailedscreen extends StatelessWidget {
                                             left: BorderSide(color: purpule))),
                                     padding: EdgeInsets.symmetric(
                                         horizontal: 0, vertical: 5),
-                                    width: 200,
+                                    width: 12.w,
                                     height: 48,
                                     child: selectedModel.isarvand == 'arvand'
                                         ? ArvandPelak(entry: selectedModel)
@@ -325,14 +326,14 @@ class Detailedscreen extends StatelessWidget {
                       decoration: BoxDecoration(
                           border: Border(left: BorderSide(color: purpule))),
                       padding: EdgeInsets.symmetric(horizontal: 0),
-                      width: 224,
+                      width: 12.w,
                       child: Center(
                         child: Hero(
                           tag: "heroTag${index}",
                           child: Image.network(
                             "${imagesPath}${selectedModel.id}/${selectedModel.imgpath}",
                             fit: BoxFit.fill,
-                            width: 210,
+                            width: 12.w,
                             height: 48,
                           ),
                         ),
@@ -722,7 +723,7 @@ Container header3() {
             bottom: BorderSide(color: purpule),
             top: BorderSide(color: purpule))),
     child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
       textDirection: TextDirection.rtl,
       children: [
         headerOftable3("شماره پلاک"),
@@ -747,11 +748,11 @@ Container headerOftable3(String title) {
                   ? BorderSide(color: purpule)
                   : BorderSide.none)),
       height: 50,
-      width: 200,
+      width: 12.w,
       child: Center(
           child: Text(
         title,
-        style: TextStyle(color: Colors.white),
+        style: TextStyle(color: Colors.white,fontSize: 10.sp),
       )));
 }
 
@@ -760,12 +761,12 @@ Container contactOfTable3(String title) {
       decoration:
           BoxDecoration(border: Border(left: BorderSide(color: purpule))),
       height: 98,
-      width: 224,
+      width: 12.w,
       child: Center(
           child: Text(
         title,
         textDirection: TextDirection.rtl,
-        style: TextStyle(color: Colors.white, fontSize: 18),
+        style: TextStyle(color: Colors.white, fontSize: 10.sp),
       )));
 }
 

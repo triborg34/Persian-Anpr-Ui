@@ -8,6 +8,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:unapwebv/controller/mianController.dart';
 import 'package:unapwebv/model/consts.dart';
 import 'package:unapwebv/model/model.dart';
@@ -39,6 +40,7 @@ class _DbContantState extends State<DbContant> {
 
     return Container(
       height: 290,
+      width: 50.w,
       color: Colors.transparent,
       margin: EdgeInsets.symmetric(horizontal: 10),
       child: StreamBuilder<List<plateModel>>(
@@ -151,6 +153,7 @@ class _DbContantState extends State<DbContant> {
                   initialScrollOffset: 0.0,
                 ),
                 itemBuilder: (context, index) {
+                
                   final entry = entries[index];
 
                   return InkWell(
@@ -170,6 +173,7 @@ class _DbContantState extends State<DbContant> {
                               '-',
                       child: Container(
                         height: 60,
+                        width: 50.w,
                         decoration: BoxDecoration(
                             color: purpule,
                             borderRadius: BorderRadius.circular(5)),
@@ -178,7 +182,7 @@ class _DbContantState extends State<DbContant> {
                           textDirection: TextDirection.rtl,
                           children: [
                             SizedBox(
-                                width: 210,
+                                width: 10.w,
                                 child: entry.isarvand == 'arvand'
                                     ? ArvandPelak2(entry: entry)
                                     : LicanceNumber(entry: entry)),
@@ -193,7 +197,7 @@ class _DbContantState extends State<DbContant> {
                                 child: Image.network(
                                   ("${imagesPath}${entry.id}/${entry.imgpath}"), ///
                                   fit: BoxFit.fill,
-                                  width: 235,
+                                  width: 10.w,
                                   height: 48,
                                 ),
                               )),
@@ -204,7 +208,7 @@ class _DbContantState extends State<DbContant> {
                             Padding(
                               padding: const EdgeInsets.only(left: 8),
                               child: Container(
-                                width: 225,
+                                width: 8.w,
                                 child: Get.find<Boxes>()
                                         .regBox
                                         .where(
@@ -273,7 +277,7 @@ class _DbContantState extends State<DbContant> {
                                     ? "دوربین خروجی"
                                     : "دوربین ورودی",
                                 style: TextStyle(
-                                    color: Colors.white, fontSize: 18),
+                                    color: Colors.white, fontSize: 12.sp),
                               ),
                             )))
                           ],

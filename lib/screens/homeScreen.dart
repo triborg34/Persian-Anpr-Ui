@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:unapwebv/controller/mianController.dart';
 import 'package:unapwebv/model/consts.dart';
 
@@ -90,6 +91,7 @@ class HomeScreen extends StatelessWidget {
           SizedBox(
             height: 20,
           ),
+          
         ],
       ),
     );
@@ -103,7 +105,7 @@ class HomeScreen extends StatelessWidget {
     } else if (index == 1) {
       return Container(
         width: MediaQuery.sizeOf(context).width * 0.5,
-        height: 350,
+        height: 40.h,
         child: Wrap(
           children: [
             for (int i = 1; i <= 4; i++)

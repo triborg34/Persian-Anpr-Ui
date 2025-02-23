@@ -46,12 +46,10 @@ dependencies:
   responsive_navigation_bar: ^5.0.2
   dropdown_button2: ^2.3.9
   timezone: ^0.8.0
-
   persian_datetime_picker: ^2.7.0
   side_bar_custom: ^1.0.3
   font_awesome_flutter: ^10.7.0
   timezone_utc_offset: ^1.1.0
-  responsive_framework: ^1.5.1
   dio: ^5.7.0
   splash_view: ^2.0.1
   easy_image_viewer: ^1.5.1
@@ -61,6 +59,7 @@ dependencies:
   pocketbase: ^0.21.0
   idb_shim: ^2.6.1+7
   printing: ^5.14.2
+  responsive_sizer: ^3.3.1
  
 
 

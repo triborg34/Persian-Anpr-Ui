@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:unapwebv/model/consts.dart';
 import 'package:unapwebv/model/model.dart';
 
@@ -14,7 +15,7 @@ class LicanceNumber extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Container(
-      width: 185,
+      width: 1.5.w,
       margin: EdgeInsets.only(right: 3),
       height: 40,
       decoration: BoxDecoration(
@@ -30,7 +31,7 @@ class LicanceNumber extends StatelessWidget {
               child: Image.network(
                   'assets/images/iranFlag.png'),
             ),
-            width: 30,
+            width: 1.5.w,
             padding: EdgeInsets.all(3),
             decoration: BoxDecoration(
               border: Border(
@@ -62,16 +63,16 @@ class LicanceNumber extends StatelessWidget {
                 textDirection:
                     TextDirection.rtl,
                 style:
-                    TextStyle(fontSize: 18),
+                    TextStyle(fontSize: 11.sp),
               ),
             ),
           ),
           SizedBox(
-            width: 50,
-            height: 40,
+            width: 1.5.w,
+            height:40,
             child: Container(
                 padding: EdgeInsets.only(
-                    left: 5),
+                    left: 0),
                 color: Colors.white,
                 child: Center(
                   child: Text(
@@ -81,7 +82,8 @@ class LicanceNumber extends StatelessWidget {
                       textDirection:
                           TextDirection.rtl,
                       style: TextStyle(
-                          fontSize: 18)),
+                          fontSize:11.sp
+                          )),
                 )),
           )
         ],
