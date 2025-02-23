@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 
 import 'package:persian_datetime_picker/persian_datetime_picker.dart';
 import 'package:persian_number_utility/persian_number_utility.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 import 'package:unapwebv/controller/mianController.dart';
 import 'package:unapwebv/model/consts.dart';
@@ -691,7 +692,7 @@ class ReportScreen extends StatelessWidget {
                                             border: Border(
                                                 left: BorderSide(
                                                     color: purpule))),
-                                        width: 221,
+                                        width: 12.w,
                                         child: Center(
                                           child: Text(
                                             rcontroller
@@ -708,7 +709,7 @@ class ReportScreen extends StatelessWidget {
                                             border: Border(
                                                 left: BorderSide(
                                                     color: purpule))),
-                                        width: 221,
+                                        width: 12.w,
                                         child: Center(
                                           child: Text(
                                             rcontroller
@@ -726,7 +727,7 @@ class ReportScreen extends StatelessWidget {
                                             border: Border(
                                                 left: BorderSide(
                                                     color: purpule))),
-                                        width: 221,
+                                        width: 12.w,
                                         child: Center(
                                           child: Text(
                                             Get.find<Boxes>()
@@ -755,7 +756,7 @@ class ReportScreen extends StatelessWidget {
                                             border: Border(
                                                 left: BorderSide(
                                                     color: purpule))),
-                                        width: 221,
+                                        width: 12.w,
                                         child: Center(
                                           child: Text(
                                             rcontroller.selectedModel[index]
@@ -772,7 +773,7 @@ class ReportScreen extends StatelessWidget {
                                           border: Border(
                                               left:
                                                   BorderSide(color: purpule))),
-                                      width: 221,
+                                      width: 12.w,
                                       height: 50,
                                       child: Center(
                                         child: Text(
@@ -813,7 +814,7 @@ class ReportScreen extends StatelessWidget {
                                           border: Border(
                                               left:
                                                   BorderSide(color: purpule))),
-                                      width: 221,
+                                      width: 12.w,
                                       height: 50,
                                       child: Center(
                                         child: Text(
@@ -855,7 +856,7 @@ class ReportScreen extends StatelessWidget {
                                             border: Border(
                                                 left: BorderSide(
                                                     color: purpule))),
-                                        width: 250,
+                                        width: 12.w,
                                         child: Center(
                                           child: InkWell(
                                               onTap: () {
@@ -870,36 +871,34 @@ class ReportScreen extends StatelessWidget {
                                                   child: Image.network(
                                                     "${imagesPath}${rcontroller.selectedModel[index].id}/${rcontroller.selectedModel[index].imgpath}",
                                                     fit: BoxFit.fill,
-                                                    width: 221,
+                                                    width: 12.w,
                                                     height: 48,
                                                   ))),
                                         )),
                                     Container(
-                                        padding: EdgeInsets.all(1.0),
+                                        padding: EdgeInsets.all(5.0),
                                         height: 50,
-                                        width: Get.width / 9.03,
+                                        width: 12.w,
                                         decoration: BoxDecoration(
                                             border: Border(
                                                 right:
                                                     BorderSide(color: purpule),
                                                 left: BorderSide(
                                                     color: purpule))),
-                                        child: Center(
-                                          child: rcontroller
-                                                      .selectedModel[index]
-                                                      .isarvand ==
-                                                  "arvand"
-                                              ? SizedBox(
-                                                  width: Get.width / 9.03,
-                                                  height: 50,
-                                                  child: ArvandPelak(
-                                                      entry: rcontroller
-                                                              .selectedModel[
-                                                          index]))
-                                              : LicanceNumber(
-                                                  entry: rcontroller
-                                                      .selectedModel[index]),
-                                        )),
+                                        child: rcontroller
+                                                    .selectedModel[index]
+                                                    .isarvand ==
+                                                "arvand"
+                                            ? SizedBox(
+                                                width: 12.w,
+                                                height: 50,
+                                                child: ArvandPelak(
+                                                    entry: rcontroller
+                                                            .selectedModel[
+                                                        index]))
+                                            : LicanceNumber(
+                                                entry: rcontroller
+                                                    .selectedModel[index])),
                                   ],
                                 ),
                               ),
@@ -1202,7 +1201,7 @@ Container header2() {
             bottom: BorderSide(color: purpule),
             top: BorderSide(color: purpule))),
     child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
       textDirection: TextDirection.rtl,
       children: [
         headerOftable2("شماره پلاک"),
@@ -1223,7 +1222,7 @@ Container contactOfTable2(String title) {
       decoration:
           BoxDecoration(border: Border(left: BorderSide(color: purpule))),
       height: 98,
-      width: 205,
+      width: 12.w,
       child: Center(
           child: Text(
         title,
@@ -1249,7 +1248,7 @@ Container headerOftable2(String title) {
                   ? BorderSide(color: purpule)
                   : BorderSide.none)),
       height: 50,
-      width: Get.width / 9.26,
+      width: 12.w,
       child: Center(
           child: Text(
         title,
