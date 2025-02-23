@@ -1,10 +1,9 @@
-import 'dart:math';
+// import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:unapwebv/controller/mianController.dart';
 import 'package:unapwebv/model/consts.dart';
-import 'package:unapwebv/model/storagedb/registredDb.dart';
 import 'package:unapwebv/screens/reportScreen.dart';
 import 'package:unapwebv/widgets/alphabetselector.dart';
 import 'package:unapwebv/widgets/arvand_pelak.dart';
@@ -306,32 +305,33 @@ class _EnhancedCarRegistrationDialogState
                         arvandController.text;
                   }
                   // Create RegistredDb object with the new fields
-                  RegistredDb? registredDb;
+                
 
-                  String id = Random().nextInt(9999).toString();
-                  try {
-                    print(widget.entry.plateNum);
-                    registredDb = RegistredDb(
-                        id: id,
-                        role: _selectedRole ?? '',
-                        socialNumber: Get.find<feildController>()
-                            .socialNumber
-                            .text, // Add the social security number here
-                        plateImagePath: widget.entry.imgpath,
-                        plateNumber: widget.entry.plateNum,
-                        rtpath: widget.entry.rtpath,
-                        carName: Get.find<feildController>().carName.text,
-                        name:
-                            "${Get.find<feildController>().Fname.text} ${Get.find<feildController>().name.text}",
-                        status: true,
-                        eDate: widget.entry.eDate,
-                        eTime: widget.entry.eTime,
-                        screenImg: widget.entry.scrnPath,
-                        isarvand: widget.entry.isarvand);
-                    try {
+                  // String id = Random().nextInt(9999).toString();
+                 
+                    // print(widget.entry.plateNum);
+                    // registredDb = RegistredDb(
+                    //     id: id,
+                    //     role: _selectedRole ?? '',
+                    //     socialNumber: Get.find<feildController>()
+                    //         .socialNumber
+                    //         .text, // Add the social security number here
+                    //     plateImagePath: widget.entry.imgpath,
+                    //     plateNumber: widget.entry.plateNum,
+                    //     rtpath: widget.entry.rtpath,
+                    //     carName: Get.find<feildController>().carName.text,
+                    //     name:
+                    //         "${Get.find<feildController>().Fname.text} ${Get.find<feildController>().name.text}",
+                    //     status: true,
+                    //     eDate: widget.entry.eDate,
+                    //     eTime: widget.entry.eTime,
+                    //     screenImg: widget.entry.scrnPath,
+                    //     isarvand: widget.entry.isarvand);
+                if(widget.isRegister==false && widget.isEditing==false){
+                      try {
                       final body = <String, dynamic>{
                      
-                        "plateImagePath": "",
+                        "plateImagePath": widget.entry.imgpath,
                         "plateNumber": widget.entry.plateNum,
                         "name":
                             "${Get.find<feildController>().Fname.text} ${Get.find<feildController>().name.text}",
@@ -339,7 +339,7 @@ class _EnhancedCarRegistrationDialogState
                         "eDate": widget.entry.eDate,
                         "eTime": widget.entry.eTime,
                         "status": true,
-                        "screenImg": "",
+                        "screenImg": widget.entry.scrnPath,
                         "role": _selectedRole ?? '',
                         "socialNumber":
                             Get.find<feildController>().socialNumber.text,
@@ -347,40 +347,49 @@ class _EnhancedCarRegistrationDialogState
                         "rtpath": widget.entry.rtpath,
                       };
                       await pb.collection('registredDb').create(body: body);
-                      Get.find<Boxes>().regBox.add(registredDb);
+                      // Get.find<Boxes>().regBox.add(registredDb);
                       Get.find<Boxes>().getregData();
                     } catch (e) {
                       print(e);
                     }
-                  } catch (e) {
-                    print(e);
-                    registredDb = RegistredDb(
-                        id: id,
-                        isarvand: arvandSwith ? "notarvand" : 'arvnad',
-                        rtpath: '/rt1',
-                        role: _selectedRole ?? '',
-                        socialNumber: Get.find<feildController>()
-                            .socialNumber
-                            .text, // Add the social security number here
-                        plateImagePath: '',
-                        plateNumber: Get.find<ReportController>().platePicker,
-                        carName: Get.find<feildController>().carName.text,
-                        name:
+                }
+                
+                else if(widget.isRegister==true && widget.isEditing==false){
+                                 try {
+                      final body = <String, dynamic>{
+                     
+                        "plateImagePath":'',
+                        "plateNumber":Get.find<ReportController>().platePicker,
+                        "name":
                             "${Get.find<feildController>().Fname.text} ${Get.find<feildController>().name.text}",
-                        status: true,
-                        eDate: DateTime.now().toString(),
-                        eTime:
-                            "${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}",
-                        screenImg: '');
-                    Get.find<Boxes>().regBox.add(registredDb);
-                    Get.find<Boxes>().getregData();
-                  }
-                  ;
+                        "carName": Get.find<feildController>().carName.text,
+                        "eDate": DateTime.now().toString(),
+                        "eTime":"${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}",
+                        "status": true,
+                        "screenImg":'',
+                        "role": _selectedRole ?? '',
+                        "socialNumber":
+                            Get.find<feildController>().socialNumber.text,
+                        "isarvand": arvandSwith ? "notarvand" : 'arvnad',
+                        "rtpath":'/rt1',
+                      };
+                      await pb.collection('registredDb').create(body: body);
+                      // Get.find<Boxes>().regBox.add(registredDb);
+                      Get.find<Boxes>().getregData();
+                    } catch (e) {
+                      print(e);
+                    }
+
+                }
+                    // print(e);
+           
+         
+                  
                   // Add to Hive and refresh
-                  if (widget.isEditing) {
+                  else  {
                     String tempplate =
                         Get.find<Boxes>().regBox[widget.index].plateNumber!;
-                    Get.find<Boxes>().regBox[widget.index] = registredDb;
+                    
                     try {
                       final body = <String, dynamic>{
                         "plateImagePath": Get.find<Boxes>()
@@ -415,31 +424,31 @@ class _EnhancedCarRegistrationDialogState
                       print(e);
                     }
                     Get.find<Boxes>().getregData();
-                  } else {
-                    try {
-                      final body = <String, dynamic>{
-                        "id": id,
-                        "plateImagePath": "",
-                        "plateNumber": Get.find<ReportController>().platePicker,
-                        "name":
-                            "${Get.find<feildController>().Fname.text} ${Get.find<feildController>().name.text}",
-                        "carName": Get.find<feildController>().carName.text,
-                        "eDate": DateTime.now().toString(),
-                        "eTime":
-                            "${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}",
-                        "status": true,
-                        "screenImg": "",
-                        "role": _selectedRole,
-                        "socialNumber":
-                            Get.find<feildController>().socialNumber.text,
-                        "isarvand": arvandSwith ? "notarvand" : 'arvnad',
-                        "rtpath": "/rt1"
-                      };
-                      await pb.collection('registredDb').create(body: body);
-                    } catch (e) {
-                      print(e);
-                    }
-                    Get.find<Boxes>().regBox.add(registredDb);
+                  // } else {
+                  //   try {
+                  //     final body = <String, dynamic>{
+                  //       "id": id,
+                  //       "plateImagePath": "",
+                  //       "plateNumber": Get.find<ReportController>().platePicker,
+                  //       "name":
+                  //           "${Get.find<feildController>().Fname.text} ${Get.find<feildController>().name.text}",
+                  //       "carName": Get.find<feildController>().carName.text,
+                  //       "eDate": DateTime.now().toString(),
+                  //       "eTime":
+                  //           "${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}",
+                  //       "status": true,
+                  //       "screenImg": "",
+                  //       "role": _selectedRole,
+                  //       "socialNumber":
+                  //           Get.find<feildController>().socialNumber.text,
+                  //       "isarvand": arvandSwith ? "notarvand" : 'arvnad',
+                  //       "rtpath": "/rt1"
+                  //     };
+                  //     await pb.collection('registredDb').create(body: body);
+                  //   } catch (e) {
+                  //     print(e);
+                  //   }
+                  
                     Get.find<Boxes>().getregData();
                   }
 
