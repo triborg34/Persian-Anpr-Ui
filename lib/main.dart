@@ -13,10 +13,7 @@ import 'package:unapwebv/screens/firstsplashscreen.dart';
 
 
 void main() async {
-  //TODO:Add Pdf
-  //TODO:Fix Setting🤓
-  //TODO:Fix try and expects🤓
-  //TODO:Licance Demo🤓
+
 
   WidgetsFlutterBinding.ensureInitialized();
 

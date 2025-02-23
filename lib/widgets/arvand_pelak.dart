@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:persian_number_utility/persian_number_utility.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 import 'package:unapwebv/model/model.dart';
 
@@ -11,7 +12,7 @@ class ArvandPelak extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.all(0),
-      width: 180,
+      width: 10.w,
       height: 35,
         decoration: BoxDecoration(
           border: Border.all(color: Colors.black),
@@ -50,7 +51,7 @@ class ArvandPelak2 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.all(5),
-      width: 180,
+      width: 10.w,
       height: 35,
         decoration: BoxDecoration(
           border: Border.all(color: Colors.black),

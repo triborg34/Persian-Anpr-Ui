@@ -11,7 +11,7 @@ import 'package:unapwebv/widgets/arvand_pelak.dart';
 import 'package:unapwebv/widgets/licancenumber.dart';
 
 class EnhancedCarRegistrationDialog extends StatefulWidget {
-  //TODO:arvand register
+
   final dynamic
       entry; // Assuming this is the entry object from your original code
   final bool isEditing;

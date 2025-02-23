@@ -5,7 +5,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:unapwebv/controller/mianController.dart';
+
 import 'package:unapwebv/model/consts.dart';
 import 'package:unapwebv/model/storagedb/cameras.dart';
 
@@ -41,10 +43,7 @@ class _CameraSettingState extends State<CameraSetting> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                CameraSettingRows(
-                  title: 'ردیف',
-                ),
-                VerticalDivider(),
+      
                 CameraSettingRows(
                   title: 'اسم دوربین',
                 ),
@@ -124,8 +123,7 @@ class _CameraSettingState extends State<CameraSetting> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        CameraSettingRows(title: index),
-                        VerticalDivider(),
+
                         CameraSettingRows(
                             title: controller.camerabox
                                 .toList()[index]
@@ -891,13 +889,13 @@ class CameraSettingRows extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: 200,
+        width: 11.w,
         child: Center(
           child: Text(
             title.toString(),
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
-                fontSize: 18, color: Colors.white, fontWeight: FontWeight.w700),
+                fontSize: 12.sp, color: Colors.white, fontWeight: FontWeight.w700),
           ),
         ));
   }

@@ -97,7 +97,7 @@ class UserSetting extends StatelessWidget {
                                 onPressed: () async {
                                   await showDialog(
                                     context: context,
-                                    builder: (context) => //TODO?::EDIT:;
+                                    builder: (context) => 
                                         UserRegistrationDialog(
                                       isEditing: true,
                                       index: index,
@@ -113,7 +113,7 @@ class UserSetting extends StatelessWidget {
                               IconButton(
                                 onPressed: ()async {
                                   await pb.collection('users').delete(Get.find<Boxes>().userbox[index].id!);
-                                  await Get.find<Boxes>().userbox.removeAt(index); //TODO:
+                                  await Get.find<Boxes>().userbox.removeAt(index); 
                                   Get.find<Boxes>().update([6]);
                                 },
                                 icon: Icon(
@@ -264,7 +264,7 @@ GetBuilder<Boxes>(id: 9,builder: (controller) {
                           IconButton(
                               onPressed: () async{
                                       await pb.collection('registredDb').delete(Get.find<Boxes>().regBox[index].id!);
-                                    await Get.find<Boxes>().regBox.removeAt(index); //TODO:
+                                    await Get.find<Boxes>().regBox.removeAt(index); 
                                      Get.find<Boxes>().getregData();
                                     Get.find<Boxes>().update([9]);
                               },
@@ -580,7 +580,6 @@ await pb.collection('users').update(record.id, body: body);
       ],
     );
   }
-  //TODO:EDIT??? MAYBE 
-  //TODO:ARVAND EDIT>??????
+
 }
 

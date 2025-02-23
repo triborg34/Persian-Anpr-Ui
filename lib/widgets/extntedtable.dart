@@ -163,8 +163,14 @@ Container contant() {
                                                 textDirection: pw.TextDirection.rtl,
                                                 style: pw.TextStyle(font: ttf)),
                                             pw.Spacer(),
+                                                              pw.Text(
+                                            ' ساعت : ${DateTime.now().hour.toString().toPersianDigit()}:${DateTime.now().minute.toString().toPersianDigit()}',
+                                            style: pw.TextStyle(font: ttf),
+                                            textDirection:
+                                                pw.TextDirection.rtl),
+                                                pw.Spacer(),
                                             pw.Text(
-                                                'شماره قبض : ${Random().nextInt(200)}',
+                                                'شماره قبض : ${Random().nextInt(200).toString().toPersianDigit()}',
                                                 style: pw.TextStyle(font: ttf),
                                                 textDirection:
                                                     pw.TextDirection.rtl),
