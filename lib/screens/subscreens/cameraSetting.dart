@@ -43,7 +43,6 @@ class _CameraSettingState extends State<CameraSetting> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-      
                 CameraSettingRows(
                   title: 'اسم دوربین',
                 ),
@@ -123,7 +122,6 @@ class _CameraSettingState extends State<CameraSetting> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-
                         CameraSettingRows(
                             title: controller.camerabox
                                 .toList()[index]
@@ -482,30 +480,33 @@ class _CameraSettingState extends State<CameraSetting> {
                                               licance: controller.camerabox
                                                   .toList()[index]
                                                   .licance);
+
+                                      var body = {
+                                        "rtpath":
+                                            controller.camerabox[index].rtpath,
+                                        "gate": value['type'],
+                                        "ip": value['ip'],
+                                        "nameCamera": value['name'],
+                                        "rtspname": value['rtspname'],
+                                        "status": true,
+                                        "username": value['username'],
+                                        "password": value['username'],
+                                        "isNotrtsp": value['isnotrtsp'],
+                                        "licance": controller.camerabox
+                                            .toList()[index]
+                                            .licance
+                                      };
+                                      
+                               
+                                      await pb.collection('cameras').update(
+                                          controller.camerabox
+                                              .toList()[index]
+                                              .id!,
+                                          body: body);
+                                      Get.find<Boxes>().getCamera();
+                                      Get.find<Boxes>().update([5]);
                                     }
                                     Get.find<Boxes>().update([5]);
-                                    var body={
-                                           "rtpath": controller
-                                                  .camerabox[index].rtpath,
-                                              "id": controller.camerabox
-                                                  .toList()[index]
-                                                  .id,
-                                              "gate": value['type'],
-                                              "ip": value['ip'],
-                                              "nameCamera": value['name'],
-                                              "rtspname": value['rtspname'],
-                                              "status": true,
-                                              "username": value['username'],
-                                              "password": value['username'],
-                                              "isNotrtsp": value['isnotrtsp'],
-                                              "licance": controller.camerabox
-                                                  .toList()[index]
-                                                  .licance
-
-                                    };
-                                    await pb.collection('cameras').update(controller.camerabox
-                                                  .toList()[index]
-                                                  .id!, body: body);
                                   });
                                 },
                                 icon: Icon(
@@ -523,10 +524,12 @@ class _CameraSettingState extends State<CameraSetting> {
                           child: Center(
                             child: IconButton(
                                 onPressed: () async {
-                                    await pb.collection('cameras').delete(controller.camerabox[index].id!);
+                                  await pb
+                                      .collection('cameras')
+                                      .delete(controller.camerabox[index].id!);
                                   await controller.camerabox.removeAt(index);
-                                 
-                                ;
+
+                                  ;
                                   Get.find<Boxes>().update([5]);
                                   setState(() {});
                                 },
@@ -785,7 +788,7 @@ class _CameraSettingState extends State<CameraSetting> {
                                 '/rt${Get.find<Boxes>().camerabox.length + 1}',
                             licance: generateRandomString(100)));
                       }
-                  
+
                       Get.find<Boxes>().update([5]);
                     });
                   },
@@ -806,23 +809,22 @@ class _CameraSettingState extends State<CameraSetting> {
               ElevatedButton(
                 onPressed: () async {
                   var dio = Dio();
-                      
-                      var body = {
-                        "id": Get.find<Boxes>().camerabox.last.id,
-                        "gate": Get.find<Boxes>().camerabox.last.gate,
-                        "ip": Get.find<Boxes>().camerabox.last.ip,
-                        "nameCamera": Get.find<Boxes>().camerabox.last.nameCamera,
-                        "status": Get.find<Boxes>().camerabox.last.status,
-                        "username": Get.find<Boxes>().camerabox.last.username,
-                        "password": Get.find<Boxes>().camerabox.last.password,
-                        "rtspname": Get.find<Boxes>().camerabox.last.rtspname,
-                        "isNotrtsp": Get.find<Boxes>().camerabox.last.isNotrtsp,
-                        "rtpath":
-                            Get.find<Boxes>().camerabox.last.rtpath,
-                        "licance": Get.find<Boxes>().camerabox.last.licance
-                      };
-                      final record =
-                          await pb.collection('cameras').create(body: body);
+
+                  var body = {
+                    "id": Get.find<Boxes>().camerabox.last.id,
+                    "gate": Get.find<Boxes>().camerabox.last.gate,
+                    "ip": Get.find<Boxes>().camerabox.last.ip,
+                    "nameCamera": Get.find<Boxes>().camerabox.last.nameCamera,
+                    "status": Get.find<Boxes>().camerabox.last.status,
+                    "username": Get.find<Boxes>().camerabox.last.username,
+                    "password": Get.find<Boxes>().camerabox.last.password,
+                    "rtspname": Get.find<Boxes>().camerabox.last.rtspname,
+                    "isNotrtsp": Get.find<Boxes>().camerabox.last.isNotrtsp,
+                    "rtpath": Get.find<Boxes>().camerabox.last.rtpath,
+                    "licance": Get.find<Boxes>().camerabox.last.licance
+                  };
+                  final record =
+                      await pb.collection('cameras').create(body: body);
                   var res = dio.post(
                       'http://127.0.0.1:${Get.find<Boxes>().settingbox.last.connect}/cameras',
                       data: {
@@ -895,7 +897,9 @@ class CameraSettingRows extends StatelessWidget {
             title.toString(),
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
-                fontSize: 12.sp, color: Colors.white, fontWeight: FontWeight.w700),
+                fontSize: 12.sp,
+                color: Colors.white,
+                fontWeight: FontWeight.w700),
           ),
         ));
   }

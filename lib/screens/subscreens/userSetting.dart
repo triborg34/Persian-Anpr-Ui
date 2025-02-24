@@ -9,6 +9,8 @@ import 'package:get/get.dart';
 import 'package:unapwebv/controller/mianController.dart';
 import 'package:unapwebv/model/consts.dart';
 import 'package:persian_number_utility/persian_number_utility.dart';
+// ignore: unused_import
+import 'package:unapwebv/model/model.dart';
 import 'package:unapwebv/model/storagedb/users.dart';
 import 'package:unapwebv/widgets/Register.dart';
 
@@ -186,6 +188,7 @@ GetBuilder<Boxes>(id: 9,builder: (controller) {
               height: 150,
               child: ListView.separated(
                   itemBuilder: (context, index) {
+
   
                     return Container(
                       height: 50,
@@ -208,7 +211,10 @@ GetBuilder<Boxes>(id: 9,builder: (controller) {
                             child: Center(
                               child: Get.find<Boxes>().regBox[index].plateImagePath=='' ?Text("-") : Image.network(
                                 (
-                                 "${imagesPath}${Get.find<Boxes>().regBox[index].plateImagePath}"),
+                                 "${imagesPath}${Get.find<ReportController>().pModel.where((element) {
+                         
+                                   return element.plateNum==Get.find<Boxes>().regBox[index].plateNumber;
+                                 },).toList().first.id}/${Get.find<Boxes>().regBox[index].plateImagePath}"),
                                 width: 240,
                                 fit: BoxFit.fill,
                               ),

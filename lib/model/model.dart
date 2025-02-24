@@ -1,10 +1,10 @@
 class plateModel {
   String? id;
-  double? charPercent;
+  dynamic charPercent;
   String? eDate;
   String? eTime;
   String? plateNum;
-  double? platePercent;
+  dynamic platePercent;
   String? status;
   String? imgpath;
   String? scrnPath;
