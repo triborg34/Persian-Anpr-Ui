@@ -665,6 +665,7 @@ class Detailedscreen extends StatelessWidget {
                                           decoration: pw.BoxDecoration(
                                               border: pw.Border.all()),
                                           child: pw.Text(
+                                            selectedModel.isarvand=='arvand' ? selectedModel.plateNum!.toPersianDigit():
                                               convertToPersianString(
                                                   selectedModel.plateNum!,
                                                   alphabetP2),

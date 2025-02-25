@@ -418,6 +418,7 @@ Container contant() {
                                               decoration: pw.BoxDecoration(
                                                   border: pw.Border.all()),
                                               child: pw.Text(
+                                                tcontroller.selectedmodel.isarvand=='arvand' ? tcontroller.selectedmodel.plateNum!.toPersianDigit() :
                                                   convertToPersianString(
                                                       tcontroller.selectedmodel.plateNum!,
                                                       alphabetP2),
