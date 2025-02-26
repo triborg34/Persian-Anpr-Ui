@@ -22,19 +22,21 @@ class Generalsetting extends StatelessWidget {
           Get.find<Boxes>().settingbox.last.charConf!;
       Get.find<settingController>().hardWareValue =
           Get.find<Boxes>().settingbox.last.hardWare!;
-
+    Get.find<settingController>().qualitySladierValue.value= Get.find<Boxes>().settingbox.last.qualitySliderValue!;
       Get.find<settingController>().timezoneseleted =
           Get.find<Boxes>().settingbox.last.timeZone!;
       Get.find<settingController>().clockType =
           Get.find<Boxes>().settingbox.last.clockType!;
     } catch (e) {
+      print(e);
       Get.find<settingController>().psliderValue = 0.8.obs;
       Get.find<settingController>().csliderValue = 0.75.obs;
       Get.find<settingController>().hardWareValue = 'cuda';
       Get.find<settingController>().clockType = '24';
+       Get.find<settingController>().qualitySladierValue.value=20.0;
       Get.find<settingController>().timezoneseleted = "Asia/Tehran";
-      Get.find<settingController>().port = 5000.toString();
-      Get.find<settingController>().connect = 8000.toString();
+      Get.find<settingController>().port = 9992.toString();
+      Get.find<settingController>().connect = 9993.toString();
       Get.find<settingController>().isRfid = false.obs;
       Get.find<settingController>().rl1 = false.obs;
       Get.find<settingController>().rl2 = false.obs;
@@ -151,6 +153,43 @@ class Generalsetting extends StatelessWidget {
                       SizedBox(
                         height: 25,
                       ),
+                                            Row(
+                        children: [
+                          FutursOfSystemRow(
+                            lable: "کیفیت عکس :",
+                          ),
+                          Obx(() => SizedBox(
+                                height: 10,
+                                child: Slider(
+                                  min: 0,
+                                  max: 100,
+                                  divisions: 10,
+                                  activeColor: selecetpurpule,
+                                  inactiveColor: Colors.white70,
+                                  value: Get.find<settingController>()
+                                      .qualitySladierValue
+                                      .value,
+                                  onChanged: (value) {
+                                    Get.find<settingController>()
+                                        .qualitySladierValue
+                                        .value = value;
+                                  },
+                                ),
+                              )),
+                          SizedBox(
+                            width: 0,
+                          ),
+                          Obx(
+                            () => Text(
+                              "${(Get.find<settingController>().qualitySladierValue.value )}%",
+                              style: TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 )),
@@ -230,6 +269,7 @@ class Generalsetting extends StatelessWidget {
                   onPressed: () async {
                     Get.find<Boxes>().settingbox.add(
                           Setting(
+                            qualitySliderValue: Get.find<settingController>().qualitySladierValue.value,
                               alarm: Get.find<Boxes>().settingbox.last.alarm!,
                               connect:
                                   Get.find<Boxes>().settingbox.last.connect!,
@@ -271,7 +311,8 @@ class Generalsetting extends StatelessWidget {
                       "dbPath": '',
                       "outPutPath": '',
                       "timeZone": Get.find<settingController>().timezoneseleted,
-                      "clockType": Get.find<settingController>().clockType
+                      "clockType": Get.find<settingController>().clockType,
+                      "quality":Get.find<settingController>().qualitySladierValue.value
                     };
                     await pb.collection('setting').create(body: body);
                     
@@ -324,6 +365,7 @@ class Generalsetting extends StatelessWidget {
                     onPressed: () async {
                       Get.find<Boxes>().settingbox.clear();
                       Get.find<Boxes>().settingbox.add(Setting(
+                          qualitySliderValue: Get.find<settingController>().qualitySladierValue.value,
                           alarm: Get.find<settingController>().alarm.value,
                           plateConf:
                               Get.find<settingController>().psliderValue.value,
@@ -359,7 +401,8 @@ class Generalsetting extends StatelessWidget {
                         "outPutPath":
                             Get.find<settingController>().pathOfOutput.value,
                         "timeZone": Get.find<settingController>().timezoneseleted,
-                        "clockType": Get.find<settingController>().clockType
+                        "clockType": Get.find<settingController>().clockType,
+                         "quality":Get.find<settingController>().qualitySladierValue.value
                       };
                       await pb.collection('setting').create(body: body);
                       Get.snackbar("", "پیش فرض شد");
@@ -439,6 +482,7 @@ class Generalsetting extends StatelessWidget {
                   onPressed: () async {
                     Get.find<Boxes>().settingbox.add(
                           Setting(
+                              qualitySliderValue: Get.find<settingController>().qualitySladierValue.value,
                               alarm: Get.find<Boxes>().settingbox.last.alarm!,
                               connect:
                                   Get.find<Boxes>().settingbox.last.connect!,
@@ -482,6 +526,7 @@ class Generalsetting extends StatelessWidget {
                           Get.find<settingController>().pathOfOutput.value,
                       "timeZone": Get.find<settingController>().timezoneseleted,
                       "clockType": Get.find<settingController>().clockType
+                      , "quality":Get.find<settingController>().qualitySladierValue.value
                     };
                     await pb.collection('setting').create(body: body);
 
@@ -499,13 +544,14 @@ class Generalsetting extends StatelessWidget {
                     onPressed: () async {
                       Get.find<Boxes>().settingbox.clear();
                       Get.find<Boxes>().settingbox.add(Setting(
+                          qualitySliderValue: Get.find<settingController>().qualitySladierValue.value,
                           alarm: Get.find<settingController>().alarm.value,
                           plateConf:
                               Get.find<settingController>().psliderValue.value,
                           charConf:
                               Get.find<settingController>().csliderValue.value,
                           hardWare: Get.find<settingController>().hardWareValue,
-                  
+
                           timeZone: Get.find<settingController>().timezoneseleted,
                           clockType: Get.find<settingController>().clockType,
                           connect: Get.find<settingController>().connect,
@@ -535,6 +581,7 @@ class Generalsetting extends StatelessWidget {
                             Get.find<settingController>().pathOfOutput.value,
                         "timeZone": Get.find<settingController>().timezoneseleted,
                         "clockType": Get.find<settingController>().clockType
+                        , "quality":Get.find<settingController>().qualitySladierValue.value
                       };
                       await pb.collection('setting').create(body: body);
                   

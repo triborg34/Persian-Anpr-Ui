@@ -826,8 +826,9 @@ class _CameraSettingState extends State<CameraSetting> {
                   final record =
                       await pb.collection('cameras').create(body: body);
                   var res = dio.post(
-                      'http://127.0.0.1:${Get.find<Boxes>().settingbox.last.connect}/cameras',
+                      'http://${pathurl}:${Get.find<Boxes>().settingbox.last.connect}/cameras',
                       data: {
+                        "rtspname":"${Get.find<Boxes>().camerabox.last.rtspname}",
                         "ip": "${Get.find<Boxes>().camerabox.last.ip}",
                         "username":
                             "${Get.find<Boxes>().camerabox.last.username}",

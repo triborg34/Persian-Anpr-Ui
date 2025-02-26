@@ -95,6 +95,7 @@ class Boxes extends GetxController {
         "rfidip": '192.168.1.91',
         "rfidport": '2000',
         "alarm": false
+        ,"quality":10.0
       };
 
       await pb.collection('setting').create(body: body);
@@ -178,6 +179,7 @@ class navController extends GetxController {
 class settingController extends GetxController {
   var psliderValue = 0.8.obs;
   var csliderValue = 0.75.obs;
+  var qualitySladierValue=10.0.obs;
   var hardWareValue = 'cuda';
   var pathOfdb = '../../../../engine/database/entrieses.db'.obs;
   var pathOfOutput = '../engine/'.obs;
@@ -198,6 +200,7 @@ class settingController extends GetxController {
       Get.find<Boxes>().settingbox.add(Setting(
           charConf: csliderValue.value,
           clockType: clockType,
+          qualitySliderValue: qualitySladierValue.value,
           plateConf: psliderValue.value,
           hardWare: hardWareValue,
           timeZone: timezoneseleted,

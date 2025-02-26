@@ -30,11 +30,13 @@ class Setting {
   
   bool? alarm;
 
+  double? qualitySliderValue;
+
   Setting(
       {this.plateConf,
       this.charConf,
       this.hardWare,
-
+       this.qualitySliderValue,
       this.timeZone,
       this.clockType,
       this.connect,this.port,this.isRfid,this.rfidip,this.rfidport,this.rl1,this.rl2,required this.alarm});
@@ -54,6 +56,7 @@ class Setting {
     rfidip = json['rfidip'];
     rfidport = json['rfidport'];
     alarm = json['alarm'];
+    qualitySliderValue=json['quality'];
 
   }
 
@@ -73,6 +76,7 @@ class Setting {
     data['rfidip'] = this.rfidip;
     data['rfidport'] = this.rfidport;
     data['alarm'] = this.alarm;
+    data['quality']=this.qualitySliderValue;
     return data;
   }
 }

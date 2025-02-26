@@ -109,8 +109,12 @@ class _FirstLoginScreenState extends State<FirstLoginScreen> {
                       child: ElevatedButton(
                         onPressed: () async {
                           if (urlController.text.isNotEmpty) {
+                            if(urlController.text.contains(":")){
+                              url="http://${urlController.text}";
+                            }else{
                             url = "http://${urlController.text}:8090";
-                            
+                            }
+                           
                             pb = PocketBase(url);
                             await pb.collection('ipconfig').create(body: {"defip": url});
                             await _saveUrl(url);
