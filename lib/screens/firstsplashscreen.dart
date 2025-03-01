@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pocketbase/pocketbase.dart';
@@ -28,7 +29,9 @@ class _FirstLoginScreenState extends State<FirstLoginScreen> {
     setState(() {
       showUrlInput = false;
     });
+    
 
+    if(kIsWeb){
     try {
       String? savedUrl = await _getSavedUrl();
       if (savedUrl != null) {
@@ -50,6 +53,14 @@ class _FirstLoginScreenState extends State<FirstLoginScreen> {
       setState(() {
         showUrlInput = true;
       });
+    }
+    
+    }else{
+      print(url);
+      url='http://127.0.0.1:8090';
+            updatePaths();
+      await firstLogin();
+      Get.to(() => ModernLoginPage());
     }
   }
 
@@ -117,7 +128,9 @@ class _FirstLoginScreenState extends State<FirstLoginScreen> {
                            
                             pb = PocketBase(url);
                             await pb.collection('ipconfig').create(body: {"defip": url});
+                            if (kIsWeb){
                             await _saveUrl(url);
+                            }
                             initializeApp();
                           }
                         },

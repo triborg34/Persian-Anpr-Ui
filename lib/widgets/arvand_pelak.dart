@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:persian_number_utility/persian_number_utility.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -25,7 +26,7 @@ class ArvandPelak extends StatelessWidget {
                 width: 30,
                 color: const Color.fromARGB(255, 64, 107, 180),
                 child: Center(
-                  child: Image.network('assets/images/arvand.png'),
+                  child: kIsWeb  ?  Image.network('assets/images/arvand.png') : Image.asset('assets/images/arvand.png'),
                 ),
               ),
               Container(
@@ -64,7 +65,7 @@ class ArvandPelak2 extends StatelessWidget {
                 width: 30,
                 color: const Color.fromARGB(255, 64, 107, 180),
                 child: Center(
-                  child: Image.network('assets/images/arvand.png'),
+                  child: kIsWeb ? Image.network('assets/images/arvand.png') : Image.asset('assets/images/arvand.png'),
                 ),
               ),
               Column(

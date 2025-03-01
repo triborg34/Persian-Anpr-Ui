@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:unapwebv/model/consts.dart';
@@ -6,7 +7,7 @@ AppBar MyAppBar() {
   return AppBar(
     foregroundColor: Colors.white,
     centerTitle: true,
-    title: Image.network('assets/images/mainlogo.png',width: 200,),
+    title: kIsWeb ?  Image.network('assets/images/mainlogo.png',width: 200,): Image.asset('assets/images/mainlogo.png',width: 200,),
     backgroundColor: purpule,
     actions: [
       Padding(

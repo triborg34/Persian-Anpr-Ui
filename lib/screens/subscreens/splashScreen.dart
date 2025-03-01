@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:splash_view/splash_view.dart';
 import 'package:unapwebv/screens/mainPage.dart';
@@ -12,7 +13,7 @@ class SplashScreen extends StatelessWidget {
     
     return SplashView(
         backgroundColor: Colors.black,
-        logo: Image.network('assets/images/logo.jpg'),
+        logo: kIsWeb ?  Image.network('assets/images/logo.jpg') :Image.asset('assets/images/logo.jpg'),
         subtitle: Text(
           "Automatic Licence Plate Recognition",
           style: TextStyle(color: Colors.white60),

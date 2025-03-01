@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -72,7 +73,7 @@ class _ModernLoginPageState extends State<ModernLoginPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Image.network('assets/images/mainlogo2.png',width: 200,height: 200,),
+                 kIsWeb ?   Image.network('assets/images/mainlogo2.png',width: 200,height: 200,) : Image.asset('assets/images/mainlogo2.png',width: 200,height: 200,),
                     Text(
                         "سامانه پایش خودکار پلاک\n Automatic Numberplate Recognition",style: TextStyle(color: Colors.white,fontSize: 18),textAlign: TextAlign.center,)
                   ],
@@ -242,7 +243,10 @@ class _ModernLoginPageState extends State<ModernLoginPage> {
                       height: 600,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(15),
-                        child: Image.network(
+                        child:kIsWeb ?  Image.network(
+                          'assets/images/ban.jpg',
+                          fit: BoxFit.fill,
+                        ):Image.asset(
                           'assets/images/ban.jpg',
                           fit: BoxFit.fill,
                         ),

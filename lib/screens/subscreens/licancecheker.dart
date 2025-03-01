@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -59,7 +60,7 @@ class _LicancechekerState extends State<Licancecheker> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Image.network('assets/images/logo.jpg'),
+          kIsWeb  ?  Image.network('assets/images/logo.jpg') :Image.asset('assets/images/logo.jpg') ,
             SizedBox(
               height: 15,
             ),

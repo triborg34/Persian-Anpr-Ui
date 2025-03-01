@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:unapwebv/model/consts.dart';
@@ -28,7 +29,8 @@ class LicanceNumber extends StatelessWidget {
           Container(
             height: 40,
             child: Center(
-              child: Image.network(
+              child: kIsWeb ? Image.network(
+                  'assets/images/iranFlag.png') : Image.asset(
                   'assets/images/iranFlag.png'),
             ),
             width: 1.5.w,
