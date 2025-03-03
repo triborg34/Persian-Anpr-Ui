@@ -28,8 +28,8 @@ Ensure you have the following installed:
 1. **Clone the repository:**
 
    ```sh
-   git clone <repo_url>
-   cd <repo_name>
+   git clone https://github.com/triborg34/Persian-Anpr-Ui.git
+   cd Persian-Anpr-Ui
    ```
 
 2. **Install Flutter dependencies:**
