@@ -207,14 +207,10 @@ class ReportScreen extends StatelessWidget {
                                 );
                                 await saveToCsv(data);
 
-                                Get.snackbar("ذخیره شد", rcontroller.savePath!,
-                                    backgroundColor: purpule,
-                                    colorText: Colors.white,
-                                    snackStyle: SnackStyle.FLOATING,
-                                    snackPosition: SnackPosition.BOTTOM);
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("ذخیره شد", textDirection:TextDirection.rtl )));
+ 
                               } else {
-                                Get.snackbar("", "خطا گزارشی یافت نشد",
-                                    colorText: Colors.white);
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("خطا گزارشی یافت نشد", textDirection:TextDirection.rtl ,),));
                               }
                             },
                             icon: Icon(

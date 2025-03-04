@@ -106,11 +106,11 @@ class _DbContantState extends State<DbContant> {
                     Get.find<settingController>().rl2.value == true) {
                onRelayTwo();
                 } else {
-                  Get.snackbar("", "مشکلی در رله پیش امده");
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("مشکلی در رله پیش امده ",textDirection:TextDirection.rtl )));
                 }
               } else {
                 //Alarm
-                Get.snackbar("", "ورود غیر مجاز");
+              //  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("ورود غیر مجاز")));
               }
             }
             return ListView.separated(

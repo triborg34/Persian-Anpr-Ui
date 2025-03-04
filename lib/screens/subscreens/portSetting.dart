@@ -382,8 +382,7 @@ class PortSettings extends StatelessWidget {
                                     (value) {
                                       print(value.statusCode);
                                       if (value.statusCode == 200) {
-                                        Get.snackbar("", "ارتباط قطع شد",
-                                            colorText: Colors.white);
+                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("اتصال قطع شد" ,textDirection:TextDirection.rtl )));
                                                              Get.find<settingController>()
                                     .isRfid
                                     .value= !Get.find<settingController>()
@@ -401,9 +400,7 @@ class PortSettings extends StatelessWidget {
                                     .post(url, data: {"isconnect": true}).then(
                                   (value) {
                                     if (value.statusCode == 200) {
-                                      Get.snackbar(
-                                          "", "اتصال با موفقیت برقرار شد",
-                                          colorText: Colors.white);
+                               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("اتصال با موفیت برقرار  شد",textDirection:TextDirection.rtl )));
                                                   Get.find<settingController>()
                                     .isRfid
                                     .value= !Get.find<settingController>()
@@ -443,7 +440,7 @@ class PortSettings extends StatelessWidget {
                       value: Get.find<settingController>().alarm.value,
                       onChanged: (value) {
                         Get.find<settingController>().alarm.value = value;
-                        Get.snackbar("", "فعال شد", colorText: Colors.white);
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("فعال شد",textDirection:TextDirection.rtl  )));
                       },
                     )),
               ],
@@ -484,8 +481,7 @@ class PortSettings extends StatelessWidget {
                         await pb
                             .collection('setting')
                             .update(resultList.items.last.id, body: body);
-                        Get.snackbar("", "تغییرات ذخیره شد",
-                            colorText: Colors.white);
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("تغییرات ذخیره شد",textDirection:TextDirection.rtl )));
                       },
                       child: Text("ذخیره")))),
 

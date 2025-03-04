@@ -157,7 +157,7 @@ class UserSetting extends StatelessWidget {
                 ),
                 ElevatedButton(
                     onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('ذخیره شد')));
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('ذخیره شد',textDirection:TextDirection.rtl )));
                     },
                     child: Row(
                       children: [Text("ذخیره")],

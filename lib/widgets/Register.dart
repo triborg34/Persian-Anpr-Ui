@@ -427,18 +427,13 @@ class _EnhancedCarRegistrationDialogState
                               Get.find<Boxes>().regBox[widget.index].rtpath);
                     } catch (e) {
                       print(e);
+                      
                     }
                     Get.find<Boxes>().getregData();
                   }
 
                   // Show success notification
-                  Get.snackbar(
-                    "ثبت شد",
-                    "",
-                    colorText: Colors.white,
-                    backgroundColor: Colors.green.shade600,
-                    maxWidth: 200,
-                  );
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("ثبت شد",textDirection:TextDirection.rtl )));
                   Get.find<Boxes>().update([9]);
 
                   // Close the dialog

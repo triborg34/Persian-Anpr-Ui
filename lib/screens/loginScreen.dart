@@ -289,7 +289,7 @@ class _ModernLoginPageState extends State<ModernLoginPage> {
           Get.to(() => Licancecheker());
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('رمز عبور یا نام کاربری اشتباه')),
+            SnackBar(content: Text('رمز عبور یا نام کاربری اشتباه',textDirection:TextDirection.rtl )),
           );
         }
       }

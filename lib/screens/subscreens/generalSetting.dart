@@ -361,7 +361,7 @@ class Generalsetting extends StatelessWidget {
                           });
              
                     }
-                    Get.snackbar("ذخیره شد", "", colorText: Colors.white);
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("ذخیره شد",textDirection:TextDirection.rtl  )));
                   },
                 ),
                 SizedBox(
@@ -414,7 +414,7 @@ class Generalsetting extends StatelessWidget {
                          "quality":Get.find<settingController>().qualitySladierValue.value
                       };
                       await pb.collection('setting').create(body: body);
-                      Get.snackbar("", "پیش فرض شد");
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("پیش فرض شد",textDirection:TextDirection.rtl  )));
                     },
                   ),
                 ),
@@ -539,7 +539,7 @@ class Generalsetting extends StatelessWidget {
                     };
                     await pb.collection('setting').create(body: body);
 
-                    Get.snackbar("ذخیره شد", "");
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("ذخیره شد", textDirection:TextDirection.rtl )));
                     ;
                   },
                 ),
@@ -594,7 +594,7 @@ class Generalsetting extends StatelessWidget {
                       };
                       await pb.collection('setting').create(body: body);
                   
-                      Get.snackbar("", "پیش فرض شد");
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("پیش فرض شد",textDirection:TextDirection.rtl  )));
                     },
                   ),
                 ),

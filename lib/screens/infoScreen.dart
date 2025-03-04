@@ -69,7 +69,7 @@ class Infoscreen extends StatelessWidget {
                                             content: Text(
                                                 "درحال استفاده از اخرین بروزرسانی هستید")));
                               }else{
-                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("خطا در برقراری ارتباط")));
+                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("خطا در برقراری ارتباط",textDirection:TextDirection.rtl )));
                               }
                             },
                           );

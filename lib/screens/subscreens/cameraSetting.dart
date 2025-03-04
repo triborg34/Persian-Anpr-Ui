@@ -845,19 +845,7 @@ class _CameraSettingState extends State<CameraSetting> {
                       //       "${Get.find<Boxes>().camerabox.values.first.password}"
                       // });
                       if (value.statusCode == 200) {
-                        Get.snackbar(
-                          "",
-                          '',
-                          colorText: Colors.white,
-                          messageText: Text(
-                            "تنظیمات ذخیره شد",
-                            textDirection: TextDirection.rtl,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontFamily: 'arial'),
-                          ),
-                        );
+               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(" تنظیمات ذخیره شد",textDirection:TextDirection.rtl  )));
                       }
                     },
                   );
