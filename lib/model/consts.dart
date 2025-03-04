@@ -1,8 +1,12 @@
 
 import 'dart:io';
 import 'dart:math';
+import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:pocketbase/pocketbase.dart';
+
+import '../controller/mianController.dart';
 
 
 
@@ -403,4 +407,20 @@ await pb.collection('sharedPerfence').create(body: {
   'licance':false
 });
 }
+}
+
+
+
+void onRelayOne()async{
+     Dio dio=Dio();
+                       await dio
+                      .get(
+                          'http://$pathurl:${Get.find<Boxes>().settingbox.last.connect}/iprelay?onOff=true&relay=1');
+}
+
+void onRelayTwo()async{
+   Dio dio=Dio();
+                        await dio
+                      .get(
+                          'http://127.0.0.1:${Get.find<Boxes>().settingbox.last.connect}/iprelay?onOff=true&relay=2');
 }

@@ -3,6 +3,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:unapwebv/controller/mianController.dart';
@@ -448,6 +449,10 @@ Container contant() {
                     }, icon: Icon(Icons.print)),
                   ),
                 )
+                ,
+                Visibility(visible: Get.find<Boxes>().settingbox.last.isRfid!,child: IconButton(onPressed: (){
+                  onRelayOne();
+                }, icon: Icon(Icons.door_back_door)),)
           ],
         ),
       ));

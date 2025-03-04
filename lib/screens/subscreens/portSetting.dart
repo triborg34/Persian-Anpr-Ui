@@ -13,7 +13,8 @@ class PortSettings extends StatelessWidget {
       TextEditingController(text: Get.find<settingController>().connect);
 
   TextEditingController defipcontroller = TextEditingController(text: pathurl);
-  TextEditingController defportcontroller = TextEditingController(text: pathport);
+  TextEditingController defportcontroller =
+      TextEditingController(text: pathport);
   TextEditingController rfidip =
       TextEditingController(text: Get.find<settingController>().rfidip);
   TextEditingController rfidport = TextEditingController(
@@ -134,13 +135,14 @@ class PortSettings extends StatelessWidget {
                       SizedBox(
                         width: 100,
                         height: 50,
-                        
                         child: TextFormField(
                           controller: defipcontroller,
                           readOnly: true,
                           textDirection: TextDirection.ltr,
                           style: TextStyle(
-                              color: Colors.white24, fontFamily: 'arial',overflow: TextOverflow.clip),
+                              color: Colors.white24,
+                              fontFamily: 'arial',
+                              overflow: TextOverflow.clip),
                           decoration: InputDecoration(
                               border: OutlineInputBorder(),
                               hintText: 'eg:192.168.1...',
@@ -187,27 +189,27 @@ class PortSettings extends StatelessWidget {
                 IconButton(
                     onPressed: () async {
                       final records =
-                          await pb.collection('ipconfig').getFullList(
-                      
-                              );
-                    await pb.collection('ipconfig').update(records.last.id, body: {
-                      "defip":"http://${defipcontroller.text}:${defportcontroller.text}"
-                    });
+                          await pb.collection('ipconfig').getFullList();
+                      await pb.collection('ipconfig').update(records.last.id,
+                          body: {
+                            "defip":
+                                "http://${defipcontroller.text}:${defportcontroller.text}"
+                          });
 
                       Dio dio = Dio();
 
                       await dio.post(
                           "http://${pathurl}:${Get.find<Boxes>().settingbox.last.connect}/defip?defip=${defipcontroller.text}&defport=${defportcontroller.text}");
-      
+
                       await dio.post(
-                          'http://127.0.0.1:${Get.find<Boxes>().settingbox.last.connect}/config',
+                          'http://${pathurl}:${Get.find<Boxes>().settingbox.last.connect}/config',
                           data: {
                             "section": "DEFAULT",
                             "key": "socketport",
                             "value": portController.text
                           });
                       await dio.post(
-                          'http://127.0.0.1:${Get.find<Boxes>().settingbox.last.connect}/config',
+                          'http://${pathurl}:${Get.find<Boxes>().settingbox.last.connect}/config',
                           data: {
                             "section": "DEFAULT",
                             "key": "serverport",
@@ -276,29 +278,30 @@ class PortSettings extends StatelessWidget {
                   ),
                 ),
                 Obx(() => Switch(
-                      value: Get.find<settingController>().isRfid.value,
+                      value: Get.find<settingController>().switchRfid.value,
                       onChanged: (value) async {
-                        Get.find<settingController>().isRfid.value = value;
-                        if (value == false) {
-                          String url =
-                              'http://127.0.0.1:${Get.find<Boxes>().settingbox.last.connect}/iprelay?ip=${rfidip.text}&port=${rfidport.text}';
-                          Dio dio = Dio();
-                          await dio.get(
-                              'http://127.0.0.1:${Get.find<Boxes>().settingbox.last.connect}/iprelay?onOff=false&relay=1');
-                          await dio.get(
-                              'http://127.0.0.1:${Get.find<Boxes>().settingbox.last.connect}/iprelay?onOff=false&relay=2');
-                          dio.post(url, data: {"isconnect": false}).then(
-                            (value) {
-                              if (value.statusCode == 200) {
-                                Get.snackbar("", "اتصال قطع شد");
-                              }
-                            },
-                          );
-                        }
+                        Get.find<settingController>().switchRfid.value = value;
+                        print( Get.find<settingController>().isRfid.value);
+                        // if (value == false) {
+                        //   String url =
+                        //       'http://127.0.0.1:${Get.find<Boxes>().settingbox.last.connect}/iprelay?ip=${rfidip.text}&port=${rfidport.text}';
+                        //   Dio dio = Dio();
+                        //   await dio.get(
+                        //       'http://127.0.0.1:${Get.find<Boxes>().settingbox.last.connect}/iprelay?onOff=false&relay=1');
+                        //   await dio.get(
+                        //       'http://127.0.0.1:${Get.find<Boxes>().settingbox.last.connect}/iprelay?onOff=false&relay=2');
+                        //   dio.post(url, data: {"isconnect": false}).then(
+                        //     (value) {
+                        //       if (value.statusCode == 200) {
+                        //         Get.snackbar("", "اتصال قطع شد");
+                        //       }
+                        //     },
+                        //   );
+                        // }
                       },
                     )),
                 Obx(() => Visibility(
-                      visible: Get.find<settingController>().isRfid.value,
+                      visible: Get.find<settingController>().switchRfid.value,
                       child: Row(
                         children: [
                           SizedBox(
@@ -363,23 +366,59 @@ class PortSettings extends StatelessWidget {
                               )),
                           TextButton(
                               onPressed: () async {
-                                String url =
-                                    'http://127.0.0.1:${Get.find<Boxes>().settingbox.last.connect}/iprelay?ip=${rfidip.text}&port=${rfidport.text}';
+                                print(Get.find<settingController>()
+                                    .isRfid
+                                    .value);
+                                if (Get.find<settingController>()
+                                    .isRfid
+                                    .value) {
+                                      print(pathurl);
+                                  String url =
+                                      'http://${pathurl}:${Get.find<Boxes>().settingbox.last.connect}/iprelay?ip=${rfidip.text}&port=${rfidport.text}';
+                                      print(url);
+                                  Dio dio = Dio();
+                                  await dio.post(url,
+                                      data: {"isconnect": false},).then(
+                                    (value) {
+                                      print(value.statusCode);
+                                      if (value.statusCode == 200) {
+                                        Get.snackbar("", "ارتباط قطع شد",
+                                            colorText: Colors.white);
+                                                             Get.find<settingController>()
+                                    .isRfid
+                                    .value= !Get.find<settingController>()
+                                    .isRfid
+                                    .value;
+                                      }
+                     
+                                    },
+                                  );
+                                }
+                              else{  String url =
+                                    'http://$pathurl:${Get.find<Boxes>().settingbox.last.connect}/iprelay?ip=${rfidip.text}&port=${rfidport.text}';
                                 Dio dio = Dio();
                                 await dio
                                     .post(url, data: {"isconnect": true}).then(
                                   (value) {
                                     if (value.statusCode == 200) {
                                       Get.snackbar(
-                                          "", "اتصال با موفقیت برقرار شد");
+                                          "", "اتصال با موفقیت برقرار شد",
+                                          colorText: Colors.white);
+                                                  Get.find<settingController>()
+                                    .isRfid
+                                    .value= !Get.find<settingController>()
+                                    .isRfid
+                                    .value;
                                     }
                                   },
-                                );
+                                );}
                               },
-                              child: Text(
-                                "اتصال",
-                                style: TextStyle(fontSize: 16),
-                              )),
+                              child:  Text(
+                                    Get.find<settingController>().isRfid.value
+                                        ? "قطع"
+                                        : "اتصال",
+                                    style: TextStyle(fontSize: 16),
+                                  )),
                         ],
                       ),
                     ))
@@ -449,6 +488,15 @@ class PortSettings extends StatelessWidget {
                             colorText: Colors.white);
                       },
                       child: Text("ذخیره")))),
+
+                      TextButton(onPressed: ()async{
+                     onRelayOne();
+                
+                      }, child:Text("click")),
+                                    TextButton(onPressed: ()async{
+                       onRelayTwo();
+                
+                      }, child:Text("click"))
         ],
       ),
     );

@@ -6,6 +6,7 @@
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -61,85 +62,49 @@ class _DbContantState extends State<DbContant> {
               if (Get.find<Boxes>()
                   .regBox
                   .where(
-                    (element) => element.plateNumber != entries.last.plateNum,
+                    (element) => element.plateNumber != entries.first.plateNum,
                   )
                   .isNotEmpty) {
-                audioPlayer.play(UrlSource('assets/alarm.mp3'));
+               kIsWeb ?  audioPlayer.play(UrlSource('assets/alarm.mp3')) :  audioPlayer.play(AssetSource('assets/alarm.mp3'));
               }
               Dio dio = Dio();
               dio.post(
-                  'http://127.0.0.1:${Get.find<Boxes>().settingbox.last.connect}/email?email=${Get.find<Boxes>().userbox.last.email}',
+                  'http://${pathurl}:${Get.find<Boxes>().settingbox.last.connect}/email?email=${Get.find<Boxes>().userbox.last.email}',
                   data: {
                     "plateNumber": entries.last.plateNum,
                     "eDate": entries.last.eDate,
                     "eTime": entries.last.eTime
                   });
             }
-
+            print(Get.find<Boxes>().settingbox.last.isRfid!);
             if (Get.find<Boxes>().settingbox.last.isRfid!) {
-              Dio dio = Dio();
+              print("inja");
+              print(Get.find<Boxes>()
+                  .regBox
+                  .where(
+                    (element) {
+                      return element.plateNumber == entries.first.plateNum;
+            }).isNotEmpty);
+            
               if (Get.find<Boxes>()
                   .regBox
                   .where(
-                    (element) => element.plateNumber == entries.last.plateNum,
+                    (element) => element.plateNumber == entries.first.plateNum,
                   )
                   .isNotEmpty) {
-                if (Get.find<settingController>().rl1.value ||
+                    print("inja 2");
+                if (Get.find<settingController>().rl1.value &&
                     Get.find<settingController>().rl2.value) {
-                  dio
-                      .get(
-                          'http://127.0.0.1:${Get.find<Boxes>().settingbox.last.connect}/iprelay?onOff=true&relay=1')
-                      .then(
-                    (value) {
-                      if (value.statusCode == 200) {
-                         dio
-                            .get(
-                                'http://127.0.0.1:${Get.find<Boxes>().settingbox.last.connect}/iprelay?onOff=true&relay=2')
-                            .then(
-                          (value) {
-                            Future.delayed(Duration(seconds: 20)).then(
-                              (value) {
-                                dio.get(
-                                    'http://127.0.0.1:${Get.find<Boxes>().settingbox.last.connect}/iprelay?onOff=false&relay=1');
-                                dio.get(
-                                    'http://127.0.0.1:${Get.find<Boxes>().settingbox.last.connect}/iprelay?onOff=false&relay=2');
-                              },
-                            );
-                          },
-                        );
-                      }
-                    },
-                  );
-                } else if (Get.find<settingController>().rl1.value == true ||
+                      print("?");
+                  onRelayOne();
+                  onRelayTwo();
+                } else if (Get.find<settingController>().rl1.value == true &&
                     Get.find<settingController>().rl2.value == false) {
-                  dio
-                      .get(
-                          'http://127.0.0.1:${Get.find<Boxes>().settingbox.last.connect}/iprelay?onOff=true&relay=1')
-                      .then(
-                    (value) {
-                      Future.delayed(Duration(seconds: 20)).then(
-                        (value) {
-                          dio.get(
-                              'http://127.0.0.1:${Get.find<Boxes>().settingbox.last.connect}/iprelay?onOff=false&relay=1');
-                        },
-                      );
-                    },
-                  );
-                } else if (Get.find<settingController>().rl1.value == false ||
+                      print("inja3");
+    onRelayOne();
+                } else if (Get.find<settingController>().rl1.value == false &&
                     Get.find<settingController>().rl2.value == true) {
-                  dio
-                      .get(
-                          'http://127.0.0.1:${Get.find<Boxes>().settingbox.last.connect}/iprelay?onOff=true&relay=2')
-                      .then(
-                    (value) {
-                      Future.delayed(Duration(seconds: 20)).then(
-                        (value) {
-                          dio.get(
-                              'http://127.0.0.1:${Get.find<Boxes>().settingbox.last.connect}/iprelay?onOff=false&relay=2');
-                        },
-                      );
-                    },
-                  );
+               onRelayTwo();
                 } else {
                   Get.snackbar("", "مشکلی در رله پیش امده");
                 }
@@ -221,11 +186,20 @@ class _DbContantState extends State<DbContant> {
                                         decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(15),
-                                            color: const Color.fromARGB(
-                                                255, 36, 87, 37)),
+                                            color: Colors.transparent
+                                            // const Color.fromARGB(
+                                            //     255, 36, 87, 37)
+                                                ),
                                         child: Center(
                                           child: Text(
-                                            "ثبت شده است",
+                                            
+                                            Get.find<Boxes>()
+                    .regBox[Get.find<Boxes>().regBox.indexWhere(
+                          (element) =>
+                              element.plateNumber ==
+                              entry.plateNum,
+                        )]
+                    .name!,
                                             style:
                                                 TextStyle(color: Colors.white),
                                           ),

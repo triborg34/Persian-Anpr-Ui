@@ -30,7 +30,7 @@ class Setting {
   
   bool? alarm;
 
-  double? qualitySliderValue;
+  dynamic qualitySliderValue;
 
   Setting(
       {this.plateConf,

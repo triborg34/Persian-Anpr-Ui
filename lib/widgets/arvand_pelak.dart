@@ -12,9 +12,9 @@ class ArvandPelak extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(0),
-      width: 10.w,
-      height: 35,
+        margin: EdgeInsets.all(0),
+        width: 10.w,
+        height: 35,
         decoration: BoxDecoration(
           border: Border.all(color: Colors.black),
           color: Colors.white,
@@ -26,15 +26,21 @@ class ArvandPelak extends StatelessWidget {
                 width: 30,
                 color: const Color.fromARGB(255, 64, 107, 180),
                 child: Center(
-                  child: kIsWeb  ?  Image.network('assets/images/arvand.png') : Image.asset('assets/images/arvand.png'),
+                  child: kIsWeb
+                      ? Image.network('assets/images/arvand.png')
+                      : Image.asset('assets/images/arvand.png'),
                 ),
               ),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 25),
-                child: Text(
-                  entry.plateNum!.length <=5 ? entry.plateNum!.toPersianDigit(): "${entry.plateNum!.toPersianDigit().substring(0,entry.plateNum!.length-2)} | ${entry.plateNum!.toPersianDigit().substring(entry.plateNum!.length-2)}",
-                  style: TextStyle(color: Colors.black, fontSize: 11.sp),
-                  
+                alignment: Alignment.topCenter,
+                padding: EdgeInsets.symmetric(horizontal: 0),
+                child: Center(
+                  child: Text(
+                    entry.plateNum!.length <= 5
+                        ? entry.plateNum!.toPersianDigit()
+                        : "${entry.plateNum!.toPersianDigit().substring(0, entry.plateNum!.length - 2)} | ${entry.plateNum!.toPersianDigit().substring(entry.plateNum!.length - 2)}",
+                    style: TextStyle(color: Colors.black, fontSize: 11.sp),
+                  ),
                 ),
               ),
             ],
@@ -43,7 +49,6 @@ class ArvandPelak extends StatelessWidget {
   }
 }
 
-
 class ArvandPelak2 extends StatelessWidget {
   late plateModel entry;
   ArvandPelak2({required this.entry});
@@ -51,31 +56,40 @@ class ArvandPelak2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(5),
-      width: 10.w,
-      height: 35,
+        margin: EdgeInsets.all(0),
+        width: 10.w,
+        height: 35,
         decoration: BoxDecoration(
           border: Border.all(color: Colors.black),
           color: Colors.white,
         ),
         child: Center(
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
                 width: 30,
                 color: const Color.fromARGB(255, 64, 107, 180),
                 child: Center(
-                  child: kIsWeb ? Image.network('assets/images/arvand.png') : Image.asset('assets/images/arvand.png'),
+                  child: kIsWeb
+                      ? Image.network('assets/images/arvand.png')
+                      : Image.asset('assets/images/arvand.png'),
                 ),
               ),
               Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 25),
-                    child: Text(
-                   entry.plateNum!.length <=5 ? entry.plateNum!.toPersianDigit()  : "${entry.plateNum!.toPersianDigit().substring(0,entry.plateNum!.length-2)} | ${entry.plateNum!.toPersianDigit().substring(entry.plateNum!.length-2)}",
-                      style: TextStyle(color: Colors.black, fontSize: 11.sp),
-                      
+                       alignment: Alignment.topCenter,
+                    padding: EdgeInsets.symmetric(horizontal: 0),
+                    child: Center(
+                      child: Text(
+                        entry.plateNum!.length <= 5
+                            ? entry.plateNum!.toPersianDigit()
+                            : "${entry.plateNum!.toPersianDigit().substring(0, entry.plateNum!.length - 2)} | ${entry.plateNum!.toPersianDigit().substring(entry.plateNum!.length - 2)}",
+                        style: TextStyle(color: Colors.black, fontSize: 11.sp),
+                      ),
                     ),
                   ),
                 ],
@@ -85,4 +99,3 @@ class ArvandPelak2 extends StatelessWidget {
         ));
   }
 }
-

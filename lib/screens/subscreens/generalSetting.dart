@@ -22,11 +22,20 @@ class Generalsetting extends StatelessWidget {
           Get.find<Boxes>().settingbox.last.charConf!;
       Get.find<settingController>().hardWareValue =
           Get.find<Boxes>().settingbox.last.hardWare!;
-    Get.find<settingController>().qualitySladierValue.value= Get.find<Boxes>().settingbox.last.qualitySliderValue!;
+    Get.find<settingController>().qualitySladierValue.value= Get.find<Boxes>().settingbox.last.qualitySliderValue!.toDouble();
       Get.find<settingController>().timezoneseleted =
           Get.find<Boxes>().settingbox.last.timeZone!;
       Get.find<settingController>().clockType =
           Get.find<Boxes>().settingbox.last.clockType!;
+          Get.find<settingController>().isRfid.value=Get.find<Boxes>().settingbox.last.isRfid!;
+          Get.find<settingController>().rl1.value=Get.find<Boxes>().settingbox.last.rl1!;
+          Get.find<settingController>().rl2.value=Get.find<Boxes>().settingbox.last.rl2!;
+          Get.find<settingController>().rfidip=Get.find<Boxes>().settingbox.last.rfidip!;
+          Get.find<settingController>().rfidport=Get.find<Boxes>().settingbox.last.rfidport!;
+          Get.find<settingController>().switchRfid.value=Get.find<Boxes>().settingbox.last.isRfid!;
+          Get.find<settingController>().port=Get.find<Boxes>().settingbox.last.port!;
+          Get.find<settingController>().connect=Get.find<Boxes>().settingbox.last.connect!;
+          
     } catch (e) {
       print(e);
       Get.find<settingController>().psliderValue = 0.8.obs;

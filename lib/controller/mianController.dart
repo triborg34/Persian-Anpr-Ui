@@ -193,6 +193,7 @@ class settingController extends GetxController {
   String rfidip = '192.168.1.91';
   int rfidport = 2000;
   var alarm = false.obs;
+  var switchRfid=false.obs;
 
   @override
   void onReady() async {

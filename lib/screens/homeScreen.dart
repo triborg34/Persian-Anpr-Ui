@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:unapwebv/controller/mianController.dart';
 import 'package:unapwebv/model/consts.dart';
 
@@ -25,74 +25,103 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
      Get.find<Boxes>().getregData();
-    return Container(
-      height: MediaQuery.of(context).size.height,
-      width: MediaQuery.of(context).size.width,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                  child: Column(
-                children: [
-                  TableTitle(),
-                  DbContant()
-                ],
-              )),
-              // VideoRtsp(context),
-              StatefulBuilder(
-                builder: (context, setState) {
-                  return Column(
-                    children: [
-                      VidGridBuild(gridselector, context),
-                      Row(
-                        children: [
-                          IconButton(
-                              onPressed: () {
-                                setState(
-                                  () {
-                                    gridselector = 0;
-                                  },
-                                );
-                              },
-                              icon: Icon(Icons.rectangle_outlined)),
-                          IconButton(
-                              onPressed: () {
-                                setState(
-                                  () {
-                                    gridselector = 1;
-                                  },
-                                );
-                              },
-                              icon: Icon(Icons.grid_view)),
-                          IconButton(
-                              onPressed: () {
-                                setState(
-                                  () {
-                                    gridselector = 2;
-                                  },
-                                );
-                              },
-                              icon: Icon(Icons.grid_on))
-                        ],
-                      )
-                    ],
-                  );
-                },
-              )
-            ],
-          ),
-          SizedBox(
-            height: 15,
-          ),
-          ExtendetTableData(),
-          SizedBox(
-            height: 20,
-          ),
-          
-        ],
+          Get.find<Boxes>().getSetting();
+    return KeyboardListener(
+      focusNode: FocusNode(),
+
+      autofocus: true,
+      onKeyEvent: (event) {
+        print(event.logicalKey);
+                  if (event is KeyDownEvent &&
+              event.logicalKey == LogicalKeyboardKey.escape) {
+            onRelayOne();
+          }
+      },
+      child: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                    child: Column(
+                  children: [
+                    TableTitle(),
+                    DbContant()
+                  ],
+                )),
+                // VideoRtsp(context),
+                StatefulBuilder(
+                  builder: (context, setState) {
+                    return Column(
+                      children: [
+                        VidGridBuild(gridselector, context),
+                        
+                        Row(
+                          children: [
+                            IconButton(
+                                onPressed: () {
+                                  setState(
+                                    () {
+                                      gridselector = 0;
+                                    },
+                                  );
+                                },
+                                icon: Icon(Icons.rectangle_outlined)),
+                                                       IconButton(
+                                onPressed: () {
+                                  setState(
+                                    () {
+                                      gridselector = 4;
+                                    },
+                                  );
+                                },
+                                
+                                
+                                icon: Icon(Icons.grid_goldenratio_sharp)),
+                            IconButton(
+                                onPressed: () {
+                                  setState(
+                                    () {
+                                      gridselector = 1;
+                                    },
+                                  );
+                                },
+                                
+                                
+                                icon: Icon(Icons.grid_view)),
+           
+                                
+                            IconButton(
+                                onPressed: () {
+                                  setState(
+                                    () {
+                                      gridselector = 2;
+                                    },
+                                  );
+                                },
+                                icon: Icon(Icons.grid_on))
+                          ],
+                        )
+                      ],
+                    );
+                  },
+                )
+              ],
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            ExtendetTableData(),
+            SizedBox(
+              height: 20,
+            ),
+            
+          ],
+        ),
       ),
     );
   }
@@ -105,7 +134,7 @@ class HomeScreen extends StatelessWidget {
     } else if (index == 1) {
       return Container(
         width: MediaQuery.sizeOf(context).width * 0.5,
-        height: 40.h,
+        height: 350,
         child: Wrap(
           children: [
             for (int i = 1; i <= 4; i++)
@@ -125,7 +154,31 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
       );
-    } else {
+    }else if(index == 4){
+      return Container(
+        width: MediaQuery.sizeOf(context).width * 0.5,
+        height: 350,
+        child: Wrap(
+          children: [
+            for (int i = 1; i <= 2; i++)
+              Container(
+                width: ((MediaQuery.sizeOf(context).width * 0.5) / 2) - 10,
+                height: 350 ,
+                margin: EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+                color: Colors.transparent,
+                child: GestureDetector(
+                  onTap: () {
+                    selectedVideo=i;
+                  },
+                    child: VideoStream(
+                  url: "ws://${pathurl}:${port}/rt${i}",
+                )),
+              )
+          ],
+        ),
+      );
+    } 
+    else {
       return Container(
         width: MediaQuery.sizeOf(context).width * 0.5,
         height: 350,
