@@ -22,7 +22,11 @@ class Generalsetting extends StatelessWidget {
           Get.find<Boxes>().settingbox.last.charConf!;
       Get.find<settingController>().hardWareValue =
           Get.find<Boxes>().settingbox.last.hardWare!;
-    Get.find<settingController>().qualitySladierValue.value= Get.find<Boxes>().settingbox.last.qualitySliderValue!.toDouble();
+    try{
+      Get.find<settingController>().qualitySladierValue.value= Get.find<Boxes>().settingbox.last.qualitySliderValue!.toDouble();
+    }catch(e){
+      Get.find<settingController>().qualitySladierValue.value= 20.0;
+    }
       Get.find<settingController>().timezoneseleted =
           Get.find<Boxes>().settingbox.last.timeZone!;
       Get.find<settingController>().clockType =
@@ -53,6 +57,7 @@ class Generalsetting extends StatelessWidget {
       Get.find<settingController>().rfidport = 2000;
       Get.find<settingController>().alarm = false.obs;
     }
+    print("init");
     return Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,

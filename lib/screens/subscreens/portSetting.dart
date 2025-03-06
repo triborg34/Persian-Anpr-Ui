@@ -485,14 +485,14 @@ class PortSettings extends StatelessWidget {
                       },
                       child: Text("ذخیره")))),
 
-                      TextButton(onPressed: ()async{
-                     onRelayOne();
+                    //   TextButton(onPressed: ()async{
+                    //  onRelayOne();
                 
-                      }, child:Text("click")),
-                                    TextButton(onPressed: ()async{
-                       onRelayTwo();
+                    //   }, child:Text("click")),
+                    //                 TextButton(onPressed: ()async{
+                    //    onRelayTwo();
                 
-                      }, child:Text("click"))
+                    //   }, child:Text("click"))
         ],
       ),
     );

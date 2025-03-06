@@ -8,6 +8,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:unapwebv/controller/mianController.dart';
@@ -106,7 +107,12 @@ class _DbContantState extends State<DbContant> {
                     Get.find<settingController>().rl2.value == true) {
                onRelayTwo();
                 } else {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("مشکلی در رله پیش امده ",textDirection:TextDirection.rtl )));
+                  try{
+                    SchedulerBinding.instance.addPostFrameCallback((timeStamp) => showsnack(context),);
+       
+                  }catch(e){
+                    print(e);
+                  }
                 }
               } else {
                 //Alarm

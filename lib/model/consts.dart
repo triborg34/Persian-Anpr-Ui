@@ -2,6 +2,7 @@
 import 'dart:io';
 import 'dart:math';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:pocketbase/pocketbase.dart';
@@ -423,4 +424,9 @@ void onRelayTwo()async{
                         await dio
                       .get(
                           'http://127.0.0.1:${Get.find<Boxes>().settingbox.last.connect}/iprelay?onOff=true&relay=2');
+}
+
+
+void showsnack(BuildContext context){
+   
 }

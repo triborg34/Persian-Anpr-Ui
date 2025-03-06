@@ -3,11 +3,14 @@ import 'dart:async';
 
 
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 
 import 'package:responsive_navigation_bar/responsive_navigation_bar.dart';
 import 'package:unapwebv/controller/mianController.dart';
+import 'package:unapwebv/model/consts.dart';
 import 'package:unapwebv/model/storagedb/db.dart';
 import 'package:unapwebv/screens/homeScreen.dart';
 import 'package:unapwebv/screens/infoScreen.dart';
@@ -29,7 +32,7 @@ class _MainViewState extends State<MainView> {
   
   
   @override
-  void initState() {
+  void initState()  {
 
     // _databaseHelper = DatabaseHelper.withPath(widget.dbPath);
 
@@ -43,6 +46,17 @@ class _MainViewState extends State<MainView> {
     //     .open(Media("rtsp://admin:admin@192.168.1.89:554/stream"));
     //rtsp://admin:admin@192.168.1.88:554/stream
     Get.find<navController>().body=HomeScreen();
+
+     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+ if(Get.find<Boxes>().settingbox.last.isRfid!){
+     String url =
+                                    'http://$pathurl:${Get.find<Boxes>().settingbox.last.connect}/iprelay?ip=${Get.find<Boxes>().settingbox.last.rfidip}&port=${Get.find<Boxes>().settingbox.last.rfidport}';
+                                Dio dio = Dio();
+                                 dio
+                                    .post(url, data: {"isconnect": true});
+    }
+     },);
+   
 
     super.initState();
   }
