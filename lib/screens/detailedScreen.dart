@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:easy_image_viewer/easy_image_viewer.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:persian_number_utility/persian_number_utility.dart';
@@ -373,7 +374,7 @@ class Detailedscreen extends StatelessWidget {
                         selectedModel.platePercent.toString() + "%"),
                     contactOfTable3(selectedModel.charPercent.toString() + "%"),
                     contactOfTable3(selectedModel.eDate!.toPersianDate()),
-                    contactOfTable3(selectedModel.eTime!)
+                    contactOfTable3(kIsWeb ? "${selectedModel.eTime!.split(":")[2]}:${selectedModel.eTime!.split(":")[1]}:${selectedModel.eTime!.split(":")[0]}" : selectedModel.eTime!)
                   ],
                 ),
               ),

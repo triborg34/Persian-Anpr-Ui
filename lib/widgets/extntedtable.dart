@@ -2,6 +2,7 @@
 
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -125,7 +126,8 @@ Container contant() {
                 
             contactOfTable(tcontroller.selectedIndex == -1
                 ? "-"
-                : tcontroller.selectedmodel.eTime!)
+                : kIsWeb ?
+                 "${tcontroller.selectedmodel.eTime!.split(":")[2]}:${tcontroller.selectedmodel.eTime!.split(":")[1]}:${tcontroller.selectedmodel.eTime!.split(":")[0]}" : tcontroller.selectedmodel.eTime!) 
                 ,
                 Container(
                   decoration: BoxDecoration(
