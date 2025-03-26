@@ -1,45 +1,81 @@
 import 'dart:async';
-
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-
 class WebSocket {
-  // ------------------------- Members ------------------------- //
   late String url;
   WebSocketChannel? _channel;
-  StreamController<bool> streamController = StreamController<bool>.broadcast();
+  Timer? _reconnectTimer;
+  bool _isConnecting = false;
+  bool _shouldReconnect = true; // New flag
 
-  // ---------------------- Getter Setters --------------------- //
-  String get getUrl {
-    return url;
-  }
+  final StreamController<dynamic> _streamController = StreamController.broadcast();
+  final StreamController<bool> _reconnectingController = StreamController.broadcast();
 
-  set setUrl(String url) {
-    this.url = url;
-  }
+  Stream<dynamic> get stream => _streamController.stream;
+  Stream<bool> get reconnectingStream => _reconnectingController.stream;
 
-  Stream<dynamic> get stream {
-    if (_channel != null) {
-      return _channel!.stream;
-    } else {
-      throw WebSocketChannelException("The connection was not established !");
+  WebSocket(this.url);
+
+  void connect() {
+    if (_isConnecting || !_shouldReconnect) return;
+    _isConnecting = true;
+
+    try {
+      _channel = WebSocketChannel.connect(Uri.parse(url));
+
+      _channel!.stream.listen(
+        (data) {
+          if (!_streamController.isClosed) {
+            _streamController.add(data);
+          }
+        },
+        onDone: () {
+          _isConnecting = false;
+
+          // Don't reconnect if server closed with error (invalid path)
+          if (_shouldReconnect && _channel != null) {
+            _tryReconnect();
+          }
+        },
+        onError: (error) {
+          _isConnecting = false;
+          if (_shouldReconnect) {
+            _tryReconnect();
+          }
+        },
+        cancelOnError: true,
+      );
+
+      if (!_reconnectingController.isClosed) {
+        _reconnectingController.add(false);
+      }
+    } catch (e) {
+      _isConnecting = false;
+      _tryReconnect();
     }
   }
 
-  // --------------------- Constructor ---------------------- //
-  WebSocket(this.url);
+  void _tryReconnect() {
+    if (_reconnectTimer != null && _reconnectTimer!.isActive) return;
 
-  // ---------------------- Functions ----------------------- //
+    if (!_reconnectingController.isClosed) {
+      _reconnectingController.add(true);
+    }
 
-  /// Connects the current application to a websocket
-  void connect() async {
-    _channel = WebSocketChannel.connect(Uri.parse(url));
+    _reconnectTimer = Timer(Duration(seconds: 3), () {
+      connect();
+    });
   }
 
-  /// Disconnects the current application from a websocket
   void disconnect() {
-    if (_channel != null) {
-      _channel!.sink.close(4000);
+    _shouldReconnect = false; // <- this stops any future reconnects
+    _reconnectTimer?.cancel();
+    _channel?.sink.close();
+    if (!_streamController.isClosed) {
+      _streamController.close();
+    }
+    if (!_reconnectingController.isClosed) {
+      _reconnectingController.close();
     }
   }
 }

@@ -1,107 +1,124 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:unapwebv/model/consts.dart';
 import 'package:unapwebv/widgets/videogetter.dart';
 
+
 class VideoStream extends StatefulWidget {
-  String url;
-  VideoStream({Key? key, required this.url}) : super(key: key);
+  final String url;
+  const VideoStream({Key? key, required this.url}) : super(key: key);
 
   @override
   State<VideoStream> createState() => _VideoStreamState();
 }
 
 class _VideoStreamState extends State<VideoStream> {
+  late WebSocket _socket;
+  bool isConnected = false;
+  bool _isReconnecting = false;
 
-    late final WebSocket _socket;
-     bool _isConnected = false;
-  void connect(BuildContext context) async {
-      _socket = WebSocket(widget.url);
- 
+  StreamSubscription? _subscription;
+  StreamSubscription? _reconnectSub;
+
+  void connect() {
+    _socket = WebSocket(widget.url);
     _socket.connect();
-    setState(() {
-      _isConnected = true;
+
+    _subscription = _socket.stream.listen((data) {
+      setState(() {
+        isConnected = true;
+      });
+    }, onDone: () {
+      setState(() {
+        isConnected = false;
+      });
+    }, onError: (e) {
+      setState(() {
+        isConnected = false;
+      });
+    });
+
+    _reconnectSub = _socket.reconnectingStream.listen((reconnecting) {
+      setState(() {
+        _isReconnecting = reconnecting;
+      });
     });
   }
 
-  // void disconnect() {
-  //   _socket.disconnect();
-  //   setState(() {
-  //     _isConnected = false;
-  //   });
-  // }
-
-
   @override
   void initState() {
-    
-    connect(context);
     super.initState();
+    connect();
   }
+
   @override
   void dispose() {
-
+    _subscription?.cancel();
+    _reconnectSub?.cancel();
     _socket.disconnect();
-
     super.dispose();
   }
 
+  @override
+void didUpdateWidget(covariant VideoStream oldWidget) {
+  super.didUpdateWidget(oldWidget);
+  if (oldWidget.url != widget.url) {
+    _socket.disconnect(); // kills previous connection
+    connect(); // starts new one
+  }
+}
 
   @override
   Widget build(BuildContext context) {
-    if (_isConnected) {
-      
-      return Container(
-        margin: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-        decoration: BoxDecoration(
+    return Stack(
+      children: [
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+          decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
-            border: Border.all(color: purpule)),
-        padding: EdgeInsets.all(8.0),
-        height: 350,
-        width: MediaQuery.sizeOf(context).width * 0.5,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(15),
-          child: StreamBuilder(
-            stream: _socket.stream,
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return Center(child: const CircularProgressIndicator());
-              }
+            border: Border.all(color: purpule),
+          ),
+          padding: const EdgeInsets.all(8.0),
+          height: 350,
+          width: MediaQuery.sizeOf(context).width * 0.5,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(15),
+            child: StreamBuilder(
+              stream: _socket.stream,
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const Center(child: CircularProgressIndicator());
+                }
 
-              if (snapshot.connectionState == ConnectionState.done) {
-                return  Center(
-                    child: ElevatedButton(
-                        onPressed: () {
-                          WebSocket webSocket =
-                              WebSocket(widget.url);
-                          webSocket.connect();
-                        },
-                        child: Icon(Icons.repeat)));
-              }
-              //? Working for single frames
-              return Image.memory(
-                Uint8List.fromList(
-                  base64Decode(
-                    (snapshot.data.toString()),
-                  ),
-                ),
-                gaplessPlayback: true,
-                fit: BoxFit.fill,
-                excludeFromSemantics: true,
-              );
-            },
+                return Image.memory(
+                  Uint8List.fromList(base64Decode(snapshot.data.toString())),
+                  gaplessPlayback: true,
+                  fit: BoxFit.fill,
+                  excludeFromSemantics: true,
+                );
+              },
+            ),
           ),
         ),
-      );
-    } else {
-      return ElevatedButton(
-          onPressed: () {
-            WebSocket webSocket = WebSocket(widget.url);
-            webSocket.connect();
-          },
-          child: Icon(Icons.repartition));
-    }
+        if (_isReconnecting)
+          Positioned(
+            top: 10,
+            right: 10,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: Colors.orange.withOpacity(0.9),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Text(
+                "Reconnecting...",
+                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+      ],
+    );
   }
 }
