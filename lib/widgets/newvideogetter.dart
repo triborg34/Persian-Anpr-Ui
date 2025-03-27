@@ -23,7 +23,7 @@ class _VideoStreamState extends State<VideoStream> {
   StreamSubscription? _frameSub;
   StreamSubscription? _reconnectSub;
 
-  static const int maxFrameSize = 300 * 1024; // 300 KB
+  static const int maxFrameSize = 2048 * 1024; // 300 KB
 
   void connect() {
     _socket = WebSocket(widget.url);
