@@ -7,6 +7,7 @@ import 'package:unapwebv/model/consts.dart';
 
 import 'package:unapwebv/widgets/dbContant.dart';
 import 'package:unapwebv/widgets/extendetTableData.dart';
+import 'package:unapwebv/widgets/memryguard.dart';
 import 'package:unapwebv/widgets/newvideogetter.dart';
 import 'package:unapwebv/widgets/tableTitle.dart';
 
@@ -18,7 +19,7 @@ class HomeScreen extends StatelessWidget {
   //TODO: WEB NOT BUILD YET
 
 
-  int gridselector = 0;
+  int gridselector = 4;
   int selectedVideo=1;
   String port=Get.find<Boxes>().settingbox.last.port!;
   
@@ -60,6 +61,7 @@ class HomeScreen extends StatelessWidget {
                     return Column(
                       children: [
                         VidGridBuild(gridselector, context),
+                        MemoryGuard(),
                         
                         Row(
                           children: [

@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:unapwebv/model/consts.dart';
+import 'dart:html' as html; // for memory info
 import 'package:unapwebv/widgets/videogetter.dart';
 
 
@@ -16,33 +16,44 @@ class VideoStream extends StatefulWidget {
 
 class _VideoStreamState extends State<VideoStream> {
   late WebSocket _socket;
-  bool isConnected = false;
+  Uint8List? _latestImage;
+  DateTime _lastFrameTime = DateTime.now();
   bool _isReconnecting = false;
 
-  StreamSubscription? _subscription;
+  StreamSubscription? _frameSub;
   StreamSubscription? _reconnectSub;
+
+  static const int maxFrameSize = 300 * 1024; // 300 KB
 
   void connect() {
     _socket = WebSocket(widget.url);
     _socket.connect();
 
-    _subscription = _socket.stream.listen((data) {
-      setState(() {
-        isConnected = true;
-      });
-    }, onDone: () {
-      setState(() {
-        isConnected = false;
-      });
-    }, onError: (e) {
-      setState(() {
-        isConnected = false;
-      });
+    _frameSub = _socket.stream.listen((data) {
+      final now = DateTime.now();
+      if (now.difference(_lastFrameTime).inMilliseconds < 100) return;
+      _lastFrameTime = now;
+
+      try {
+        final base64String = data.toString();
+
+        // Skip large base64 frames
+        if (base64String.length > maxFrameSize * 1.37) return;
+
+        final decoded = base64Decode(base64String);
+        if (decoded.length > maxFrameSize) return;
+
+        setState(() {
+          _latestImage = decoded;
+        });
+      } catch (_) {
+        // Skip corrupt frames
+      }
     });
 
-    _reconnectSub = _socket.reconnectingStream.listen((reconnecting) {
+    _reconnectSub = _socket.reconnectingStream.listen((val) {
       setState(() {
-        _isReconnecting = reconnecting;
+        _isReconnecting = val;
       });
     });
   }
@@ -55,61 +66,67 @@ class _VideoStreamState extends State<VideoStream> {
 
   @override
   void dispose() {
-    _subscription?.cancel();
+    _frameSub?.cancel();
     _reconnectSub?.cancel();
     _socket.disconnect();
     super.dispose();
   }
 
   @override
-void didUpdateWidget(covariant VideoStream oldWidget) {
-  super.didUpdateWidget(oldWidget);
-  if (oldWidget.url != widget.url) {
-    _socket.disconnect(); // kills previous connection
-    connect(); // starts new one
+  void didUpdateWidget(VideoStream oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.url != widget.url) {
+      _frameSub?.cancel();
+      _reconnectSub?.cancel();
+      _socket.disconnect();
+      connect();
+    }
   }
-}
+
+  String getMemoryInfo() {
+    try {
+      final mem = html.window.performance.memory!;
+      final used = (mem.usedJSHeapSize! / (1024 * 1024)).toStringAsFixed(2);
+      final total = (mem.totalJSHeapSize! / (1024 * 1024)).toStringAsFixed(2);
+      return "Memory: $used MB / $total MB";
+    } catch (e) {
+      return "Memory: N/A";
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         Container(
-          margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+          margin: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            border: Border.all(color: purpule),
+            border: Border.all(color: Colors.purple),
+            borderRadius: BorderRadius.circular(12),
           ),
-          padding: const EdgeInsets.all(8.0),
           height: 350,
-          width: MediaQuery.sizeOf(context).width * 0.5,
+          width: MediaQuery.of(context).size.width * 0.5,
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(15),
-            child: StreamBuilder(
-              stream: _socket.stream,
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-
-                return Image.memory(
-                  Uint8List.fromList(base64Decode(snapshot.data.toString())),
-                  gaplessPlayback: true,
-                  fit: BoxFit.fill,
-                  excludeFromSemantics: true,
-                );
-              },
-            ),
+            borderRadius: BorderRadius.circular(12),
+            child: _latestImage != null
+                ? Image.memory(
+                    _latestImage!,
+                    gaplessPlayback: true,
+                    fit: BoxFit.cover,
+                  )
+                : const Center(child: CircularProgressIndicator()),
           ),
         ),
+
+        // Reconnecting banner
         if (_isReconnecting)
           Positioned(
             top: 10,
             right: 10,
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               decoration: BoxDecoration(
-                color: Colors.orange.withOpacity(0.9),
+                color: Colors.orange,
                 borderRadius: BorderRadius.circular(10),
               ),
               child: const Text(
@@ -118,6 +135,23 @@ void didUpdateWidget(covariant VideoStream oldWidget) {
               ),
             ),
           ),
+
+        // Memory usage
+        Positioned(
+          bottom: 10,
+          left: 10,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            decoration: BoxDecoration(
+              color: Colors.black87,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Text(
+              getMemoryInfo(),
+              style: const TextStyle(color: Colors.white, fontSize: 12),
+            ),
+          ),
+        ),
       ],
     );
   }
