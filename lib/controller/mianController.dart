@@ -29,6 +29,7 @@ class videoController extends GetxController {
 class tableController extends GetxController {
   var selectedIndex = -1;
   plateModel selectedmodel = plateModel();
+
 }
 
 class feildController extends GetxController {

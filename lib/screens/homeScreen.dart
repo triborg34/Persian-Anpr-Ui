@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:unapwebv/controller/mianController.dart';
 import 'package:unapwebv/model/consts.dart';
 
@@ -11,18 +12,47 @@ import 'package:unapwebv/widgets/memryguard.dart';
 import 'package:unapwebv/widgets/newvideogetter.dart';
 import 'package:unapwebv/widgets/tableTitle.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   HomeScreen({
     super.key,
   
   });
-  //TODO: WEB NOT BUILD YET
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
 
   int gridselector = 4;
+
   int selectedVideo=1;
+
+
+
   String port=Get.find<Boxes>().settingbox.last.port!;
-  
+  Future<void> _updateGridSelector(int newValue) async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      gridselector = newValue;
+    });
+    await prefs.setInt('gridselector', newValue);
+  }
+
+
+  @override
+  void initState() {
+        _loadGridSelector();
+    super.initState();
+  }
+
+    Future<void> _loadGridSelector() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      gridselector = prefs.getInt('gridselector') ?? 0;
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +99,7 @@ class HomeScreen extends StatelessWidget {
                                 onPressed: () {
                                   setState(
                                     () {
-                                      gridselector = 0;
+                                      _updateGridSelector(0);
                                     },
                                   );
                                 },
@@ -78,7 +108,7 @@ class HomeScreen extends StatelessWidget {
                                 onPressed: () {
                                   setState(
                                     () {
-                                      gridselector = 4;
+                                       _updateGridSelector(4);
                                     },
                                   );
                                 },
@@ -89,7 +119,7 @@ class HomeScreen extends StatelessWidget {
                                 onPressed: () {
                                   setState(
                                     () {
-                                      gridselector = 1;
+                                       _updateGridSelector(1);
                                     },
                                   );
                                 },
@@ -102,7 +132,7 @@ class HomeScreen extends StatelessWidget {
                                 onPressed: () {
                                   setState(
                                     () {
-                                      gridselector = 2;
+                                      _updateGridSelector(2);
                                     },
                                   );
                                 },
