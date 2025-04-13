@@ -422,10 +422,36 @@ void onRelayTwo()async{
    Dio dio=Dio();
                         await dio
                       .get(
-                          'http://127.0.0.1:${Get.find<Boxes>().settingbox.last.connect}/iprelay?onOff=true&relay=2');
+                          'http://$pathurl:${Get.find<Boxes>().settingbox.last.connect}/iprelay?onOff=true&relay=2');
 }
 
 
 void showsnack(BuildContext context){
    
+}
+
+
+
+Future<dynamic> fetchData() async {
+  String path="http://$pathurl:${Get.find<Boxes>().settingbox.last.connect}/get";
+  try {
+    final dio = Dio();
+    final response = await dio.get(path);
+    return response.data;
+  } catch (e) {
+    throw Exception('Failed to fetch data: $e');
+  }
+}
+
+Future<dynamic> fetchRtsp(ip,port,username,password) async{
+  String path="http://$pathurl:${Get.find<Boxes>().settingbox.last.connect}/getrtsp?ip=${ip}&port=${port}&username=${username}&password={$password}";
+
+  try{
+    final dio=Dio();
+    final res=await dio.get(path);
+    return res.data;
+  }catch(e){
+    throw Exception("Failed to fetch data : $e");
+
+  }
 }

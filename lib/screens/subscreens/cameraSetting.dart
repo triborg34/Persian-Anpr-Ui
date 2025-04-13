@@ -10,6 +10,7 @@ import 'package:unapwebv/controller/mianController.dart';
 
 import 'package:unapwebv/model/consts.dart';
 import 'package:unapwebv/model/storagedb/cameras.dart';
+import 'package:unapwebv/screens/subscreens/onvifsearch.dart';
 
 class CameraSetting extends StatefulWidget {
   CameraSetting({super.key});
@@ -496,8 +497,7 @@ class _CameraSettingState extends State<CameraSetting> {
                                             .toList()[index]
                                             .licance
                                       };
-                                      
-                               
+
                                       await pb.collection('cameras').update(
                                           controller.camerabox
                                               .toList()[index]
@@ -828,7 +828,8 @@ class _CameraSettingState extends State<CameraSetting> {
                   var res = dio.post(
                       'http://${pathurl}:${Get.find<Boxes>().settingbox.last.connect}/cameras',
                       data: {
-                        "rtspname":"${Get.find<Boxes>().camerabox.last.rtspname}",
+                        "rtspname":
+                            "${Get.find<Boxes>().camerabox.last.rtspname}",
                         "ip": "${Get.find<Boxes>().camerabox.last.ip}",
                         "username":
                             "${Get.find<Boxes>().camerabox.last.username}",
@@ -845,7 +846,9 @@ class _CameraSettingState extends State<CameraSetting> {
                       //       "${Get.find<Boxes>().camerabox.values.first.password}"
                       // });
                       if (value.statusCode == 200) {
-               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(" تنظیمات ذخیره شد",textDirection:TextDirection.rtl  )));
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(" تنظیمات ذخیره شد",
+                                textDirection: TextDirection.rtl)));
                       }
                     },
                   );
@@ -860,9 +863,15 @@ class _CameraSettingState extends State<CameraSetting> {
                   ],
                 ),
               ),
+              IconButton(
+                  onPressed: () {
+                    Get.to(() => OnvifSearch());
+                  },
+                  icon: Icon(Icons.search,color: Colors.white,))
             ],
           ),
           Spacer()
+          //TODO:MAYBE IP HOST NAME ADDED MAYBE NOT
         ],
       ),
     );
