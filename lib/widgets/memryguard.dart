@@ -14,7 +14,7 @@ class _MemoryGuardState extends State<MemoryGuard> {
   double usedMb = 0;
   bool _warned = false;
 
-  // ✅ Updated thresholds for higher memory setup
+  //  Updated thresholds for higher memory setup
   static const int warningThresholdMb = 1200; // Show toast at 1.2 GB
   static const int reloadThresholdMb = 1500;  // Reload at 1.5 GB
   static const int cooldownMinutes = 10;      // Don't reload more than once every 10 minutes
@@ -34,13 +34,13 @@ class _MemoryGuardState extends State<MemoryGuard> {
           usedMb = used;
         });
 
-        // 🔔 Show one-time warning if above threshold
+        //  Show one-time warning if above threshold
         if (used > warningThresholdMb && !_warned) {
           _warned = true;
-          _showToast("⚠️ Memory usage high. Reloading soon if it grows...");
+          _showToast("Memory usage high. Reloading soon if it grows...");
         }
 
-        // 🧠 Prevent infinite reloads using localStorage cooldown
+        //  Prevent infinite reloads using localStorage cooldown
         final lastReloadStr = html.window.localStorage['lastReload'];
         final now = DateTime.now().millisecondsSinceEpoch;
         final lastReload = int.tryParse(lastReloadStr ?? '0') ?? 0;
