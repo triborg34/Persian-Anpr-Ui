@@ -34,17 +34,6 @@ class _MainViewState extends State<MainView> {
   @override
   void initState()  {
 
-    // _databaseHelper = DatabaseHelper.withPath(widget.dbPath);
-
-    // _databaseHelper.queryAndEmitEntries();
-    // _pollingTimer = Timer.periodic(Duration(seconds: 3), (timer) {
-    //   _databaseHelper.queryAndEmitEntries();
- 
-    // });
-    // Get.find<videoController>()
-    //     .player
-    //     .open(Media("rtsp://admin:admin@192.168.1.89:554/stream"));
-    //rtsp://admin:admin@192.168.1.88:554/stream
     Get.find<navController>().body=HomeScreen();
 
      SchedulerBinding.instance.addPostFrameCallback((timeStamp) {

@@ -56,7 +56,7 @@ class _DbContantState extends State<DbContant> {
               );
             }
             final entries = snapshot.data!.reversed.toList();
-          
+            
 
             if (Get.find<settingController>().alarm.value) {
               AudioPlayer audioPlayer = AudioPlayer();
@@ -77,15 +77,10 @@ class _DbContantState extends State<DbContant> {
                     "eTime": entries.last.eTime
                   });
             }
-            print(Get.find<Boxes>().settingbox.last.isRfid!);
+         
             if (Get.find<Boxes>().settingbox.last.isRfid!) {
-              print("inja");
-              print(Get.find<Boxes>()
-                  .regBox
-                  .where(
-                    (element) {
-                      return element.plateNumber == entries.first.plateNum;
-            }).isNotEmpty);
+        
+  
             
               if (Get.find<Boxes>()
                   .regBox
@@ -93,15 +88,15 @@ class _DbContantState extends State<DbContant> {
                     (element) => element.plateNumber == entries.first.plateNum,
                   )
                   .isNotEmpty) {
-                    print("inja 2");
+                   
                 if (Get.find<settingController>().rl1.value &&
                     Get.find<settingController>().rl2.value) {
-                      print("?");
+             
                   onRelayOne();
                   onRelayTwo();
                 } else if (Get.find<settingController>().rl1.value == true &&
                     Get.find<settingController>().rl2.value == false) {
-                      print("inja3");
+                   
     onRelayOne();
                 } else if (Get.find<settingController>().rl1.value == false &&
                     Get.find<settingController>().rl2.value == true) {
@@ -126,9 +121,11 @@ class _DbContantState extends State<DbContant> {
                 itemBuilder: (context, index) {
                 
                   final entry = entries[index];
-
+                  
                   return InkWell(
+           
                     onTap: () {
+                      
                       Get.find<tableController>().selectedIndex = index;
                       Get.find<tableController>().selectedmodel =
                           entries[index];
@@ -259,7 +256,13 @@ class _DbContantState extends State<DbContant> {
                                 style: TextStyle(
                                     color: Colors.white, fontSize: 12.sp),
                               ),
-                            )))
+                            ))),
+                                 VerticalDivider(
+                              color: Colors.black,
+                            ),
+                            SizedBox(width: 6.w,height: 50,child: IconButton(onPressed: ()async{
+                            await pb.collection('database').delete(entry.id!);
+                            }, icon: Icon(Icons.delete,color: Colors.red,)),)
                           ],
                         ),
                       ),
