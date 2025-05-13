@@ -1,5 +1,6 @@
 import 'dart:async';
 
+
 import 'package:flutter/material.dart';
 import 'package:unapwebv/widgets/htmltovideo.dart';
 import 'dart:html' as html; // for memory info
@@ -64,9 +65,10 @@ void _handleStreamError() {
 
 
 @override
-void dispose() {
+void dispose()async {
   _reconnectSub?.cancel();
   _isReconnecting = false;
+
   super.dispose();
 }
 
