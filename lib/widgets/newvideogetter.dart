@@ -1,12 +1,9 @@
 import 'dart:async';
-// import 'dart:convert';
-// import 'dart:typed_data';
-import 'package:dio/dio.dart';
+
 import 'package:flutter/material.dart';
 import 'package:unapwebv/widgets/htmltovideo.dart';
 import 'dart:html' as html; // for memory info
 // import 'package:unapwebv/widgets/videogetter.dart';
-
 
 class VideoStream extends StatefulWidget {
   final String url;
@@ -17,75 +14,72 @@ class VideoStream extends StatefulWidget {
 }
 
 class _VideoStreamState extends State<VideoStream> {
-  // late WebSocket _socket;
-  // Uint8List? _latestImage;
-  // DateTime _lastFrameTime = DateTime.now();
-  bool _isReconnecting = false;
 
-  StreamSubscription? _frameSub;
   StreamSubscription? _reconnectSub;
 
-  // static const int maxFrameSize = 2048 * 1024; // 300 KB
+  bool _error = false;
 
-  // void connect() {
-  //   _socket = WebSocket(widget.url);
-  //   _socket.connect();
+bool _isReconnecting = false;
 
-  //   _frameSub = _socket.stream.listen((data) {
-  //     final now = DateTime.now();
-  //     if (now.difference(_lastFrameTime).inMilliseconds < 100) return;
-  //     _lastFrameTime = now;
+void _handleStreamError() {
+  if (!mounted || _isReconnecting) return;
 
-  //     try {
-  //       final base64String = data.toString();
+  _isReconnecting = true;
 
-  //       // Skip large base64 frames
-  //       if (base64String.length > maxFrameSize * 1.37) return;
+  setState(() {
+    _error = true;
+  });
 
-  //       final decoded = base64Decode(base64String);
-  //       if (decoded.length > maxFrameSize) return;
-
-  //       setState(() {
-  //         _latestImage = decoded;
-  //       });
-  //     } catch (_) {
-  //       // Skip corrupt frames
-  //     }
-  //   });
-
-  //   _reconnectSub = _socket.reconnectingStream.listen((val) {
-  //     setState(() {
-  //       _isReconnecting = val;
-  //     });
-  //   });
-  // }
-
-  @override
-  void initState() {
-
-    
-    super.initState();
-    // connect();
-  }
-
-  @override
-  void dispose() {
-    _frameSub?.cancel();
-    _reconnectSub?.cancel();
-    // _socket.disconnect();
-    super.dispose();
-  }
-
-  @override
-  void didUpdateWidget(VideoStream oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.url != widget.url) {
-      _frameSub?.cancel();
+  _reconnectSub = Stream.periodic(Duration(seconds: 5)).listen((_) async {
+    final isAlive = await _checkFeed();
+    if (isAlive && mounted) {
+      _isReconnecting = false;
+      setState(() {
+        _error = false;
+      });
       _reconnectSub?.cancel();
-      // _socket.disconnect();
-      // connect();
+    }
+  });
+}
+
+  void _handleStreamLoad() {
+    if (_error) {
+      setState(() {
+        _error = false;
+      });
     }
   }
+
+  Future<bool> _checkFeed() async {
+    try {
+      final response = await html.HttpRequest.request(
+        widget.url,
+        method: 'HEAD',
+      );
+      return response.status == 200;
+    } catch (_) {
+      return false;
+    }
+  }
+
+
+@override
+void dispose() {
+  _reconnectSub?.cancel();
+  _isReconnecting = false;
+  super.dispose();
+}
+
+@override
+void didUpdateWidget(VideoStream oldWidget) {
+  super.didUpdateWidget(oldWidget);
+  if (oldWidget.url != widget.url) {
+
+
+    _reconnectSub?.cancel();
+    _reconnectSub = null;
+  }
+}
 
   String getMemoryInfo() {
     try {
@@ -111,29 +105,16 @@ class _VideoStreamState extends State<VideoStream> {
           height: 350,
           width: MediaQuery.of(context).size.width * 0.5,
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: CameraFeed(streamUrl: "http://127.0.0.1:8000/video_feed/rt1",)
-                // : const Center(child: CircularProgressIndicator()),
-          ),
+              borderRadius: BorderRadius.circular(12),
+              child:_error==false? CameraFeed(
+                key: ValueKey(widget.url), // Force rebuild if URL changes
+                streamUrl: widget.url,
+                onError: _handleStreamError,
+                onLoad: _handleStreamLoad,
+              ): Center(child: Text("No Camera"),) ) ,
         ),
 
         // Reconnecting banner
-        if (_isReconnecting)
-          Positioned(
-            top: 10,
-            right: 10,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              decoration: BoxDecoration(
-                color: Colors.orange,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: const Text(
-                "Reconnecting...",
-                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-              ),
-            ),
-          ),
 
         // Memory usage
         Positioned(

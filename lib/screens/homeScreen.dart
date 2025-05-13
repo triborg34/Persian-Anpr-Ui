@@ -24,7 +24,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 
-  int gridselector = 4;
+  int gridselector = 0;
 
   int selectedVideo=1;
 
@@ -161,8 +161,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget VidGridBuild(int index, context) {
     if (index == 0) {
+
       return VideoStream(
-        url: "ws://${pathurl}:${port}/rt${selectedVideo}",
+        url: "http://${pathurl}:${port}/video_feed/rt${selectedVideo}",
       );
     } else if (index == 1) {
       return Container(
@@ -181,7 +182,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     selectedVideo=i;
                   },
                     child: VideoStream(
-                  url: "ws://${pathurl}:${port}/rt${i}",
+                  url: "http://${pathurl}:${port}/video_feed/rt${i}",
                 )),
               )
           ],
@@ -204,7 +205,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     selectedVideo=i;
                   },
                     child: VideoStream(
-                  url: "ws://${pathurl}:${port}/rt${i}",
+                  url: "http://${pathurl}:${port}/video_feed/rt${i}",
                 )),
               )
           ],
@@ -224,7 +225,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 margin: EdgeInsets.symmetric(horizontal: 5, vertical: 0),
                 color: Colors.transparent,
                 child: VideoStream(
-                  url: "ws://${pathurl}:${port}/rt${i}",
+                  url: "http://${pathurl}:${port}/video_feed/rt${i}",
                 ),
               )
           ],
