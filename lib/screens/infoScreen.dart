@@ -26,7 +26,7 @@ class Infoscreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 KeyValueRow(
-                    keyString: "BuilDNumber", valueString: "SN/14030011020"),
+                    keyString: "BuilDNumber", valueString: "SN/14030011025"),
                 Divider(
                   color: purpule,
                 ),
