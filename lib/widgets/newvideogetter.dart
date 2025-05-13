@@ -1,9 +1,11 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:typed_data';
+// import 'dart:convert';
+// import 'dart:typed_data';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:unapwebv/widgets/htmltovideo.dart';
 import 'dart:html' as html; // for memory info
-import 'package:unapwebv/widgets/videogetter.dart';
+// import 'package:unapwebv/widgets/videogetter.dart';
 
 
 class VideoStream extends StatefulWidget {
@@ -15,60 +17,62 @@ class VideoStream extends StatefulWidget {
 }
 
 class _VideoStreamState extends State<VideoStream> {
-  late WebSocket _socket;
-  Uint8List? _latestImage;
-  DateTime _lastFrameTime = DateTime.now();
+  // late WebSocket _socket;
+  // Uint8List? _latestImage;
+  // DateTime _lastFrameTime = DateTime.now();
   bool _isReconnecting = false;
 
   StreamSubscription? _frameSub;
   StreamSubscription? _reconnectSub;
 
-  static const int maxFrameSize = 2048 * 1024; // 300 KB
+  // static const int maxFrameSize = 2048 * 1024; // 300 KB
 
-  void connect() {
-    _socket = WebSocket(widget.url);
-    _socket.connect();
+  // void connect() {
+  //   _socket = WebSocket(widget.url);
+  //   _socket.connect();
 
-    _frameSub = _socket.stream.listen((data) {
-      final now = DateTime.now();
-      if (now.difference(_lastFrameTime).inMilliseconds < 100) return;
-      _lastFrameTime = now;
+  //   _frameSub = _socket.stream.listen((data) {
+  //     final now = DateTime.now();
+  //     if (now.difference(_lastFrameTime).inMilliseconds < 100) return;
+  //     _lastFrameTime = now;
 
-      try {
-        final base64String = data.toString();
+  //     try {
+  //       final base64String = data.toString();
 
-        // Skip large base64 frames
-        if (base64String.length > maxFrameSize * 1.37) return;
+  //       // Skip large base64 frames
+  //       if (base64String.length > maxFrameSize * 1.37) return;
 
-        final decoded = base64Decode(base64String);
-        if (decoded.length > maxFrameSize) return;
+  //       final decoded = base64Decode(base64String);
+  //       if (decoded.length > maxFrameSize) return;
 
-        setState(() {
-          _latestImage = decoded;
-        });
-      } catch (_) {
-        // Skip corrupt frames
-      }
-    });
+  //       setState(() {
+  //         _latestImage = decoded;
+  //       });
+  //     } catch (_) {
+  //       // Skip corrupt frames
+  //     }
+  //   });
 
-    _reconnectSub = _socket.reconnectingStream.listen((val) {
-      setState(() {
-        _isReconnecting = val;
-      });
-    });
-  }
+  //   _reconnectSub = _socket.reconnectingStream.listen((val) {
+  //     setState(() {
+  //       _isReconnecting = val;
+  //     });
+  //   });
+  // }
 
   @override
   void initState() {
+
+    
     super.initState();
-    connect();
+    // connect();
   }
 
   @override
   void dispose() {
     _frameSub?.cancel();
     _reconnectSub?.cancel();
-    _socket.disconnect();
+    // _socket.disconnect();
     super.dispose();
   }
 
@@ -78,8 +82,8 @@ class _VideoStreamState extends State<VideoStream> {
     if (oldWidget.url != widget.url) {
       _frameSub?.cancel();
       _reconnectSub?.cancel();
-      _socket.disconnect();
-      connect();
+      // _socket.disconnect();
+      // connect();
     }
   }
 
@@ -108,13 +112,8 @@ class _VideoStreamState extends State<VideoStream> {
           width: MediaQuery.of(context).size.width * 0.5,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: _latestImage != null
-                ? Image.memory(
-                    _latestImage!,
-                    gaplessPlayback: true,
-                    fit: BoxFit.cover,
-                  )
-                : const Center(child: CircularProgressIndicator()),
+            child: CameraFeed(streamUrl: "http://127.0.0.1:8000/video_feed/rt1",)
+                // : const Center(child: CircularProgressIndicator()),
           ),
         ),
 
