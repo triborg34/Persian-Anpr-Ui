@@ -1,6 +1,5 @@
 import 'dart:async';
-
-
+                             
 import 'package:flutter/material.dart';
 import 'package:unapwebv/widgets/htmltovideo.dart';
 import 'dart:html' as html; // for memory info
@@ -15,36 +14,50 @@ class VideoStream extends StatefulWidget {
 }
 
 class _VideoStreamState extends State<VideoStream> {
-
   StreamSubscription? _reconnectSub;
-
   bool _error = false;
+  bool _isReconnecting = false;
+  Timer? memoryMonitorTimer;
+  String memoryInfo = "Memory: N/A";
 
-bool _isReconnecting = false;
+   void initState() {
+    super.initState();
+    
+    // Start memory monitoring at regular intervals
+    memoryMonitorTimer = Timer.periodic(Duration(seconds: 5), (_) {
+      if (mounted) {
+        setState(() {
+          memoryInfo = getMemoryInfo();
+        });
+      }
+    });
+  }
 
-void _handleStreamError() {
-  if (!mounted || _isReconnecting) return;
+    void _handleStreamError() {
+    if (!mounted || _isReconnecting) return;
 
-  _isReconnecting = true;
+    _isReconnecting = true;
 
-  setState(() {
-    _error = true;
-  });
+    setState(() {
+      _error = true;
+    });
 
-  _reconnectSub = Stream.periodic(Duration(seconds: 5)).listen((_) async {
-    final isAlive = await _checkFeed();
-    if (isAlive && mounted) {
-      _isReconnecting = false;
-      setState(() {
-        _error = false;
-      });
-      _reconnectSub?.cancel();
-    }
-  });
-}
+    // Attempt to reconnect every 5 seconds
+    _reconnectSub = Stream.periodic(Duration(seconds: 5)).listen((_) async {
+      final isAlive = await _checkFeed();
+      if (isAlive && mounted) {
+        _isReconnecting = false;
+        setState(() {
+          _error = false;
+        });
+        _reconnectSub?.cancel();
+        _reconnectSub = null;
+      }
+    });
+  }
 
-  void _handleStreamLoad() {
-    if (_error) {
+ void _handleStreamLoad() {
+    if (_error && mounted) {
       setState(() {
         _error = false;
       });
@@ -64,26 +77,9 @@ void _handleStreamError() {
   }
 
 
-@override
-void dispose()async {
-  _reconnectSub?.cancel();
-  _isReconnecting = false;
-
-  super.dispose();
-}
-
-@override
-void didUpdateWidget(VideoStream oldWidget) {
-  super.didUpdateWidget(oldWidget);
-  if (oldWidget.url != widget.url) {
 
 
-    _reconnectSub?.cancel();
-    _reconnectSub = null;
-  }
-}
-
-  String getMemoryInfo() {
+   String getMemoryInfo() {
     try {
       final mem = html.window.performance.memory!;
       final used = (mem.usedJSHeapSize! / (1024 * 1024)).toStringAsFixed(2);
@@ -91,6 +87,33 @@ void didUpdateWidget(VideoStream oldWidget) {
       return "Memory: $used MB / $total MB";
     } catch (e) {
       return "Memory: N/A";
+    }
+  }
+
+    @override
+  void dispose()async {
+    _reconnectSub?.cancel();
+    memoryMonitorTimer?.cancel();
+    _isReconnecting = false;
+    // var response=Dio().get('http://127.0.0.1:5000/video_release').then((value) => print(value),);
+    super.dispose();
+  }
+
+   @override
+  void didUpdateWidget(VideoStream oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.url != widget.url) {
+      _reconnectSub?.cancel();
+      _reconnectSub = null;
+      
+      // Force error check on URL change
+      _checkFeed().then((isAlive) {
+        if (mounted) {
+          setState(() {
+            _error = !isAlive;
+          });
+        }
+      });
     }
   }
 
@@ -108,12 +131,16 @@ void didUpdateWidget(VideoStream oldWidget) {
           width: MediaQuery.of(context).size.width * 0.5,
           child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child:_error==false? CameraFeed(
-                key: ValueKey(widget.url), // Force rebuild if URL changes
-                streamUrl: widget.url,
-                onError: _handleStreamError,
-                onLoad: _handleStreamLoad,
-              ): Center(child: Text("No Camera"),) ) ,
+              child: _error == false
+                  ? CameraFeed(
+                      key: ValueKey(widget.url), // Force rebuild if URL changes
+                      streamUrl: widget.url,
+                      onError: _handleStreamError,
+                      onLoad: _handleStreamLoad,
+                    )
+                  : Center(
+                      child: Text("No Camera"),
+                    )),
         ),
 
         // Reconnecting banner
