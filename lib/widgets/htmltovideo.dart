@@ -1,24 +1,22 @@
-import 'dart:html' as html;
 import 'package:flutter/material.dart';
 import 'dart:ui_web' as ui;
+import 'package:get/get.dart';
+import 'package:unapwebv/controller/mianController.dart';
+
 
 class CameraFeed extends StatefulWidget {
   final String streamUrl;
   final VoidCallback? onError; // Callback when stream fails
-  final VoidCallback? onLoad;  // Optional: when it loads successfully
+  final VoidCallback? onLoad;
 
-  const CameraFeed({
-    super.key,
-    required this.streamUrl,
-    this.onError,
-    this.onLoad,
-  });
+  const CameraFeed({super.key, required this.streamUrl,this.onError,this.onLoad});
 
   @override
   State<CameraFeed> createState() => _CameraFeedState();
 }
 
 class _CameraFeedState extends State<CameraFeed> {
+  final CameraController controller = Get.find();
   late final String viewId;
 
   @override
@@ -26,22 +24,19 @@ class _CameraFeedState extends State<CameraFeed> {
     super.initState();
     viewId = 'camera-feed-${widget.streamUrl.hashCode}-${DateTime.now().millisecondsSinceEpoch}';
 
-    // ignore: undefined_prefixed_name
-    ui.platformViewRegistry.registerViewFactory(viewId, (int viewId) {
-      final imgElement = html.ImageElement()
-        ..src = widget.streamUrl
-        ..style.width = '100%'
-        ..style.height = '100%'
-        ..style.objectFit = 'cover'
-        ..onError.listen((event) {
-          widget.onError?.call();
-        })
-        ..onLoad.listen((event) {
-          widget.onLoad?.call();
-        });
+    controller.connect(widget.streamUrl, viewId,widget.onError!,widget.onLoad!);
 
-      return imgElement;
-    });
+    // ignore: undefined_prefixed_name
+    ui.platformViewRegistry.registerViewFactory(
+      viewId,
+      (int viewId) => controller.getElement(this.viewId)!,
+    );
+  }
+
+  @override
+  void dispose() {
+    controller.disconnect(viewId);
+    super.dispose();
   }
 
   @override
@@ -49,6 +44,7 @@ class _CameraFeedState extends State<CameraFeed> {
     return SizedBox(
       width: 640,
       height: 480,
-      child: HtmlElementView(viewType: viewId));
+      child: HtmlElementView(viewType: viewId),
+    );
   }
 }

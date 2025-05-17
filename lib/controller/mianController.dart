@@ -8,7 +8,7 @@ import 'package:unapwebv/model/storagedb/registredDb.dart';
 import 'package:unapwebv/model/storagedb/setting.dart';
 import 'package:unapwebv/model/storagedb/users.dart';
 import 'package:unapwebv/widgets/videogetter.dart';
-
+import 'dart:html' as html;
 import '../model/consts.dart';
 
 class videoController extends GetxController {
@@ -239,22 +239,72 @@ class settingController extends GetxController {
   }
 }
 
-class ViedoSocket extends GetxController {
-  late final WebSocket socket;
-  bool isConnected = false;
+// class ViedoSocket extends GetxController {
+//   late final WebSocket socket;
+//   bool isConnected = false;
 
-  void connect(BuildContext context, String url) async {
-    socket = WebSocket(url);
+//   void connect(BuildContext context, String url) async {
+//     socket = WebSocket(url);
 
-    socket.connect();
-    isConnected = true;
-    update();
+//     socket.connect();
+//     isConnected = true;
+//     update();
+//   }
+
+//   void disconnect() {
+//     socket.disconnect();
+
+//     isConnected = false;
+//     update();
+//   }
+// }
+
+
+
+
+class CameraController extends GetxController {
+  final _cameras = <String, html.ImageElement>{}.obs;
+
+  void connect(String url, String viewId,VoidCallback onError,VoidCallback onLoad) {
+    final imgElement = html.ImageElement()
+      ..src = url
+      ..id = viewId
+      ..style.width = '100%'
+      ..style.height = '100%'
+        ..onError.listen((event) {
+          onError.call();
+        })
+        ..onLoad.listen((event) {
+          onLoad.call();
+        })
+      ..style.objectFit = 'cover';
+      
+
+    _cameras[viewId] = imgElement;
   }
 
-  void disconnect() {
-    socket.disconnect();
+  html.ImageElement? getElement(String viewId) => _cameras[viewId];
 
-    isConnected = false;
-    update();
+  void disconnect(String viewId) {
+    final element = _cameras[viewId];
+    if (element != null) {
+      element.src = '';
+      element.remove();
+      _cameras.remove(viewId);
+    }
+  }
+
+  /// 🔌 Disconnects all active camera streams
+  void disconnectAll() {
+    final keys = _cameras.keys.toList(); // Avoid concurrent modification
+    for (final viewId in keys) {
+      disconnect(viewId);
+    }
+  }
+
+  @override
+  void onClose() {
+    disconnectAll();
+    super.onClose();
   }
 }

@@ -14,9 +14,7 @@ class VideoStream extends StatefulWidget {
 }
 
 class _VideoStreamState extends State<VideoStream> {
-  StreamSubscription? _reconnectSub;
   bool _error = false;
-  bool _isReconnecting = false;
   Timer? memoryMonitorTimer;
   String memoryInfo = "Memory: N/A";
 
@@ -34,26 +32,13 @@ class _VideoStreamState extends State<VideoStream> {
   }
 
     void _handleStreamError() {
-    if (!mounted || _isReconnecting) return;
-
-    _isReconnecting = true;
+    if (!mounted) return;
 
     setState(() {
       _error = true;
     });
 
     // Attempt to reconnect every 5 seconds
-    _reconnectSub = Stream.periodic(Duration(seconds: 5)).listen((_) async {
-      final isAlive = await _checkFeed();
-      if (isAlive && mounted) {
-        _isReconnecting = false;
-        setState(() {
-          _error = false;
-        });
-        _reconnectSub?.cancel();
-        _reconnectSub = null;
-      }
-    });
   }
 
  void _handleStreamLoad() {
@@ -92,9 +77,9 @@ class _VideoStreamState extends State<VideoStream> {
 
     @override
   void dispose()async {
-    _reconnectSub?.cancel();
+
     memoryMonitorTimer?.cancel();
-    _isReconnecting = false;
+
     // var response=Dio().get('http://127.0.0.1:5000/video_release').then((value) => print(value),);
     super.dispose();
   }
@@ -103,8 +88,6 @@ class _VideoStreamState extends State<VideoStream> {
   void didUpdateWidget(VideoStream oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.url != widget.url) {
-      _reconnectSub?.cancel();
-      _reconnectSub = null;
       
       // Force error check on URL change
       _checkFeed().then((isAlive) {
@@ -136,7 +119,9 @@ class _VideoStreamState extends State<VideoStream> {
                       key: ValueKey(widget.url), // Force rebuild if URL changes
                       streamUrl: widget.url,
                       onError: _handleStreamError,
-                      onLoad: _handleStreamLoad,
+                      onLoad: _handleStreamLoad ,
+                      
+
                     )
                   : Center(
                       child: Text("No Camera"),

@@ -13,7 +13,7 @@ class MyBinding extends Bindings{
     Get.put(ReportController());
     Get.lazyPut(()=>navController());
     Get.lazyPut(()=>settingController(),);
-    Get.lazyPut(()=>ViedoSocket());
+    Get.lazyPut(()=>CameraController());
     }else{
           Get.put(videoController());
     Get.put(tableController());
@@ -22,7 +22,7 @@ class MyBinding extends Bindings{
     Get.put(ReportController());
     Get.put(navController());
     Get.put(settingController(),);
-    Get.put(ViedoSocket());
+    Get.put(CameraController());
     }
   }
 
